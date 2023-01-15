@@ -1,0 +1,36 @@
+﻿using Workshop.Domain.Contracts;
+using Workshop.Domain.DTO.Results;
+using Workshop.Domain.DTO.UserDTO;
+using Workshop.Domain.Entities;
+using Workshop.Domain.Repositories;
+using Workshop.Domain.UseCases.Contracts;
+
+namespace Workshop.Domain.UseCases.UserUseCases;
+
+public class CreateUserUseCase : IUseCase<CreateUserDto>
+{
+    IUserRepository _repository;
+    IHasher _hasher;
+
+    public CreateUserUseCase(IUserRepository repository, IHasher hasher)
+    {
+        _repository = repository;
+        _hasher = hasher;
+    }
+
+    public GenericResultDTO handle(CreateUserDto data)
+    {
+        data.Validate();
+        if (data.Invalid)
+        {
+            return new InvalidDataResultDTO("user", data.Notifications);
+        }
+
+        var password = _hasher.hash(data.Password);
+
+        var newUser = new User(data.Name, data.Email, password);
+        _repository.Create(newUser);
+
+        return new SuccessResultDTO("Usuário Adicionado com sucesso!", newUser);
+    }
+}
