@@ -1,5 +1,5 @@
 ﻿using Workshop.Domain.Contracts;
-using Workshop.Domain.DTO.Results;
+using Workshop.Domain.Contracts.Results;
 using Workshop.Domain.DTO.UserDTO;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.UseCases.Contracts;
@@ -17,25 +17,25 @@ public class LoginUseCase : IUseCase<LoginDTO>
         _hasher = hasher;
     }
 
-    public GenericResultDTO handle(LoginDTO data)
+    public GenericResult handle(LoginDTO data)
     {
         data.Validate();
         if (data.Invalid)
         {
-            return new InvalidDataResultDTO("user", data.Notifications);
+            return new InvalidDataResult("user", data.Notifications);
         }
 
         var user = _repository.GetByEmail(data.Email);
         if (user == null)
         {
-            return new NotFoundResultDTO("user");
+            return new NotFoundResult("user");
         }
 
         var isPasswordValid = _hasher.validate(user.Password, data.Password);
         if (!isPasswordValid) {
-            return new NotFoundResultDTO("user");
+            return new NotFoundResult("user");
         }
 
-        return new SuccessResultDTO("Usuario autenticado com sucesso!", user);
+        return new SuccessResult("Usuario autenticado com sucesso!", user);
     }
 }

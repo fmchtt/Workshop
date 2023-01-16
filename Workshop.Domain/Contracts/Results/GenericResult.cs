@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Workshop.Domain.DTO.Results;
+namespace Workshop.Domain.Contracts.Results;
 
-public abstract class GenericResultDTO
+public abstract class GenericResult
 {
     public string Message { get; set; }
     public object Result { get; set; }
 
-    public GenericResultDTO(string message) {
+    public GenericResult(string message)
+    {
         Message = message;
     }
 
-    public GenericResultDTO(string message, object result)
+    public GenericResult(string message, object result)
     {
         Message = message;
         Result = result;

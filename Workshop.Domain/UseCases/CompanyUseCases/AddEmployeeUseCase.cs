@@ -1,8 +1,8 @@
 ﻿using Workshop.Domain.DTO.CompanyDTO;
-using Workshop.Domain.DTO.Results;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.Entities;
 using Workshop.Domain.UseCases.Contracts;
+using Workshop.Domain.Contracts.Results;
 
 namespace Workshop.Domain.UseCases.CompanyUseCases;
 
@@ -19,18 +19,18 @@ public class AddEmployeeUseCase : IUseCase<AddEmployeeDTO>
         _roleRepository = roleRepository;
     }
 
-    public GenericResultDTO handle(AddEmployeeDTO data)
+    public GenericResult handle(AddEmployeeDTO data)
     {
         data.Validate();
         if (data.Invalid)
         {
-            return new InvalidDataResultDTO("employee", data.Notifications);
+            return new InvalidDataResult("employee", data.Notifications);
         }
 
         var company = _companyRepository.GetById(data.CompanyId);
         if (company == null)
         {
-            return new NotFoundResultDTO("company");
+            return new NotFoundResult("company");
         }
 
         var user = _userRepository.GetByEmail(data.Email);
@@ -42,23 +42,23 @@ public class AddEmployeeUseCase : IUseCase<AddEmployeeDTO>
 
         if (company.Employees.Find(x => x.UserId == user.Id) != null)
         {
-            return new InvalidDataResultDTO("user", new());
+            return new InvalidDataResult("user", new());
         }
 
         var role = _roleRepository.getById(data.RoleId);
         if (role == null)
         {
-            return new NotFoundResultDTO("role");
+            return new NotFoundResult("role");
         }
         
         if (role.CompanyId != company.Id)
         {
-            return new InvalidDataResultDTO("role", new());
+            return new InvalidDataResult("role", new());
         }
 
         var newEmployee = new Employee(user.Id, company.Id, role);
         company.Employees.Add(newEmployee);
 
-        return new SuccessResultDTO("Funcionario adicionado com sucesso!", newEmployee);
+        return new SuccessResult("Funcionario adicionado com sucesso!", newEmployee);
     }
 }

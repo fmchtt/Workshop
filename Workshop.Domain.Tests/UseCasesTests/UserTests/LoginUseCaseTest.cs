@@ -1,4 +1,4 @@
-﻿using Workshop.Domain.DTO.Results;
+﻿using Workshop.Domain.Contracts.Results;
 using Workshop.Domain.DTO.UserDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Tests.Repositories;
@@ -32,7 +32,7 @@ public class LoginUseCaseTest
 
         var result = _useCase.handle(dto);
 
-        Assert.IsTrue(result is SuccessResultDTO);
+        Assert.IsTrue(result is SuccessResult);
     }
 
     [TestMethod]
@@ -42,7 +42,7 @@ public class LoginUseCaseTest
 
         var result = _useCase.handle(dto);
 
-        Assert.IsTrue(result is InvalidDataResultDTO);
+        Assert.IsTrue(result is InvalidDataResult);
     }
 
 
@@ -57,6 +57,6 @@ public class LoginUseCaseTest
 
         var result = _useCase.handle(dto);
 
-        Assert.IsTrue(result is NotFoundResultDTO);
+        Assert.IsTrue(result is NotFoundResult);
     }
 }

@@ -1,7 +1,7 @@
-﻿using Workshop.Domain.DTO.Results;
+﻿using Workshop.Domain.Contracts.Results;
 
 namespace Workshop.Domain.UseCases.Contracts;
 public interface IUseCase<T>
 {
-    GenericResultDTO handle(T t);
+    GenericResult handle(T t);
 }

@@ -1,5 +1,5 @@
 ﻿using Workshop.Domain.Contracts;
-using Workshop.Domain.DTO.Results;
+using Workshop.Domain.Contracts.Results;
 using Workshop.Domain.DTO.UserDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
@@ -18,12 +18,12 @@ public class CreateUserUseCase : IUseCase<CreateUserDto>
         _hasher = hasher;
     }
 
-    public GenericResultDTO handle(CreateUserDto data)
+    public GenericResult handle(CreateUserDto data)
     {
         data.Validate();
         if (data.Invalid)
         {
-            return new InvalidDataResultDTO("user", data.Notifications);
+            return new InvalidDataResult("user", data.Notifications);
         }
 
         var password = _hasher.hash(data.Password);
@@ -31,6 +31,6 @@ public class CreateUserUseCase : IUseCase<CreateUserDto>
         var newUser = new User(data.Name, data.Email, password);
         _repository.Create(newUser);
 
-        return new SuccessResultDTO("Usuário Adicionado com sucesso!", newUser);
+        return new SuccessResult("Usuário Adicionado com sucesso!", newUser);
     }
 }

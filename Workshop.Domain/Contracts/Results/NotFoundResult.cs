@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Workshop.Domain.DTO.Results;
+namespace Workshop.Domain.Contracts.Results;
 
-public class NotFoundResultDTO : GenericResultDTO
+public class NotFoundResult : GenericResult
 {
-    public NotFoundResultDTO(string objectName) : base(objectName)
+    public NotFoundResult(string objectName) : base(objectName)
     {
         Message = $"{objectName} não encontrado";
     }

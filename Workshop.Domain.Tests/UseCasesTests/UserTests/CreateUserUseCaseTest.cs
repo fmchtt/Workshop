@@ -1,11 +1,11 @@
 ﻿using Workshop.Domain.Contracts;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.Entities;
-using Workshop.Domain.DTO.Results;
 using Workshop.Domain.Tests.Repositories;
 using Workshop.Domain.Tests.Utils;
 using Workshop.Domain.UseCases.UserUseCases;
 using Workshop.Domain.DTO.UserDTO;
+using Workshop.Domain.Contracts.Results;
 
 namespace Workshop.Domain.Tests.UseCasesTests.UserTests;
 
@@ -30,7 +30,7 @@ public class CreateUserUseCaseTest
 
         var result = _useCase.handle(userDto);
 
-        Assert.IsTrue(result is SuccessResultDTO);
+        Assert.IsTrue(result is SuccessResult);
     }
 
     [TestMethod]
@@ -40,7 +40,7 @@ public class CreateUserUseCaseTest
 
         var result = _useCase.handle(userDto);
 
-        Assert.IsTrue(result is InvalidDataResultDTO);
+        Assert.IsTrue(result is InvalidDataResult);
     }
 
     [TestMethod]

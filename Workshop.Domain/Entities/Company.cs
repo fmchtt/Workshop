@@ -13,5 +13,11 @@
             OwnerId = ownerId;
             Employees = employees;
         }
+
+        public Company(string name, Guid ownerId)
+        {
+            Name = name;
+            OwnerId = ownerId;
+        }
     }
 }
