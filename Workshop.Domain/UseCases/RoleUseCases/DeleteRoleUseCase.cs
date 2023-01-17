@@ -31,6 +31,17 @@ public class DeleteRoleUseCase
             return new UnauthorizedResult("role:delete");
         }
 
+        var role = _roleRepository.getById(data.RoleId);
+        if (user == null)
+        {
+            return new NotFoundResult("role");
+        }
+
+        if (role.CompanyId != user.Employee.CompanyId)
+        {
+            return new NotFoundResult("role");
+        }
+
         _roleRepository.Delete(data.RoleId);
 
         return new SuccessResult("Role deletado com sucesso!");
