@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.Tests.Repositories;
 
 public class FakeUserRepository : IUserRepository
 {
-    List<User> _users = new List<User>();
+    private readonly List<User> _users = new List<User>();
 
     public void Create(User user)
     {

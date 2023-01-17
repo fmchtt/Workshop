@@ -5,10 +5,10 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.ProductUseCases;
 
-public class CreateProductUseCase { 
-
-    IProductRepository _productRepository;
-    IUserRepository _userRepository;
+public class CreateProductUseCase
+{
+    private readonly IProductRepository _productRepository;
+    private readonly IUserRepository _userRepository;
 
     public CreateProductUseCase(IProductRepository repository, IUserRepository userRepository)
     {
@@ -35,7 +35,7 @@ public class CreateProductUseCase {
             return new UnauthorizedResult("product:create");
         }
 
-        var product = new Product(data.Name, data.Description, data.Price, user.Employee.CompanyId);
+        var product = new Product(data.Name, data.Description, data.Price, user.Employee.CompanyId, data.QuantityInStock);
         _productRepository.Create(product);
 
         return new SuccessResult("Produto criado com sucesso!", product);

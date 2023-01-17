@@ -8,8 +8,8 @@ namespace Workshop.Domain.UseCases.UserUseCases;
 
 public class CreateUserUseCase
 {
-    IUserRepository _repository;
-    IHasher _hasher;
+    private readonly IUserRepository _repository;
+    private readonly IHasher _hasher;
 
     public CreateUserUseCase(IUserRepository repository, IHasher hasher)
     {

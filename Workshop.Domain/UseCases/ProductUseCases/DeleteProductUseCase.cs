@@ -6,8 +6,8 @@ namespace Workshop.Domain.UseCases.ProductUseCases;
 
 public class DeleteProductUseCase
 {
-    IProductRepository _productRepository;
-    IUserRepository _userRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IUserRepository _userRepository;
 
     public DeleteProductUseCase(IProductRepository productRepository, IUserRepository userRepository)
     {

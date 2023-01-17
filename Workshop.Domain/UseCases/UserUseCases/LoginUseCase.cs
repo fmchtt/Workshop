@@ -7,8 +7,8 @@ namespace Workshop.Domain.UseCases.UserUseCases;
 
 public class LoginUseCase
 {
-    IUserRepository _repository;
-    IHasher _hasher;
+    private readonly IUserRepository _repository;
+    private readonly IHasher _hasher;
 
     public LoginUseCase(IUserRepository repository, IHasher hasher)
     {

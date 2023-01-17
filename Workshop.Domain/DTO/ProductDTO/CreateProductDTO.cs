@@ -8,7 +8,8 @@ public class CreateProductDTO : Notifiable, IDTO
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public int Price { get; set; }
+    public Decimal Price { get; set; }
+    public int QuantityInStock { get; set; }
 
     public void Validate()
     {

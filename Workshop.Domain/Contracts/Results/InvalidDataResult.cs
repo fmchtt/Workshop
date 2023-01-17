@@ -12,4 +12,9 @@ public class InvalidDataResult : GenericResult
     {
         Message = $"{objectName} Inválido";
     }
+
+    public InvalidDataResult(string objectName) : base(objectName)
+    {
+        Message = $"{objectName} Inválido";
+    }
 }
