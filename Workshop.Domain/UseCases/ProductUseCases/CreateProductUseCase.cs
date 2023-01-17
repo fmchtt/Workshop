@@ -5,11 +5,12 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.ProductUseCases;
 
-public class CreateProductUseCase
-{
+public class CreateProductUseCase { 
+
     IProductRepository _repository;
 
-    public CreateProductUseCase(IProductRepository repository) { 
+    public CreateProductUseCase(IProductRepository repository)
+    {
         _repository = repository;
     }
 
