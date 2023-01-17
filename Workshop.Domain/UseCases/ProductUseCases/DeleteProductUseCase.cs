@@ -41,6 +41,6 @@ public class DeleteProductUseCase
 
         _productRepository.Delete(product.Id);
 
-        return new SuccessResult("Produto deletado com sucesso!", null);
+        return new SuccessResult("Produto deletado com sucesso!");
     }
 }

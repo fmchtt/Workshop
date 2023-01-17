@@ -11,4 +11,8 @@ public class SuccessResult : GenericResult
     public SuccessResult(string message, object result) : base(message, result)
     {
     }
+
+    public SuccessResult(string message) : base(message)
+    {
+    }
 }

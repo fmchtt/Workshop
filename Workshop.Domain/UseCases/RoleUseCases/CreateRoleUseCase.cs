@@ -17,8 +17,8 @@ public class CreateRoleUseCase
         IPermissionRepository permissionRepository
     ) {
         _roleRepository = roleRepository;
-        _permissionRepository = permissionRepository;
         _userRepository = userRepository;
+        _permissionRepository = permissionRepository;
     }
 
     public GenericResult Handle(CreateRoleDTO data, Guid executorId)
