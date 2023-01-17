@@ -14,7 +14,8 @@ public class DeleteProductUseCase
         _productRepository = productRepository;
         _userRepository = userRepository;
     }
-    public GenericResult Handle(DeleteProductDTO data, Guid UserId)
+
+    public GenericResult Handle(DeleteProductDTO data, Guid ExecutorId)
     {
         data.Validate();
         if (data.Invalid)
@@ -28,9 +29,14 @@ public class DeleteProductUseCase
             return new NotFoundResult("product");
         }
 
-        var user = _userRepository.GetById(UserId);
+        var user = _userRepository.GetById(ExecutorId);
         if (user == null || user.Employee.CompanyId != product.OwnerId) {
             return new NotFoundResult("owner");
+        }
+
+        if (!user.Employee.VerifyPermission("product:delete"))
+        {
+            return new UnauthorizedResult("product:delete");
         }
 
         _productRepository.Delete(product.Id);

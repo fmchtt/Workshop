@@ -7,14 +7,16 @@ namespace Workshop.Domain.UseCases.ProductUseCases;
 
 public class CreateProductUseCase { 
 
-    IProductRepository _repository;
+    IProductRepository _productRepository;
+    IUserRepository _userRepository;
 
-    public CreateProductUseCase(IProductRepository repository)
+    public CreateProductUseCase(IProductRepository repository, IUserRepository userRepository)
     {
-        _repository = repository;
+        _productRepository = repository;
+        _userRepository = userRepository;
     }
 
-    public GenericResult Handle(CreateProductDTO data, Guid OwnerId)
+    public GenericResult Handle(CreateProductDTO data, Guid ExecutorId)
     {
         data.Validate();
         if (data.Invalid)
@@ -22,8 +24,19 @@ public class CreateProductUseCase {
             return new InvalidDataResult("product", data.Notifications);
         }
 
-        var product = new Product(data.Name, data.Description, data.Price, OwnerId);
-        _repository.Create(product);
+        var user = _userRepository.GetById(ExecutorId);
+        if (user == null)
+        {
+            return new NotFoundResult("user");
+        }
+
+        if (!user.Employee.VerifyPermission("product:create"))
+        {
+            return new UnauthorizedResult("product:create");
+        }
+
+        var product = new Product(data.Name, data.Description, data.Price, user.Employee.CompanyId);
+        _productRepository.Create(product);
 
         return new SuccessResult("Produto criado com sucesso!", product);
     }

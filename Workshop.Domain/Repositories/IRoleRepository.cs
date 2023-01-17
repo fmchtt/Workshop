@@ -5,4 +5,5 @@ namespace Workshop.Domain.Repositories;
 public interface IRoleRepository
 {
     Role getById(Guid roleId);
+    void Create(Role role);
 }

@@ -18,7 +18,7 @@ public class AddEmployeeUseCase
         _roleRepository = roleRepository;
     }
 
-    public GenericResult Handle(AddEmployeeDTO data, Guid CompanyId)
+    public GenericResult Handle(AddEmployeeDTO data, Guid ExecutorId)
     {
         data.Validate();
         if (data.Invalid)
@@ -26,7 +26,18 @@ public class AddEmployeeUseCase
             return new InvalidDataResult("employee", data.Notifications);
         }
 
-        var company = _companyRepository.GetById(CompanyId);
+        var executor = _userRepository.GetById(ExecutorId);
+        if (executor == null)
+        {
+            return new NotFoundResult("user");
+        }
+
+        if (executor.Employee.VerifyPermission("employee:create"))
+        {
+            return new UnauthorizedResult("employee:create");
+        }
+
+        var company = _companyRepository.GetById(executor.Employee.CompanyId);
         if (company == null)
         {
             return new NotFoundResult("company");
