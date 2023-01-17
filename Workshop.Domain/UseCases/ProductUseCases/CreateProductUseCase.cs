@@ -2,11 +2,10 @@
 using Workshop.Domain.DTO.ProductDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
-using Workshop.Domain.UseCases.Contracts;
 
 namespace Workshop.Domain.UseCases.ProductUseCases;
 
-public class CreateProductUseCase : IUseCase<CreateProductDTO>
+public class CreateProductUseCase
 {
     IProductRepository _repository;
 
@@ -14,7 +13,7 @@ public class CreateProductUseCase : IUseCase<CreateProductDTO>
         _repository = repository;
     }
 
-    public GenericResult handle(CreateProductDTO data)
+    public GenericResult handle(CreateProductDTO data, Guid OwnerId)
     {
         data.Validate();
         if (data.Invalid)
@@ -22,7 +21,7 @@ public class CreateProductUseCase : IUseCase<CreateProductDTO>
             return new InvalidDataResult("product", data.Notifications);
         }
 
-        var product = new Product(data.Name, data.Description, data.Price, data.OwnerId);
+        var product = new Product(data.Name, data.Description, data.Price, OwnerId);
         _repository.Create(product);
 
         return new SuccessResult("Produto criado com sucesso!", product);

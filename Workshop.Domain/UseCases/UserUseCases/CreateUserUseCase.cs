@@ -3,11 +3,10 @@ using Workshop.Domain.Contracts.Results;
 using Workshop.Domain.DTO.UserDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
-using Workshop.Domain.UseCases.Contracts;
 
 namespace Workshop.Domain.UseCases.UserUseCases;
 
-public class CreateUserUseCase : IUseCase<CreateUserDto>
+public class CreateUserUseCase
 {
     IUserRepository _repository;
     IHasher _hasher;

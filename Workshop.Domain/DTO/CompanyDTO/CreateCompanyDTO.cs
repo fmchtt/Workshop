@@ -6,12 +6,10 @@ namespace Workshop.Domain.DTO.CompanyDTO;
 public class CreateCompanyDTO : Notifiable, IDTO
 {
     public string Name { get; set; }
-    public Guid OwnerId { get; set; }
 
-    public CreateCompanyDTO(string name, Guid ownerId)
+    public CreateCompanyDTO(string name)
     {
         Name = name;
-        OwnerId = ownerId;
     }
 
     public void Validate()

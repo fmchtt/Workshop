@@ -6,14 +6,12 @@ namespace Workshop.Domain.DTO.CompanyDTO;
 
 public class AddEmployeeDTO : Notifiable, IDTO
 {
-    public AddEmployeeDTO(string name, string email, Guid companyId)
+    public AddEmployeeDTO(string name, string email)
     {
         Name = name;
         Email = email;
-        CompanyId= companyId;
     }
 
-    public Guid CompanyId { get; set; }
     public Guid RoleId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }

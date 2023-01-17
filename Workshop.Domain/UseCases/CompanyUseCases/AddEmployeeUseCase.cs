@@ -1,12 +1,11 @@
 ﻿using Workshop.Domain.DTO.CompanyDTO;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.Entities;
-using Workshop.Domain.UseCases.Contracts;
 using Workshop.Domain.Contracts.Results;
 
 namespace Workshop.Domain.UseCases.CompanyUseCases;
 
-public class AddEmployeeUseCase : IUseCase<AddEmployeeDTO>
+public class AddEmployeeUseCase
 {
     IUserRepository _userRepository;
     ICompanyRepository _companyRepository;
@@ -19,7 +18,7 @@ public class AddEmployeeUseCase : IUseCase<AddEmployeeDTO>
         _roleRepository = roleRepository;
     }
 
-    public GenericResult handle(AddEmployeeDTO data)
+    public GenericResult handle(AddEmployeeDTO data, Guid CompanyId)
     {
         data.Validate();
         if (data.Invalid)
@@ -27,7 +26,7 @@ public class AddEmployeeUseCase : IUseCase<AddEmployeeDTO>
             return new InvalidDataResult("employee", data.Notifications);
         }
 
-        var company = _companyRepository.GetById(data.CompanyId);
+        var company = _companyRepository.GetById(CompanyId);
         if (company == null)
         {
             return new NotFoundResult("company");
