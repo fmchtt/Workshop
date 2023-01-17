@@ -16,7 +16,7 @@ public class LoginUseCase
         _hasher = hasher;
     }
 
-    public GenericResult handle(LoginDTO data)
+    public GenericResult Handle(LoginDTO data)
     {
         data.Validate();
         if (data.Invalid)

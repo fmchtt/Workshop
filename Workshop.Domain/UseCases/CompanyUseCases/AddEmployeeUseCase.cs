@@ -18,7 +18,7 @@ public class AddEmployeeUseCase
         _roleRepository = roleRepository;
     }
 
-    public GenericResult handle(AddEmployeeDTO data, Guid CompanyId)
+    public GenericResult Handle(AddEmployeeDTO data, Guid CompanyId)
     {
         data.Validate();
         if (data.Invalid)

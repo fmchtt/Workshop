@@ -13,7 +13,7 @@ public class CreateProductUseCase
         _repository = repository;
     }
 
-    public GenericResult handle(CreateProductDTO data, Guid OwnerId)
+    public GenericResult Handle(CreateProductDTO data, Guid OwnerId)
     {
         data.Validate();
         if (data.Invalid)

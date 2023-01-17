@@ -30,7 +30,7 @@ public class LoginUseCaseTest
 
         var dto = new LoginDTO("TESTE@TESTE.COM", "PASSWORD1234");
 
-        var result = _useCase.handle(dto);
+        var result = _useCase.Handle(dto);
 
         Assert.IsTrue(result is SuccessResult);
     }
@@ -40,7 +40,7 @@ public class LoginUseCaseTest
     {
         var dto = new LoginDTO("TESTE@.COM", "123");
 
-        var result = _useCase.handle(dto);
+        var result = _useCase.Handle(dto);
 
         Assert.IsTrue(result is InvalidDataResult);
     }
@@ -55,7 +55,7 @@ public class LoginUseCaseTest
 
         var dto = new LoginDTO("TESTE@TESTE.COM", password);
 
-        var result = _useCase.handle(dto);
+        var result = _useCase.Handle(dto);
 
         Assert.IsTrue(result is NotFoundResult);
     }

@@ -17,7 +17,7 @@ public class CreateUserUseCase
         _hasher = hasher;
     }
 
-    public GenericResult handle(CreateUserDto data)
+    public GenericResult Handle(CreateUserDto data)
     {
         data.Validate();
         if (data.Invalid)

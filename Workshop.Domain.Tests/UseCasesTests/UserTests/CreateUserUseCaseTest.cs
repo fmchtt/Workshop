@@ -28,7 +28,7 @@ public class CreateUserUseCaseTest
     {
         var userDto = new CreateUserDto("USUARIO_TESTE", "USUARIO@TESTE.COM", "1234SENHA");
 
-        var result = _useCase.handle(userDto);
+        var result = _useCase.Handle(userDto);
 
         Assert.IsTrue(result is SuccessResult);
     }
@@ -38,7 +38,7 @@ public class CreateUserUseCaseTest
     {
         var userDto = new CreateUserDto("U", "USUARIO@.COM", "1");
 
-        var result = _useCase.handle(userDto);
+        var result = _useCase.Handle(userDto);
 
         Assert.IsTrue(result is InvalidDataResult);
     }
@@ -48,7 +48,7 @@ public class CreateUserUseCaseTest
     {
         var userDto = new CreateUserDto("USUARIO_TESTE", "USUARIO@TESTE.COM", "1234SENHA");
 
-        var result = _useCase.handle(userDto);
+        var result = _useCase.Handle(userDto);
 
         var user = (User) result.Result;
 

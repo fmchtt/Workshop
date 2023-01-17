@@ -16,7 +16,7 @@ public class CreateCompanyUseCase
         _companyRepository = companyRepository;
     }
 
-    public GenericResult handle(CreateCompanyDTO data, Guid OwnerId)
+    public GenericResult Handle(CreateCompanyDTO data, Guid OwnerId)
     {
         data.Validate();
         if (data.Invalid)
