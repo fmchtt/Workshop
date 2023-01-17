@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Domain", "Workshop
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Infra", "Workshop.Infra\Workshop.Infra.csproj", "{517F865C-6306-414F-AC98-CAE12604FE87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workshop.Domain.Tests", "Workshop.Domain.Tests\Workshop.Domain.Tests.csproj", "{D9B88FA9-4761-4A32-9A6D-5B11CED70FF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Tests", "Workshop.Domain.Tests\Workshop.Tests.csproj", "{D9B88FA9-4761-4A32-9A6D-5B11CED70FF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workshop.Api", "Workshop.Api\Workshop.Api.csproj", "{3090F651-44D2-4D4F-A4A9-27FC3730C69C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Api", "Workshop.Api\Workshop.Api.csproj", "{3090F651-44D2-4D4F-A4A9-27FC3730C69C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
