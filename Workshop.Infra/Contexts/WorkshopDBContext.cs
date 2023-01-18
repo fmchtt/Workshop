@@ -23,5 +23,20 @@ public class WorkshopDBContext : DbContext
     {
         modelBuilder.Entity<Client>().HasMany(c => c.ReceivingServices).WithMany();
         modelBuilder.Entity<Role>().HasMany(r => r.Permissions).WithMany();
+        modelBuilder.Entity<Permission>().HasData(
+            new Permission("ALL", "resource:owner"),
+
+            new Permission("Criar e Gerenciar Empregado", "employee:create"),
+            new Permission("Remover Empregado", "employee:delete"),
+
+            new Permission("Criar e Gerenciar Pedidos", "order:create"),
+            new Permission("Remover Pedidos", "order:delete"),
+
+            new Permission("Criar e Gerenciar Produto", "product:create"),
+            new Permission("Deletar Produto", "product:delete"),
+
+            new Permission("Criar e Gerenciar Cargos", "role:create"),
+            new Permission("Deletar Cargos", "role:delete")
+        );
     }
 }

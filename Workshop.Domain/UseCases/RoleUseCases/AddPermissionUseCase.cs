@@ -24,9 +24,9 @@ public class AddPermissionUseCase
             return new NotFoundResult("user");
         }
 
-        if (user.Employee.VerifyPermission("role:addPermission"))
+        if (user.Employee.VerifyPermission("role:create"))
         {
-            return new UnauthorizedResult("role:addPermission");
+            return new UnauthorizedResult("role:create");
         }
 
         var role = _roleRepository.getById(data.RoleId);
