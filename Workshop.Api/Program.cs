@@ -1,14 +1,32 @@
-using Microsoft.EntityFrameworkCore;
-using Workshop.Infra.Contexts;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Workshop.Domain.Contracts;
+using Workshop.Domain.Repositories;
+using Workshop.Infra.Repositories;
+using Workshop.Infra.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Utils configurations
+builder.Services.AddTransient<IHasher, BCryptHasher>();
+
+// Repositories configuration
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(
+    JwtBearerDefaults.AuthenticationScheme,
+    options => builder.Configuration.Bind("JwtSettings", options)
+ )
+.AddCookie(
+    CookieAuthenticationDefaults.AuthenticationScheme,
+    options => builder.Configuration.Bind("CookieSettings", options)
+);
 
 var app = builder.Build();
 
@@ -19,9 +37,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(cors => cors
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin()
+);
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 
