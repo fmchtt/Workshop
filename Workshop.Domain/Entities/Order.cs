@@ -11,7 +11,7 @@ public class Order : Entity
     public Client Client { get; set; }
     public bool Complete { get; set; }
 
-    public Order(int orderNumber, int total, Guid employeeId)
+    public Order(int orderNumber, Decimal total, Guid employeeId)
     {
         OrderNumber = orderNumber;
         Total = total;

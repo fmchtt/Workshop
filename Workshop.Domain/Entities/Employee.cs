@@ -9,6 +9,12 @@ public class Employee : Entity
     public Role Role { get; set; }
     public List<Permission> Permissions { get; set; }
 
+    public Employee(Guid userId, Guid companyId)
+    {
+        UserId = userId;
+        CompanyId = companyId;
+    }
+
     public Employee(Guid userId, Guid companyId, Role role)
     {
         UserId = userId;

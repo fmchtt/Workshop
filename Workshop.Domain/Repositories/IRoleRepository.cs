@@ -6,5 +6,6 @@ public interface IRoleRepository
 {
     Role getById(Guid roleId);
     void Create(Role role);
+    void Update(Role role);
     void Delete(Guid id);
 }
