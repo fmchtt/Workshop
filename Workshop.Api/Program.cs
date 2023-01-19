@@ -1,9 +1,25 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Workshop.Domain.Contracts;
 using Workshop.Domain.Repositories;
+using Workshop.Infra.Contexts;
 using Workshop.Infra.Repositories;
 using Workshop.Infra.Utils;
+
+var secret = Environment.GetEnvironmentVariable("SECRET_KEY");
+if (secret == null)
+{
+    throw new Exception();
+}
+
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+if (connectionString == null)
+{ 
+    throw new Exception();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +28,39 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<WorkshopDBContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
+
 // Utils configurations
 builder.Services.AddTransient<IHasher, BCryptHasher>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 // Repositories configuration
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+
+var key = Encoding.ASCII.GetBytes(secret);
+
+builder.Services.AddAuthentication(
+    options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }
+)
 .AddJwtBearer(
-    JwtBearerDefaults.AuthenticationScheme,
-    options => builder.Configuration.Bind("JwtSettings", options)
+    options => { 
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,ValidateAudience = true,
+        };
+    }
  )
 .AddCookie(
     CookieAuthenticationDefaults.AuthenticationScheme,

@@ -9,11 +9,13 @@ public class LoginUseCase
 {
     private readonly IUserRepository _repository;
     private readonly IHasher _hasher;
+    private readonly ITokenService _tokenService;
 
-    public LoginUseCase(IUserRepository repository, IHasher hasher)
+    public LoginUseCase(IUserRepository repository, IHasher hasher, ITokenService tokenService)
     {
         _repository = repository;
         _hasher = hasher;
+        _tokenService = tokenService;
     }
 
     public GenericResult Handle(LoginDTO data)
@@ -35,6 +37,8 @@ public class LoginUseCase
             return new NotFoundResult("user");
         }
 
-        return new SuccessResult("Usuario autenticado com sucesso!", user);
+        var token = _tokenService.GenerateToken(user);
+
+        return new SuccessResult("Usuario autenticado com sucesso!", new { Token = token });
     }
 }

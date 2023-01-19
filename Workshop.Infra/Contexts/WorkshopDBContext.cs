@@ -14,10 +14,7 @@ public class WorkshopDBContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql($@"{Environment.GetEnvironmentVariable("CONNECTION_STRING")}");
-    }
+    public WorkshopDBContext(DbContextOptions<WorkshopDBContext> options): base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
