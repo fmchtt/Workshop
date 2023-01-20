@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
-using Workshop.Domain.DTO.Contracts;
+using Workshop.Domain.DTO.Input.Contracts;
 
-namespace Workshop.Domain.DTO.RoleDTO;
+namespace Workshop.Domain.DTO.Input.RoleDTO;
 
 public class AddPermissionDTO : Notifiable, IDTO
 {

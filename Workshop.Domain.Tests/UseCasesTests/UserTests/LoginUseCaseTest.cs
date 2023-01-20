@@ -1,9 +1,10 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.UserDTO;
+using Workshop.Domain.DTO.Input.UserDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Tests.Repositories;
 using Workshop.Domain.Tests.Utils;
 using Workshop.Domain.UseCases.UserUseCases;
+using Workshop.Tests.Utils;
 
 namespace Workshop.Domain.Tests.UseCasesTests.UserTests;
 
@@ -13,12 +14,14 @@ public class LoginUseCaseTest
     private readonly FakeUserRepository _repository;
     private readonly FakeHasher _hasher;
     private readonly LoginUseCase _useCase;
+    private readonly FakeTokenService _tokenService;
 
     public LoginUseCaseTest()
     {
         _repository = new FakeUserRepository();
         _hasher = new FakeHasher();
-        _useCase = new LoginUseCase(_repository, _hasher);
+        _tokenService = new FakeTokenService();
+        _useCase = new LoginUseCase(_repository, _hasher, _tokenService);
     }
 
     [TestMethod]

@@ -1,30 +1,35 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.RoleDTO;
+using Workshop.Domain.DTO.Input.RoleDTO;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.RoleUseCases;
 
 public class AddPermissionUseCase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IEmployeeRepository _employeeRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
 
-    public AddPermissionUseCase(IUserRepository userRepository, IRoleRepository roleRepository, IPermissionRepository permissionRepository) { 
-        _userRepository = userRepository;
+    public AddPermissionUseCase(
+        IEmployeeRepository employeeRepository,
+        IRoleRepository roleRepository, 
+        IPermissionRepository permissionRepository
+    ) 
+    {
+        _employeeRepository = employeeRepository;
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
     }
 
     public GenericResult Handle(AddPermissionDTO data, Guid executorId)
     {
-        var user = _userRepository.GetById(executorId);
+        var user = _employeeRepository.GetByUserId(executorId);
         if (user == null)
         {
             return new NotFoundResult("user");
         }
 
-        if (user.Employee.VerifyPermission("role:create"))
+        if (user.VerifyPermission("role:create"))
         {
             return new UnauthorizedResult("role:create");
         }
@@ -35,7 +40,7 @@ public class AddPermissionUseCase
             return new NotFoundResult("role");
         }
 
-        if (role.CompanyId != user.Employee.CompanyId)
+        if (role.CompanyId != user.CompanyId)
         {
             return new InvalidDataResult("role");
         }

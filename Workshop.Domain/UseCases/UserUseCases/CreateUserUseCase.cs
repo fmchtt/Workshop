@@ -1,6 +1,7 @@
 ﻿using Workshop.Domain.Contracts;
 using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.UserDTO;
+using Workshop.Domain.DTO.Input.UserDTO;
+using Workshop.Domain.DTO.Output.UserDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
 
@@ -25,11 +26,16 @@ public class CreateUserUseCase
             return new InvalidDataResult("user", data.Notifications);
         }
 
+        var user = _repository.GetByEmail(data.Email);
+        if (user != null) {
+            return new InvalidDataResult("email");
+        }
+
         var password = _hasher.hash(data.Password);
 
         var newUser = new User(data.Name, data.Email, password);
         _repository.Create(newUser);
 
-        return new SuccessResult("Usuário Adicionado com sucesso!", newUser);
+        return new SuccessResult("Usuário Adicionado com sucesso!", new UserResultDTO(newUser));
     }
 }

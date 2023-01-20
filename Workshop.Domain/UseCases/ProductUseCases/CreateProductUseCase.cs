@@ -1,5 +1,6 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.ProductDTO;
+using Workshop.Domain.DTO.Input.ProductDTO;
+using Workshop.Domain.DTO.Output.ProductDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
 
@@ -8,12 +9,15 @@ namespace Workshop.Domain.UseCases.ProductUseCases;
 public class CreateProductUseCase
 {
     private readonly IProductRepository _productRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public CreateProductUseCase(IProductRepository repository, IUserRepository userRepository)
+    public CreateProductUseCase(
+        IProductRepository repository, 
+        IEmployeeRepository employeeRepository
+    )
     {
         _productRepository = repository;
-        _userRepository = userRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public GenericResult Handle(CreateProductDTO data, Guid ExecutorId)
@@ -24,20 +28,20 @@ public class CreateProductUseCase
             return new InvalidDataResult("product", data.Notifications);
         }
 
-        var user = _userRepository.GetById(ExecutorId);
+        var user = _employeeRepository.GetByUserId(ExecutorId);
         if (user == null)
         {
             return new NotFoundResult("user");
         }
 
-        if (!user.Employee.VerifyPermission("product:create"))
+        if (!user.VerifyPermission("product:create"))
         {
             return new UnauthorizedResult("product:create");
         }
 
-        var product = new Product(data.Name, data.Description, data.Price, user.Employee.CompanyId, data.QuantityInStock);
+        var product = new Product(data.Name, data.Description, data.Price, user.CompanyId, data.QuantityInStock);
         _productRepository.Create(product);
 
-        return new SuccessResult("Produto criado com sucesso!", product);
+        return new SuccessResult("Produto criado com sucesso!", new ProductResultDTO(product));
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.ProductDTO;
+using Workshop.Domain.DTO.Input.ProductDTO;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.ProductUseCases;
@@ -7,12 +7,15 @@ namespace Workshop.Domain.UseCases.ProductUseCases;
 public class DeleteProductUseCase
 {
     private readonly IProductRepository _productRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public DeleteProductUseCase(IProductRepository productRepository, IUserRepository userRepository)
+    public DeleteProductUseCase(
+        IProductRepository productRepository,
+        IEmployeeRepository employeeRepository
+    )
     {
         _productRepository = productRepository;
-        _userRepository = userRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public GenericResult Handle(DeleteProductDTO data, Guid ExecutorId)
@@ -29,17 +32,17 @@ public class DeleteProductUseCase
             return new NotFoundResult("product");
         }
 
-        var user = _userRepository.GetById(ExecutorId);
-        if (user == null || user.Employee.CompanyId != product.OwnerId) {
+        var user = _employeeRepository.GetByUserId(ExecutorId);
+        if (user == null || user.CompanyId != product.OwnerId) {
             return new NotFoundResult("owner");
         }
 
-        if (!user.Employee.VerifyPermission("product:delete"))
+        if (!user.VerifyPermission("product:delete"))
         {
             return new UnauthorizedResult("product:delete");
         }
 
-        _productRepository.Delete(product.Id);
+        _productRepository.Delete(product);
 
         return new SuccessResult("Produto deletado com sucesso!");
     }

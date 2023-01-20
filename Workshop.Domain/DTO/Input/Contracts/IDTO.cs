@@ -1,6 +1,6 @@
 ﻿using Flunt.Validations;
 
-namespace Workshop.Domain.DTO.Contracts;
+namespace Workshop.Domain.DTO.Input.Contracts;
 
 internal interface IDTO : IValidatable
 {

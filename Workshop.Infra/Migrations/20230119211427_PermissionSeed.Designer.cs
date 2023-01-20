@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Workshop.Infra.Contexts;
@@ -11,9 +12,11 @@ using Workshop.Infra.Contexts;
 namespace Workshop.Infra.Migrations
 {
     [DbContext(typeof(WorkshopDBContext))]
-    partial class WorkshopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230119211427_PermissionSeed")]
+    partial class PermissionSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace Workshop.Infra.Migrations
                     b.HasIndex("ReceivingServicesId");
 
                     b.ToTable("ClientCompany");
-                });
-
-            modelBuilder.Entity("EmployeePermission", b =>
-                {
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PermissionsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("EmployeeId", "PermissionsId");
-
-                    b.HasIndex("PermissionsId");
-
-                    b.ToTable("EmployeePermission");
                 });
 
             modelBuilder.Entity("PermissionRole", b =>
@@ -131,7 +119,8 @@ namespace Workshop.Infra.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Employees");
                 });
@@ -172,6 +161,9 @@ namespace Workshop.Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -182,60 +174,62 @@ namespace Workshop.Infra.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.ToTable("Permissions");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("20578b79-f52f-4b42-adc1-2c83ee1969f8"),
+                            Id = new Guid("b272eced-116a-46cd-a989-48ac007644f3"),
                             Name = "ALL",
                             ResourceCode = "resource:owner"
                         },
                         new
                         {
-                            Id = new Guid("2e0edd7c-f17b-4102-b34a-b4451129dfc8"),
+                            Id = new Guid("1bd44bc9-da35-4c89-8ce0-4d566f2ef82a"),
                             Name = "Criar e Gerenciar Empregado",
                             ResourceCode = "employee:create"
                         },
                         new
                         {
-                            Id = new Guid("530eda6e-bf5a-4c24-9564-08d03f1f517f"),
+                            Id = new Guid("e54f45a3-57b6-46ba-a5ba-6b4b95825a4f"),
                             Name = "Remover Empregado",
                             ResourceCode = "employee:delete"
                         },
                         new
                         {
-                            Id = new Guid("9cca7e6b-b33c-4f3d-b34f-fd6743ea9135"),
+                            Id = new Guid("3faebefa-ebbf-4afd-8475-9eee3e78a6b8"),
                             Name = "Criar e Gerenciar Pedidos",
                             ResourceCode = "order:create"
                         },
                         new
                         {
-                            Id = new Guid("102f1eb3-aa60-4761-9606-e2382b99e0ad"),
+                            Id = new Guid("aab81c93-32c1-442d-bb8d-b7a857099570"),
                             Name = "Remover Pedidos",
                             ResourceCode = "order:delete"
                         },
                         new
                         {
-                            Id = new Guid("e369ccf9-43ad-4a81-9357-2d1e58e1547b"),
+                            Id = new Guid("3d46e73d-1fab-4673-9b18-b463a94b9e50"),
                             Name = "Criar e Gerenciar Produto",
                             ResourceCode = "product:create"
                         },
                         new
                         {
-                            Id = new Guid("78398c16-7298-4dbe-9dcf-3c9352c7039b"),
+                            Id = new Guid("2682564c-6c2f-41c3-b4f7-d0242561a168"),
                             Name = "Deletar Produto",
                             ResourceCode = "product:delete"
                         },
                         new
                         {
-                            Id = new Guid("81da03c4-8b01-416f-8420-e237c3a04a4c"),
+                            Id = new Guid("7fa60b41-7b3b-40e9-b6ae-82d3013f9929"),
                             Name = "Criar e Gerenciar Cargos",
                             ResourceCode = "role:create"
                         },
                         new
                         {
-                            Id = new Guid("a36938e4-039c-48bb-ae7f-fba5cc7d9bdb"),
+                            Id = new Guid("f68fa854-4c7d-4094-bdb8-5215f02a6360"),
                             Name = "Deletar Cargos",
                             ResourceCode = "role:delete"
                         });
@@ -362,21 +356,6 @@ namespace Workshop.Infra.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EmployeePermission", b =>
-                {
-                    b.HasOne("Workshop.Domain.Entities.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Workshop.Domain.Entities.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PermissionRole", b =>
                 {
                     b.HasOne("Workshop.Domain.Entities.Permission", null)
@@ -418,8 +397,8 @@ namespace Workshop.Infra.Migrations
                         .IsRequired();
 
                     b.HasOne("Workshop.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("Employee")
+                        .HasForeignKey("Workshop.Domain.Entities.Employee", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -447,6 +426,13 @@ namespace Workshop.Infra.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Workshop.Domain.Entities.Permission", b =>
+                {
+                    b.HasOne("Workshop.Domain.Entities.Employee", null)
+                        .WithMany("Permissions")
+                        .HasForeignKey("EmployeeId");
                 });
 
             modelBuilder.Entity("Workshop.Domain.Entities.Product", b =>
@@ -500,9 +486,20 @@ namespace Workshop.Infra.Migrations
                     b.Navigation("Employees");
                 });
 
+            modelBuilder.Entity("Workshop.Domain.Entities.Employee", b =>
+                {
+                    b.Navigation("Permissions");
+                });
+
             modelBuilder.Entity("Workshop.Domain.Entities.Order", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Workshop.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Employee")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

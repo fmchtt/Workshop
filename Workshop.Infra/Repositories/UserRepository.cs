@@ -22,18 +22,14 @@ public class UserRepository : IUserRepository
 
     public User GetByEmail(string email)
     {
-        var user = _context.Users
-            .Include(u => u.Employee.Permissions)
-            .FirstOrDefault(u => u.Email == email);
+        var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
         return user;
     }
 
     public User GetById(Guid id)
     {
-        var user = _context.Users
-            .Include(u => u.Employee.Permissions)
-            .FirstOrDefault(u => u.Id == id);
+        var user = _context.Users.FirstOrDefault(u => u.Id == id);
 
         return user;
     }

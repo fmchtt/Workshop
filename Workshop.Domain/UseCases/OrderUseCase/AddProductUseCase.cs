@@ -1,5 +1,5 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.OrderDTO;
+using Workshop.Domain.DTO.Input.OrderDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
 
@@ -9,12 +9,17 @@ public class AddProductUseCase
 {
     private readonly IProductRepository _productRepository;
     private readonly IOrderRepository _orderRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public AddProductUseCase(IProductRepository productRepository, IOrderRepository orderRepository, IUserRepository userRepository) {
+    public AddProductUseCase(
+        IProductRepository productRepository, 
+        IOrderRepository orderRepository, 
+        IEmployeeRepository employeeRepository
+    ) 
+    {
         _orderRepository = orderRepository;
         _productRepository = productRepository;
-        _userRepository = userRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public GenericResult Handle(AddProductDTO data, Guid executorId)
@@ -25,13 +30,13 @@ public class AddProductUseCase
             return new InvalidDataResult("product", data.Notifications);
         }
 
-        var user = _userRepository.GetById(executorId);
+        var user = _employeeRepository.GetByUserId(executorId);
         if (user == null)
         {
             return new NotFoundResult("user");
         }
 
-        if (!user.Employee.VerifyPermission("order:create"))
+        if (!user.VerifyPermission("order:create"))
         {
             return new UnauthorizedResult("order:create");
         }

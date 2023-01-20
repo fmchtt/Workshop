@@ -6,7 +6,6 @@ public class User : Entity
     public string Email { get; private set; }
     public string Password { get; private set; }
     public Guid ActiveEmployeeId { get; set; }
-    public Employee Employee { get; set; }
 
     public User(string name, string email, string password)
     {

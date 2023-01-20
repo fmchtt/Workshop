@@ -1,5 +1,6 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.OrderDTO;
+using Workshop.Domain.DTO.Input.OrderDTO;
+using Workshop.Domain.DTO.Output.OrderDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
 
@@ -8,30 +9,33 @@ namespace Workshop.Domain.UseCases.OrderUseCase;
 public class CreateOrderUseCase
 {
     private readonly IOrderRepository _orderRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public CreateOrderUseCase(IOrderRepository orderRepository, IUserRepository userRepository)
+    public CreateOrderUseCase(
+        IOrderRepository orderRepository, 
+        IEmployeeRepository employeeRepository
+    )
     {
         _orderRepository = orderRepository;
-        _userRepository = userRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public GenericResult Handle(CreateOrderDTO data, Guid executorId)
     {
-        var user = _userRepository.GetById(executorId);
+        var user = _employeeRepository.GetByUserId(executorId);
         if (user == null)
         {
             return new NotFoundResult("user");
         }
 
-        if (!user.Employee.VerifyPermission("order:create"))
+        if (!user.VerifyPermission("order:create"))
         {
             return new UnauthorizedResult("order:create");
         }
 
-        var order = new Order(_orderRepository.GetMaxOrderNumber(user.Employee.CompanyId) + 1, 0, user.Employee.Id);
+        var order = new Order(_orderRepository.GetMaxOrderNumber(user.CompanyId) + 1, 0, user.Id);
         _orderRepository.Create(order);
 
-        return new SuccessResult("Pedido criado com sucesso!", order);
+        return new SuccessResult("Pedido criado com sucesso!", new OrderResultDTO(order));
     }
 }

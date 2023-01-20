@@ -4,7 +4,7 @@ using Workshop.Domain.Entities;
 using Workshop.Domain.Tests.Repositories;
 using Workshop.Domain.Tests.Utils;
 using Workshop.Domain.UseCases.UserUseCases;
-using Workshop.Domain.DTO.UserDTO;
+using Workshop.Domain.DTO.Input.UserDTO;
 using Workshop.Domain.Contracts.Results;
 
 namespace Workshop.Domain.Tests.UseCasesTests.UserTests;

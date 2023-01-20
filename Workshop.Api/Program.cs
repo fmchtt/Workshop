@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,21 +17,13 @@ if (secret == null)
 
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 if (connectionString == null)
-{ 
+{
     throw new Exception();
 }
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<WorkshopDBContext>(options =>
-{
-    options.UseNpgsql(connectionString);
-});
+builder.Services.AddDbContext<WorkshopDBContext>(options => options.UseNpgsql(connectionString));
 
 // Utils configurations
 builder.Services.AddTransient<IHasher, BCryptHasher>();
@@ -39,6 +31,39 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 
 // Repositories configuration
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
+builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<IPermissionRepository, PermissionRepository>();
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 
 var key = Encoding.ASCII.GetBytes(secret);
@@ -51,20 +76,18 @@ builder.Services.AddAuthentication(
     }
 )
 .AddJwtBearer(
-    options => { 
+    options =>
+    {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,ValidateAudience = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
         };
     }
- )
-.AddCookie(
-    CookieAuthenticationDefaults.AuthenticationScheme,
-    options => builder.Configuration.Bind("CookieSettings", options)
 );
 
 var app = builder.Build();
@@ -84,9 +107,9 @@ app.UseCors(cors => cors
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

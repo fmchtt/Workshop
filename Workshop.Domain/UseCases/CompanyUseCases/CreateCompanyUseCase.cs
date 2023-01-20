@@ -1,5 +1,6 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.CompanyDTO;
+using Workshop.Domain.DTO.Input.CompanyDTO;
+using Workshop.Domain.DTO.Output.CompanyDTO;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Repositories;
 
@@ -58,6 +59,9 @@ public class CreateCompanyUseCase
         var employee = new Employee(ExecutorId, company.Id, role);
         _employeeRepository.Create(employee);
 
-        return new SuccessResult("Empresa criada com sucesso!", company);
+        owner.ActiveEmployeeId = employee.Id;
+        _userRepository.Update(owner);
+
+        return new SuccessResult("Empresa criada com sucesso!", new CompanyResultDTO(company));
     }
 }

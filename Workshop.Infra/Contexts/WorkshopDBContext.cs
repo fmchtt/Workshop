@@ -20,6 +20,9 @@ public class WorkshopDBContext : DbContext
     {
         modelBuilder.Entity<Client>().HasMany(c => c.ReceivingServices).WithMany();
         modelBuilder.Entity<Role>().HasMany(r => r.Permissions).WithMany();
+        modelBuilder.Entity<Employee>().HasMany(e => e.Permissions).WithMany();
+        modelBuilder.Entity<Employee>().HasOne(e => e.User).WithMany();
+
         modelBuilder.Entity<Permission>().HasData(
             new Permission("ALL", "resource:owner"),
 

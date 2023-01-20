@@ -1,18 +1,26 @@
-﻿using Workshop.Domain.DTO.CompanyDTO;
-using Workshop.Domain.Repositories;
+﻿using Workshop.Domain.Repositories;
 using Workshop.Domain.Entities;
 using Workshop.Domain.Contracts.Results;
+using Workshop.Domain.DTO.Input.CompanyDTO;
+using Workshop.Domain.DTO.Output.EmployeeDTO;
 
 namespace Workshop.Domain.UseCases.CompanyUseCases;
 
 public class AddEmployeeUseCase
 {
-    IUserRepository _userRepository;
-    ICompanyRepository _companyRepository;
-    IRoleRepository _roleRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public AddEmployeeUseCase(IUserRepository userRepository, ICompanyRepository companyRepository, IRoleRepository roleRepository)
+    public AddEmployeeUseCase(
+        IUserRepository userRepository, 
+        ICompanyRepository companyRepository, 
+        IRoleRepository roleRepository, 
+        IEmployeeRepository employeeRepository
+    )
     {
+        _employeeRepository = employeeRepository;
         _userRepository = userRepository;
         _companyRepository = companyRepository;
         _roleRepository = roleRepository;
@@ -26,18 +34,18 @@ public class AddEmployeeUseCase
             return new InvalidDataResult("employee", data.Notifications);
         }
 
-        var executor = _userRepository.GetById(ExecutorId);
+        var executor = _employeeRepository.GetByUserId(ExecutorId);
         if (executor == null)
         {
             return new NotFoundResult("user");
         }
 
-        if (executor.Employee.VerifyPermission("employee:create"))
+        if (executor.VerifyPermission("employee:create"))
         {
             return new UnauthorizedResult("employee:create");
         }
 
-        var company = _companyRepository.GetById(executor.Employee.CompanyId);
+        var company = _companyRepository.GetById(executor.CompanyId);
         if (company == null)
         {
             return new NotFoundResult("company");
@@ -69,6 +77,6 @@ public class AddEmployeeUseCase
         var newEmployee = new Employee(user.Id, company.Id, role);
         company.Employees.Add(newEmployee);
 
-        return new SuccessResult("Funcionario adicionado com sucesso!", newEmployee);
+        return new SuccessResult("Funcionario adicionado com sucesso!", new EmployeeResultDTO(newEmployee));
     }
 }

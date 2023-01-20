@@ -1,6 +1,6 @@
 ﻿using Workshop.Domain.Contracts;
 using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.UserDTO;
+using Workshop.Domain.DTO.Input.UserDTO;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.UserUseCases;

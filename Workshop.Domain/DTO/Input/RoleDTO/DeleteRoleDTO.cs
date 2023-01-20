@@ -1,4 +1,4 @@
-﻿namespace Workshop.Domain.DTO.RoleDTO;
+﻿namespace Workshop.Domain.DTO.Input.RoleDTO;
 
 public class DeleteRoleDTO
 {

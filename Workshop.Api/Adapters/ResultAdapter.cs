@@ -5,7 +5,7 @@ using Workshop.Domain.Contracts.Results;
 
 namespace Workshop.Api.Adapters;
 
-public class ResultAdapter<S>
+public class ResultAdapter
 {
     public static IActionResult Parse(GenericResult result)
     {
@@ -15,12 +15,11 @@ public class ResultAdapter<S>
         {
             if (result.Result != null)
             {
-                return new OkObjectResult((S) result.Result);
+                return new OkObjectResult(result.Result);
             }
 
             return new OkObjectResult(message);
         }
-
 
         if (result is InvalidDataResult)
         {

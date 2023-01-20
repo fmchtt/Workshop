@@ -1,32 +1,32 @@
 ﻿using Workshop.Domain.Contracts.Results;
-using Workshop.Domain.DTO.RoleDTO;
+using Workshop.Domain.DTO.Input.RoleDTO;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.RoleUseCases;
 
 public class DeleteRoleUseCase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IEmployeeRepository _employeeRepository;
     private readonly IRoleRepository _roleRepository;
 
     public DeleteRoleUseCase(
-        IUserRepository userRepository,
+        IEmployeeRepository employeeRepository,
         IRoleRepository roleRepository
     )
     {
         _roleRepository = roleRepository;
-        _userRepository = userRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public GenericResult Handle(DeleteRoleDTO data, Guid executorId)
     {
-        var user = _userRepository.GetById(executorId);
+        var user = _employeeRepository.GetByUserId(executorId);
         if (user == null)
         {
             return new NotFoundResult("user");
         }
 
-        if (!user.Employee.VerifyPermission("role:delete"))
+        if (!user.VerifyPermission("role:delete"))
         {
             return new UnauthorizedResult("role:delete");
         }
@@ -37,12 +37,12 @@ public class DeleteRoleUseCase
             return new NotFoundResult("role");
         }
 
-        if (role.CompanyId != user.Employee.CompanyId)
+        if (role.CompanyId != user.CompanyId)
         {
             return new NotFoundResult("role");
         }
 
-        _roleRepository.Delete(data.RoleId);
+        _roleRepository.Delete(role);
 
         return new SuccessResult("Role deletado com sucesso!");
     }

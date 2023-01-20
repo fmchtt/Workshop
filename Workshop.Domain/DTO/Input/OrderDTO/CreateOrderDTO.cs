@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
-using Workshop.Domain.DTO.Contracts;
+using Workshop.Domain.DTO.Input.Contracts;
 
-namespace Workshop.Domain.DTO.OrderDTO;
+namespace Workshop.Domain.DTO.Input.OrderDTO;
 
 public class CreateOrderDTO : Notifiable, IDTO
 {

@@ -1,8 +1,8 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using Workshop.Domain.DTO.Contracts;
+using Workshop.Domain.DTO.Input.Contracts;
 
-namespace Workshop.Domain.DTO.UserDTO;
+namespace Workshop.Domain.DTO.Input.UserDTO;
 
 public class CreateUserDto : Notifiable, IDTO
 {
