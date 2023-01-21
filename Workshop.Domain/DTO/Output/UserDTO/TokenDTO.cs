@@ -1,4 +1,4 @@
-﻿namespace Workshop.Api.DTO;
+﻿namespace Workshop.Domain.DTO.Output.UserDTO;
 
 public class TokenDTO
 {

@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Flunt.Notifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Api.Adapters;
+using Workshop.Domain.DTO.Output.Generic;
 using Workshop.Domain.Contracts;
 using Workshop.Domain.DTO.Input.UserDTO;
 using Workshop.Domain.DTO.Output.UserDTO;
@@ -9,24 +10,26 @@ using Workshop.Domain.UseCases.UserUseCases;
 
 namespace Workshop.Api.Controllers;
 
-[ApiController]
-[Route("auth")]
-public class AuthController : ControllerBase
+using NotificationList = IReadOnlyCollection<Notification>;
+
+[ApiController, Route("auth")]
+public class AuthController : WorkshopBaseController
 {
-    [HttpGet("me")]
-    [Authorize]
-    public IActionResult Me(
+    [HttpGet("me"), Authorize]
+    public UserResultDTO Me(
         [FromServices] IUserRepository userRepository
     )
     {
-        var user = userRepository.GetById(Guid.Parse(User.Identity.Name));
+        var user = userRepository.GetById(GetUserId());
 
-        return new OkObjectResult(new UserResultDTO(user));
+        return Ok(new UserResultDTO(user));
     }
 
-    [HttpPost("login")]
-    [AllowAnonymous]
-    public IActionResult Login(
+    [HttpPost("login"), AllowAnonymous]
+    [ProducesResponseType(typeof(TokenDTO), 200)]
+    [ProducesResponseType(typeof(NotificationList), 400)]
+    [ProducesResponseType(typeof(MessageResult), 404)]
+    public dynamic Login(
         [FromBody] LoginDTO data,
         [FromServices] IUserRepository userRepository,
         [FromServices] IHasher hasher,
@@ -35,12 +38,13 @@ public class AuthController : ControllerBase
     {
         var result = new LoginUseCase(userRepository, hasher, tokenService).Handle(data);
 
-        return ResultAdapter.Parse(result);
+        return ParseResult(result);
     }
 
-    [HttpPost("register")]
-    [AllowAnonymous]
-    public IActionResult Register(
+    [HttpPost("register"), AllowAnonymous]
+    [ProducesResponseType(typeof(UserResultDTO), 200)]
+    [ProducesResponseType(typeof(NotificationList), 400)]
+    public dynamic Register(
         [FromBody] CreateUserDto data,
         [FromServices] IUserRepository userRepository,
         [FromServices] IHasher hasher
@@ -48,6 +52,6 @@ public class AuthController : ControllerBase
     {
         var result = new CreateUserUseCase(userRepository, hasher).Handle(data);
 
-        return ResultAdapter.Parse(result);
+        return ParseResult(result);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Workshop.Domain.Contracts;
 using Workshop.Domain.Contracts.Results;
 using Workshop.Domain.DTO.Input.UserDTO;
+using Workshop.Domain.DTO.Output.UserDTO;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.UseCases.UserUseCases;
@@ -39,6 +40,6 @@ public class LoginUseCase
 
         var token = _tokenService.GenerateToken(user);
 
-        return new SuccessResult("Usuario autenticado com sucesso!", new { Token = token });
+        return new SuccessResult("Usuario autenticado com sucesso!", new TokenDTO(token));
     }
 }

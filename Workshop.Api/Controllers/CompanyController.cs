@@ -1,29 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Flunt.Notifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Api.Adapters;
+using Workshop.Domain.DTO.Output.Generic;
 using Workshop.Domain.DTO.Input.CompanyDTO;
 using Workshop.Domain.DTO.Output.CompanyDTO;
+using Workshop.Domain.DTO.Output.EmployeeDTO;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.UseCases.CompanyUseCases;
 
 namespace Workshop.Api.Controllers;
 
-[ApiController]
-[Route("company")]
-public class CompanyController : ControllerBase
+using NotificationList = IReadOnlyCollection<Notification>;
+
+[ApiController, Route("company")]
+public class CompanyController : WorkshopBaseController
 {
     [HttpGet, Authorize]
-    public IActionResult GetCompany(
+    public CompanyResultDTO GetCompany(
         [FromServices] IEmployeeRepository employeeRepository
     )
     {
-        var employee = employeeRepository.GetByUserId(Guid.Parse(User.Identity.Name));
+        var employee = employeeRepository.GetByUserId(GetUserId());
 
-        return new OkObjectResult(new CompanyResultDTO(employee.Company));
+        return Ok(new CompanyResultDTO(employee.Company));
     }
 
     [HttpPost("create"), Authorize]
-    public IActionResult CreateCompany(
+    [ProducesResponseType(typeof(CompanyResultDTO), 200)]
+    [ProducesResponseType(typeof(NotificationList), 400)]
+    [ProducesResponseType(typeof(MessageResult), 401)]
+    [ProducesResponseType(typeof(MessageResult), 404)]
+    public dynamic CreateCompany(
         [FromBody] CreateCompanyDTO data,
         [FromServices] ICompanyRepository companyRepository,
         [FromServices] IUserRepository userRepository,
@@ -32,8 +39,6 @@ public class CompanyController : ControllerBase
         [FromServices] IPermissionRepository permissionRepository
     )
     {
-        var userId = User?.Identity?.Name;
-
         var result = new CreateCompanyUseCase(
             userRepository, 
             companyRepository, 
@@ -42,14 +47,18 @@ public class CompanyController : ControllerBase
             permissionRepository
         ).Handle(
             data, 
-            Guid.Parse(userId)
+            GetUserId()
         );
 
-        return ResultAdapter.Parse(result);
+        return ParseResult(result);
     }
 
     [HttpPost("employee"), Authorize]
-    public IActionResult AddEmployee(
+    [ProducesResponseType(typeof(EmployeeResultDTO), 200)]
+    [ProducesResponseType(typeof(NotificationList), 400)]
+    [ProducesResponseType(typeof(MessageResult), 401)]
+    [ProducesResponseType(typeof(MessageResult), 404)]
+    public dynamic AddEmployee(
         [FromBody] AddEmployeeDTO data,
         [FromServices] ICompanyRepository companyRepository,
         [FromServices] IUserRepository userRepository,
@@ -57,8 +66,13 @@ public class CompanyController : ControllerBase
         [FromServices] IEmployeeRepository employeeRepository
     )
     {
-        var result = new AddEmployeeUseCase(userRepository, companyRepository, roleRepository, employeeRepository).Handle(data, Guid.Parse(User.Identity.Name));
+        var result = new AddEmployeeUseCase(
+            userRepository, 
+            companyRepository, 
+            roleRepository, 
+            employeeRepository
+        ).Handle(data, GetUserId());
 
-        return ResultAdapter.Parse(result);
+        return ParseResult(result);
     }
 }
