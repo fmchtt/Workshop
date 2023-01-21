@@ -28,9 +28,27 @@ public class EmployeeRepository : IEmployeeRepository
 
     public Employee GetByUserId(Guid id)
     {
+        /*
+        var user = _context.Users.First(u => u.Id == id);
+        if (user == null)
+        {
+            return null;
+        }
+
+        var employee = _context.Employees.First(e => e.Id == user.ActiveEmployeeId);
+        */
+
+
         var employee = _context.Employees
             .Include(x => x.Company)
-            .First(x => x.UserId == id);
+            .Join(
+                _context.Users, e => e.Id, 
+                u => u.ActiveEmployeeId, 
+                (e, u) => new { user = u, emp = e }
+            )
+            .Where(e => e.user.Id == id)
+            .Select(e => e.emp)
+            .First();
 
         return employee;
     }

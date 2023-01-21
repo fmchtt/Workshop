@@ -63,7 +63,7 @@ public class AddEmployeeUseCase
             return new InvalidDataResult("user", new());
         }
 
-        var role = _roleRepository.getById(data.RoleId);
+        var role = _roleRepository.GetById(data.RoleId, company.Id);
         if (role == null)
         {
             return new NotFoundResult("role");

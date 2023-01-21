@@ -35,6 +35,8 @@ builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<IRoleRepository, RoleRepository>();
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddTransient<IPermissionRepository, PermissionRepository>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<IProductRepository, ProductRepository>();
 
 // Add services to the container.
 builder.Services.AddControllers();

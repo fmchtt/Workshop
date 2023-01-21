@@ -34,7 +34,7 @@ public class AddPermissionUseCase
             return new UnauthorizedResult("role:create");
         }
 
-        var role = _roleRepository.getById(data.RoleId);
+        var role = _roleRepository.GetById(data.RoleId, user.CompanyId);
         if (role == null)
         {
             return new NotFoundResult("role");

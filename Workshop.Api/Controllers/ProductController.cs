@@ -6,7 +6,6 @@ using Workshop.Domain.DTO.Input.ProductDTO;
 using Workshop.Domain.DTO.Output.ProductDTO;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.UseCases.ProductUseCases;
-using Workshop.Infra.Contexts;
 
 namespace Workshop.Api.Controllers;
 
@@ -21,15 +20,12 @@ public class ProductController : WorkshopBaseController
     public dynamic GetProduct(
         [FromServices] IProductRepository productRepository,
         [FromServices] IEmployeeRepository employeeRepository,
-        [FromServices] IUserRepository userRepository,
         string id
     )
     {
-        var user = userRepository.GetById(GetUserId());
-        var employee = employeeRepository.GetByUserId(user.ActiveEmployeeId);
-        var product = productRepository.GetByID(Guid.Parse(id));
-
-        if (product == null || product.OwnerId != employee.CompanyId)
+        var employee = employeeRepository.GetByUserId(GetUserId());
+        var product = productRepository.GetByID(Guid.Parse(id), employee.CompanyId);
+        if (product == null)
         {
             return NotFound("Produto não encontrado!");
         }
@@ -38,23 +34,13 @@ public class ProductController : WorkshopBaseController
     }
 
     [HttpGet, Authorize]
-    [ProducesResponseType(typeof(List<ProductResultDTO>), 200)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic GetProducts(
-        [FromServices] WorkshopDBContext context,
+    public List<ProductResultDTO> GetProducts(
         [FromServices] IProductRepository productRepository,
-        [FromServices] IEmployeeRepository employeeRepository,
-        [FromServices] IUserRepository userRepository
+        [FromServices] IEmployeeRepository employeeRepository
     )
     {
-        var user = userRepository.GetById(GetUserId());
-        var employee = employeeRepository.GetByUserId(user.ActiveEmployeeId);
+        var employee = employeeRepository.GetByUserId(GetUserId());
         var product = productRepository.GetAll(employee.CompanyId);
-
-        if (product == null)
-        {
-            return NotFound("Nenhum produto cadastrado!");
-        }
 
         var products = new List<ProductResultDTO>();
         foreach (var item in product)

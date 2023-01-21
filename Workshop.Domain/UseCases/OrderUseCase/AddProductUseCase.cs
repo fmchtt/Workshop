@@ -41,7 +41,7 @@ public class AddProductUseCase
             return new UnauthorizedResult("order:create");
         }
 
-        var product = _productRepository.GetByID(data.ProductId);
+        var product = _productRepository.GetByID(data.ProductId, user.CompanyId);
         if (product == null)
         {
             return new NotFoundResult("product");
@@ -52,7 +52,7 @@ public class AddProductUseCase
             return new InvalidDataResult("A quantidade de produtos é maior que o estoque!");
         }
 
-        var order = _orderRepository.GetById(data.OrderId);
+        var order = _orderRepository.GetById(data.OrderId, user.CompanyId);
         if (order == null)
         {
             return new NotFoundResult("order");

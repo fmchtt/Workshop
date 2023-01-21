@@ -25,9 +25,16 @@ public class RoleRepository : IRoleRepository
         _context.SaveChanges();
     }
 
-    public Role getById(Guid roleId)
+    public List<Role> GetAll(Guid companyId)
     {
-        var role = _context.Roles.First(x => x.Id == roleId);
+        var roles = _context.Roles.Where(x => x.CompanyId == companyId).ToList();
+
+        return roles;
+    }
+
+    public Role GetById(Guid roleId, Guid companyId)
+    {
+        var role = _context.Roles.First(x => x.Id == roleId && x.CompanyId == companyId);
 
         return role;
     }

@@ -26,20 +26,21 @@ public class DeleteProductUseCase
             return new InvalidDataResult("product", data.Notifications);
         }
 
-        var product = _productRepository.GetByID(data.ProductId);
-        if (product == null)
-        {
-            return new NotFoundResult("product");
-        }
-
         var user = _employeeRepository.GetByUserId(ExecutorId);
-        if (user == null || user.CompanyId != product.OwnerId) {
+        if (user == null)
+        {
             return new NotFoundResult("owner");
         }
 
         if (!user.VerifyPermission("product:delete"))
         {
             return new UnauthorizedResult("product:delete");
+        }
+
+        var product = _productRepository.GetByID(data.ProductId, user.CompanyId);
+        if (product == null)
+        {
+            return new NotFoundResult("product");
         }
 
         _productRepository.Delete(product);

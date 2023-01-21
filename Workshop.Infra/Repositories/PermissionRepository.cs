@@ -13,6 +13,13 @@ public class PermissionRepository : IPermissionRepository
         _context = context;
     }
 
+    public List<Permission> GetAll()
+    {
+        var permissions = _context.Permissions.ToList();
+
+        return permissions;
+    }
+
     public Permission GetById(Guid id)
     {
         var permission = _context.Permissions.First(x => x.Id == id);

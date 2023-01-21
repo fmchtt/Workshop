@@ -31,7 +31,7 @@ public class DeleteRoleUseCase
             return new UnauthorizedResult("role:delete");
         }
 
-        var role = _roleRepository.getById(data.RoleId);
+        var role = _roleRepository.GetById(data.RoleId, user.CompanyId);
         if (user == null)
         {
             return new NotFoundResult("role");
