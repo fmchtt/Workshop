@@ -1,83 +1,44 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Domain.DTO.Input.RoleDTO;
-using Workshop.Domain.DTO.Output.Generic;
-using Workshop.Domain.DTO.Output.RoleDTO;
-using Workshop.Domain.Repositories;
-using Workshop.Domain.UseCases.RoleUseCases;
+using Workshop.Application.Management.Roles.Create;
+using Workshop.Application.Management.Roles.CreatePermission;
+using Workshop.Application.Management.Roles.GetRoles;
+using Workshop.Application.Results.Management;
+using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Api.Controllers;
 
-using NotificationList = IReadOnlyCollection<Notification>;
-
 [ApiController, Route("roles")]
-public class RoleController : WorkshopBaseController
+public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
     [HttpGet, Authorize]
-    public List<RoleResultDTO> GetRoles(
-        [FromServices] IRoleRepository roleRepository,
-        [FromServices] IEmployeeRepository employeeRepository
-    )
+    public async Task<ICollection<RoleResult>> GetRoles()
     {
-        var employee = employeeRepository.GetByUserId(GetUserId());
-        var rolesList = roleRepository.GetAll(employee.CompanyId);
-
-        var roles = new List<RoleResultDTO>();
-        foreach ( var role in rolesList )
+        var user = await GetUser();
+        var query = new GetRolesQuery
         {
-            roles.Add(new RoleResultDTO(role));
-        }
-
-        return Ok(roles);
+            CompanyId = user.Employee.CompanyId
+        };
+        return _mapper.Map<ICollection<RoleResult>>(await _mediator.Send(query));
     }
 
     [HttpPost, Authorize]
-    [ProducesResponseType(typeof(RoleResultDTO), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    [ProducesResponseType(typeof(MessageResult), 401)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic CreateRole(
-        [FromBody] CreateRoleDTO data,
-        [FromServices] IRoleRepository roleRepository,
-        [FromServices] IEmployeeRepository employeeRepository,
-        [FromServices] IPermissionRepository permissionRepository 
+    public async Task<RoleResult> CreateRole(
+        [FromBody] CreateRoleCommand command
     )
     {
-        var result = new CreateRoleUseCase(employeeRepository, roleRepository, permissionRepository).Handle(data, GetUserId());
-
-        return ParseResult(result);
+        command.Actor = await GetUser();
+        return _mapper.Map<Role, RoleResult>(await _mediator.Send(command));
     }
 
-    [HttpPost("add"), Authorize]
-    [ProducesResponseType(typeof(MessageResult), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    [ProducesResponseType(typeof(MessageResult), 401)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic AddPermission(
-        [FromBody] AddPermissionDTO data,
-        [FromServices] IRoleRepository roleRepository,
-        [FromServices] IEmployeeRepository employeeRepository,
-        [FromServices] IPermissionRepository permissionRepository
+    [HttpPost("permission"), Authorize]
+    public async Task<RoleResult> AddPermission(
+        [FromBody] CreatePermissionCommand command
     )
     {
-        var result = new AddPermissionUseCase(employeeRepository, roleRepository, permissionRepository).Handle(data, GetUserId());
-
-        return ParseResult(result);
-    }
-
-    [HttpDelete("{id}"), Authorize]
-    [ProducesResponseType(typeof(MessageResult), 200)]
-    [ProducesResponseType(typeof(MessageResult), 401)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic DeleteRole(
-        [FromServices] IRoleRepository roleRepository,
-        [FromServices] IEmployeeRepository employeeRepository,
-        string id
-    )
-    {
-        var result = new DeleteRoleUseCase(employeeRepository, roleRepository).Handle(new DeleteRoleDTO(Guid.Parse(id)), GetUserId());
-
-        return ParseResult(result);
+        command.Actor = await GetUser();
+        return _mapper.Map<Role, RoleResult>(await _mediator.Send(command));
     }
 }

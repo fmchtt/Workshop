@@ -1,78 +1,40 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Domain.DTO.Output.Generic;
-using Workshop.Domain.DTO.Input.CompanyDTO;
-using Workshop.Domain.DTO.Output.CompanyDTO;
-using Workshop.Domain.DTO.Output.EmployeeDTO;
-using Workshop.Domain.Repositories;
-using Workshop.Domain.UseCases.CompanyUseCases;
+using Workshop.Application.Management.Companies.AddEmployee;
+using Workshop.Application.Management.Companies.Create;
+using Workshop.Application.Management.Companies.GetById;
+using Workshop.Application.Results.Management;
 
 namespace Workshop.Api.Controllers;
 
-using NotificationList = IReadOnlyCollection<Notification>;
-
 [ApiController, Route("company")]
-public class CompanyController : WorkshopBaseController
+public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
     [HttpGet, Authorize]
-    public CompanyResultDTO GetCompany(
-        [FromServices] IEmployeeRepository employeeRepository
-    )
+    public async Task<CompanyResult> GetCompany()
     {
-        var employee = employeeRepository.GetByUserId(GetUserId());
-
-        return Ok(new CompanyResultDTO(employee.Company));
+        var user = await GetUser();
+        var query = new GetCompanyByIdQuery { CompanyId = user.Employee.CompanyId };
+        return _mapper.Map<CompanyResult>(await _mediator.Send(query));
     }
 
-    [HttpPost("create"), Authorize]
-    [ProducesResponseType(typeof(CompanyResultDTO), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    [ProducesResponseType(typeof(MessageResult), 401)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic CreateCompany(
-        [FromBody] CreateCompanyDTO data,
-        [FromServices] ICompanyRepository companyRepository,
-        [FromServices] IUserRepository userRepository,
-        [FromServices] IRoleRepository roleRepository,
-        [FromServices] IEmployeeRepository employeeRepository,
-        [FromServices] IPermissionRepository permissionRepository
+    [HttpPost(), Authorize]
+    public async Task<CompanyResult> CreateCompany(
+        [FromBody] CreateCompanyCommand command
     )
     {
-        var result = new CreateCompanyUseCase(
-            userRepository, 
-            companyRepository, 
-            roleRepository, 
-            employeeRepository, 
-            permissionRepository
-        ).Handle(
-            data, 
-            GetUserId()
-        );
-
-        return ParseResult(result);
+        command.Actor = await GetUser();
+        return _mapper.Map<CompanyResult>(await _mediator.Send(command));
     }
 
     [HttpPost("employee"), Authorize]
-    [ProducesResponseType(typeof(EmployeeResultDTO), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    [ProducesResponseType(typeof(MessageResult), 401)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic AddEmployee(
-        [FromBody] AddEmployeeDTO data,
-        [FromServices] ICompanyRepository companyRepository,
-        [FromServices] IUserRepository userRepository,
-        [FromServices] IRoleRepository roleRepository,
-        [FromServices] IEmployeeRepository employeeRepository
+    public async Task<EmployeeResult> AddEmployee(
+        [FromBody] CreateEmployeeCommand command
     )
     {
-        var result = new AddEmployeeUseCase(
-            userRepository, 
-            companyRepository, 
-            roleRepository, 
-            employeeRepository
-        ).Handle(data, GetUserId());
-
-        return ParseResult(result);
+        command.Actor = await GetUser();
+        return _mapper.Map<EmployeeResult>(await _mediator.Send(command));
     }
 }

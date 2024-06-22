@@ -1,51 +1,16 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Domain.DTO.Output.Generic;
-using Workshop.Domain.Contracts.Results;
+using Workshop.Domain.Entities.Management;
+using Workshop.Domain.Exceptions;
+using Workshop.Domain.Repositories;
 
 namespace Workshop.Api.Controllers;
 
-using NotificationList = IReadOnlyCollection<Notification>;
-
-public abstract class WorkshopBaseController : ControllerBase
+public abstract class WorkshopBaseController(IMediator mediator, IMapper mapper) : ControllerBase
 {
-    [NonAction]
-    public dynamic ParseResult(GenericResult result)
-    {
-        var message = result.Message;
-
-        if (result is SuccessResult)
-        {
-            if (result.Result != null)
-            {
-                return Ok(result.Result);
-            }
-
-            return Ok(message);
-        }
-
-        if (result is InvalidDataResult)
-        {
-            if (result.Result != null)
-            {
-                return BadRequest((NotificationList) result.Result);
-            }
-
-            return BadRequest(message);
-        }
-
-        if (result is Domain.Contracts.Results.NotFoundResult)
-        {
-            return NotFound(message);
-        }
-
-        if (result is Domain.Contracts.Results.UnauthorizedResult)
-        {
-            return Unauthorized(message);
-        }
-
-        return InternalServerError("Erro ao converter o resultado da operação");
-    }
+    protected IMediator _mediator = mediator;
+    protected IMapper _mapper = mapper;
 
     [NonAction]
     public Guid GetUserId()
@@ -60,74 +25,22 @@ public abstract class WorkshopBaseController : ControllerBase
     }
 
     [NonAction]
-    public T Ok<T>(T data)
+    protected async Task<User> GetUser()
     {
-        Response.StatusCode = 200;
+        var userRepository = HttpContext.RequestServices.GetService<IUserRepository>();
+        if (userRepository == null)
+        {
+            throw new AuthorizationException("Usuário não encontrado!");
+        }
 
-        return data;
-    }
+        var userId = GetUserId();
+        var user = await userRepository.GetById(userId);
 
-    [NonAction]
-    public MessageResult Ok(string message)
-    {
-        Response.StatusCode = 200;
+        if (user == null)
+        {
+            throw new AuthorizationException("Usuário não encontrado!");
+        }
 
-        return new MessageResult(message);
-    }
-
-    [NonAction]
-    public T NotFound<T>(T data)
-    {
-        Response.StatusCode = 404;
-
-        return data;
-    }
-
-    [NonAction]
-    public MessageResult NotFound(string message)
-    {
-        Response.StatusCode = 404;
-
-        return new MessageResult(message);
-    }
-
-    [NonAction]
-    public T Unauthorized<T>(T data)
-    {
-        Response.StatusCode = 401;
-
-        return data;
-    }
-
-    [NonAction]
-    public MessageResult Unauthorized(string message)
-    {
-        Response.StatusCode = 401;
-
-        return new MessageResult(message);
-    }
-
-    [NonAction]
-    public T BadRequest<T>(T data)
-    {
-        Response.StatusCode = 400;
-
-        return data;
-    }
-
-    [NonAction]
-    public MessageResult BadRequest(string message)
-    {
-        Response.StatusCode = 400;
-
-        return new MessageResult(message);
-    }
-
-    [NonAction]
-    public MessageResult InternalServerError(string message)
-    {
-        Response.StatusCode = 500;
-
-        return new MessageResult(message);
+        return user;
     }
 }

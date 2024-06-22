@@ -1,4 +1,5 @@
-﻿using Workshop.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
@@ -8,30 +9,25 @@ public class CompanyRepository : ICompanyRepository
 {
     private readonly WorkshopDBContext _context;
 
-    public CompanyRepository(WorkshopDBContext context) { 
+    public CompanyRepository(WorkshopDBContext context)
+    {
         _context = context;
     }
-    public void AddEmployee(Employee employee)
+
+    public async Task<Company?> GetById(Guid id)
     {
-        _context.Employees.Add(employee);
-        _context.SaveChanges();
+        return await _context.Companies.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public void Create(Company company)
+    public async Task Create(Company company)
     {
         _context.Companies.Add(company);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public Company GetById(Guid id)
-    {
-        var company = _context.Companies.First(c => c.Id == id);
-        return company;
-    }
-
-    public void Update(Company company)
+    public async Task Update(Company company)
     {
         _context.Companies.Update(company);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }

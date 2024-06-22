@@ -1,8 +1,8 @@
-﻿using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Domain.Contracts;
 
 public interface ITokenService
 {
-    public string GenerateToken(User user);
+    public Task<string> GenerateToken(User user);
 }

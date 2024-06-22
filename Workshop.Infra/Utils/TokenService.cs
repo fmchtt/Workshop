@@ -1,38 +1,31 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Workshop.Domain.Contracts;
-using Workshop.Domain.Entities;
+using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Infra.Utils;
 
-public class TokenService : ITokenService
+public class TokenService(string SecretKey) : ITokenService
 {
-    public string GenerateToken(User user)
+    public Task<string> GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-
-        var secret = Environment.GetEnvironmentVariable("SECRET_KEY");
-        if (secret == null)
-        {
-            throw new Exception();
-        }
-
-        var key = Encoding.ASCII.GetBytes(secret);
+        var key = Encoding.ASCII.GetBytes(SecretKey);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
+            Subject = new ClaimsIdentity(
+                [
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
-            }),
+                ]
+            ),
             Expires = DateTime.UtcNow.AddHours(4),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        return Task.FromResult(tokenHandler.WriteToken(token));
     }
 }

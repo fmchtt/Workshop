@@ -1,69 +1,38 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Domain.DTO.Output.Generic;
-using Workshop.Domain.DTO.Input.ProductDTO;
-using Workshop.Domain.DTO.Output.ProductDTO;
-using Workshop.Domain.Repositories;
-using Workshop.Domain.UseCases.ProductUseCases;
+using Workshop.Application.Results.Stock;
+using Workshop.Application.Stock.Products.Create;
+using Workshop.Application.Stock.Products.GetAll;
+using Workshop.Application.Stock.Products.GetById;
 
 namespace Workshop.Api.Controllers;
-
-using NotificationList = IReadOnlyCollection<Notification>;
-
 [ApiController, Route("products")]
-public class ProductController : WorkshopBaseController
+public class ProductController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
     [HttpGet("{id}"), Authorize]
-    [ProducesResponseType(typeof(ProductResultDTO), 200)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic GetProduct(
-        [FromServices] IProductRepository productRepository,
-        [FromServices] IEmployeeRepository employeeRepository,
-        string id
+    public async Task<ProductResult> GetProduct(
+        [FromRoute] Guid id
     )
     {
-        var employee = employeeRepository.GetByUserId(GetUserId());
-        var product = productRepository.GetByID(Guid.Parse(id), employee.CompanyId);
-        if (product == null)
-        {
-            return NotFound("Produto não encontrado!");
-        }
-
-        return Ok(new ProductResultDTO(product));
+        var query = new GetProductByIdQuery { Actor = await GetUser(), ProductId = id };
+        return _mapper.Map<ProductResult>(await _mediator.Send(query));
     }
 
     [HttpGet, Authorize]
-    public List<ProductResultDTO> GetProducts(
-        [FromServices] IProductRepository productRepository,
-        [FromServices] IEmployeeRepository employeeRepository
-    )
+    public async Task<ICollection<ProductResult>> GetProducts()
     {
-        var employee = employeeRepository.GetByUserId(GetUserId());
-        var product = productRepository.GetAll(employee.CompanyId);
-
-        var products = new List<ProductResultDTO>();
-        foreach (var item in product)
-        {
-            products.Add(new ProductResultDTO(item));
-        }
-
-        return Ok(products);
+        var query = new GetAllProductsQuery { Actor = await GetUser() };
+        return _mapper.Map<ICollection<ProductResult>>(await _mediator.Send(query));
     }
 
     [HttpPost, Authorize]
-    [ProducesResponseType(typeof(ProductResultDTO), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    [ProducesResponseType(typeof(MessageResult), 401)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic CreateProduct(
-        [FromBody] CreateProductDTO data,
-        [FromServices] IProductRepository productRepository,
-        [FromServices] IEmployeeRepository employeeRepository
+    public async Task<ProductResult> CreateProduct(
+        [FromBody] CreateProductCommand command
     )
     {
-        var result = new CreateProductUseCase(productRepository, employeeRepository).Handle(data, GetUserId());
-
-        return ParseResult(result);
+        command.Actor = await GetUser();
+        return _mapper.Map<ProductResult>(await _mediator.Send(command));
     }
 }

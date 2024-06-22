@@ -1,13 +1,12 @@
-﻿using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities.Service;
 
 namespace Workshop.Domain.Repositories;
 
 public interface IOrderRepository
 {
-    Order GetById(Guid id, Guid CompanyId);
-    List<Order> GetAll (Guid CompanyId);
-    int GetMaxOrderNumber(Guid companyId);
-    void Create(Order order);
-    void Update(Order order);
-    void Delete(Order order);
+    Task<Order?> GetById(Guid id, Guid CompanyId);
+    Task<ICollection<Order>> GetAll(Guid CompanyId);
+    Task<Order> Create(Order order);
+    Task Update(Order order);
+    Task Delete(Order order);
 }

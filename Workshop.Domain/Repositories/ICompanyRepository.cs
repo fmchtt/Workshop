@@ -1,11 +1,10 @@
-﻿using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Domain.Repositories;
 
 public interface ICompanyRepository
 {
-    Company GetById(Guid id);
-    void Create(Company company);
-    void Update(Company company);
-    void AddEmployee(Employee employee);
+    Task<Company?> GetById(Guid id);
+    Task Create(Company company);
+    Task Update(Company company);
 }

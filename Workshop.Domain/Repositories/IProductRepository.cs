@@ -1,12 +1,12 @@
-﻿using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Domain.Repositories;
 
 public interface IProductRepository
 {
-    Product GetByID(Guid id, Guid companyId);
-    List<Product> GetAll(Guid companyId);
-    void Create(Product product);
-    void Update(Product product);
-    void Delete(Product product);
+    Task<Product?> GetById(Guid id, Guid companyId);
+    Task<ICollection<Product>> GetAll(Guid companyId);
+    Task Create(Product product);
+    Task Update(Product product);
+    Task Delete(Product product);
 }

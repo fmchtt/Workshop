@@ -1,11 +1,11 @@
-﻿using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities.Management;
 namespace Workshop.Domain.Repositories;
 
 public interface IUserRepository
 {
-    User GetById(Guid id);
-    User GetByEmail(string email);
-    void Create(User user);
-    void Update(User user);
+    Task<User?> GetById(Guid id);
+    Task<User?> GetByEmail(string email);
+    Task Create(User user);
+    Task Update(User user);
 }
 

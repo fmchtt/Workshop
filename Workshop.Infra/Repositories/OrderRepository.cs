@@ -1,4 +1,5 @@
-﻿using Workshop.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
@@ -13,42 +14,32 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public void Create(Order order)
+    public async Task<ICollection<Order>> GetAll(Guid CompanyId)
     {
-        _context.Add(order);
-        _context.SaveChanges();
+        return await _context.Orders.Where(x => x.Employee.CompanyId == CompanyId).ToListAsync();
     }
 
-    public void Delete(Order order)
+    public async Task<Order?> GetById(Guid id, Guid CompanyId)
     {
-        _context.Remove(order);
-        _context.SaveChanges();
+        return await _context.Orders.FirstOrDefaultAsync(x => x.Employee.CompanyId == CompanyId && x.Id == id);
     }
 
-    public List<Order> GetAll(Guid CompanyId)
+    public async Task<Order> Create(Order order)
     {
-        var orders = _context.Orders.Where(x => x.Employee.CompanyId == CompanyId).ToList();
-
-        return orders;
+        var newOrder = _context.Add(order);
+        await _context.SaveChangesAsync();
+        return newOrder.Entity;
     }
 
-    public Order GetById(Guid id, Guid CompanyId)
-    {
-        var order = _context.Orders.First(x => x.Employee.CompanyId == CompanyId && x.Id == id);
-
-        return order;
-    }
-
-    public int GetMaxOrderNumber(Guid companyId)
-    {
-        var maxNumber = _context.Orders.Max(x => x.OrderNumber);
-
-        return maxNumber;
-    }
-
-    public void Update(Order order)
+    public async Task Update(Order order)
     {
         _context.Update(order);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Delete(Order order)
+    {
+        _context.Remove(order);
+        await _context.SaveChangesAsync();
     }
 }

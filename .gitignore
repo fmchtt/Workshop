@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Workshop.Api/Properties/launchSettings.json
+/Workshop.Api/appsettings.Development.json

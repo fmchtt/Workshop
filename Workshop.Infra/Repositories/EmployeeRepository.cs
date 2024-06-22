@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Workshop.Domain.Entities;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
@@ -14,48 +14,26 @@ public class EmployeeRepository : IEmployeeRepository
         _context = context;
     }
 
-    public void Create(Employee employee)
+    public Task<Employee?> GetById(Guid id)
+    {
+        return _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public async Task Create(Employee employee)
     {
         _context.Employees.Add(employee);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void Delete(Employee employee)
-    {
-        _context.Remove(employee);
-        _context.SaveChanges();
-    }
-
-    public Employee GetByUserId(Guid id)
-    {
-        /*
-        var user = _context.Users.First(u => u.Id == id);
-        if (user == null)
-        {
-            return null;
-        }
-
-        var employee = _context.Employees.First(e => e.Id == user.ActiveEmployeeId);
-        */
-
-
-        var employee = _context.Employees
-            .Include(x => x.Company)
-            .Join(
-                _context.Users, e => e.Id, 
-                u => u.ActiveEmployeeId, 
-                (e, u) => new { user = u, emp = e }
-            )
-            .Where(e => e.user.Id == id)
-            .Select(e => e.emp)
-            .First();
-
-        return employee;
-    }
-
-    public void Update(Employee employee)
+    public async Task Update(Employee employee)
     {
         _context.Update(employee);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Delete(Employee employee)
+    {
+        _context.Remove(employee);
+        await _context.SaveChangesAsync();
     }
 }

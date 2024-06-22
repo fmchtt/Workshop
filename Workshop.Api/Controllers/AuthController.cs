@@ -1,57 +1,33 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workshop.Domain.DTO.Output.Generic;
-using Workshop.Domain.Contracts;
-using Workshop.Domain.DTO.Input.UserDTO;
-using Workshop.Domain.DTO.Output.UserDTO;
-using Workshop.Domain.Repositories;
-using Workshop.Domain.UseCases.UserUseCases;
+using Workshop.Application.Management.Login;
+using Workshop.Application.Management.Register;
+using Workshop.Application.Results.Management;
 
 namespace Workshop.Api.Controllers;
 
-using NotificationList = IReadOnlyCollection<Notification>;
-
 [ApiController, Route("auth")]
-public class AuthController : WorkshopBaseController
+public class AuthController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
     [HttpGet("me"), Authorize]
-    public UserResultDTO Me(
-        [FromServices] IUserRepository userRepository
-    )
+    public async Task<ActualUserResult> Me()
     {
-        var user = userRepository.GetById(GetUserId());
-
-        return Ok(new UserResultDTO(user));
+        return _mapper.Map<ActualUserResult>(await GetUser());
     }
 
     [HttpPost("login"), AllowAnonymous]
-    [ProducesResponseType(typeof(TokenDTO), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    [ProducesResponseType(typeof(MessageResult), 404)]
-    public dynamic Login(
-        [FromBody] LoginDTO data,
-        [FromServices] IUserRepository userRepository,
-        [FromServices] IHasher hasher,
-        [FromServices] ITokenService tokenService
-    )
+    public async Task<TokenResult> Login([FromBody] LoginCommand command)
     {
-        var result = new LoginUseCase(userRepository, hasher, tokenService).Handle(data);
-
-        return ParseResult(result);
+        return await _mediator.Send(command);
     }
 
     [HttpPost("register"), AllowAnonymous]
-    [ProducesResponseType(typeof(UserResultDTO), 200)]
-    [ProducesResponseType(typeof(NotificationList), 400)]
-    public dynamic Register(
-        [FromBody] CreateUserDto data,
-        [FromServices] IUserRepository userRepository,
-        [FromServices] IHasher hasher
+    public async Task<TokenResult> Register(
+        [FromBody] RegisterCommand command
     )
     {
-        var result = new CreateUserUseCase(userRepository, hasher).Handle(data);
-
-        return ParseResult(result);
+        return await _mediator.Send(command);
     }
 }

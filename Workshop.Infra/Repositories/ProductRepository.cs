@@ -1,4 +1,5 @@
-﻿using Workshop.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
@@ -13,35 +14,31 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public void Create(Product product)
+    public async Task<ICollection<Product>> GetAll(Guid companyId)
+    {
+        return await _context.Products.Where(p => p.OwnerId == companyId).ToListAsync();
+    }
+
+    public async Task<Product?> GetById(Guid id, Guid companyId)
+    {
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == companyId);
+    }
+
+    public async Task Create(Product product)
     {
         _context.Add(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void Delete(Product product)
-    {
-        _context.Remove(product);
-        _context.SaveChanges();
-    }
-
-    public List<Product> GetAll(Guid companyId)
-    {
-        var product = _context.Products.Where(p => p.OwnerId == companyId).ToList();
-
-        return product;
-    }
-
-    public Product GetByID(Guid id, Guid companyId)
-    {
-        var product = _context.Products.First(p => p.Id == id && p.OwnerId == companyId);
-
-        return product;
-    }
-
-    public void Update(Product product)
+    public async Task Update(Product product)
     {
         _context.Update(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Delete(Product product)
+    {
+        _context.Remove(product);
+        await _context.SaveChangesAsync();
     }
 }

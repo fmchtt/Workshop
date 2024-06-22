@@ -1,4 +1,4 @@
-﻿using Workshop.Domain.Entities;
+﻿using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Domain.Tests.Repositories;

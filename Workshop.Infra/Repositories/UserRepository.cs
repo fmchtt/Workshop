@@ -1,7 +1,7 @@
-﻿using Workshop.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
-using Microsoft.EntityFrameworkCore;
 
 namespace Workshop.Infra.Repositories;
 
@@ -14,29 +14,25 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public void Create(User user)
+    public async Task<User?> GetByEmail(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<User?> GetById(Guid id)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+    }
+
+    public async Task Create(User user)
     {
         _context.Users.Add(user);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public User GetByEmail(string email)
+    public async Task Update(User user)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Email == email);
-
-        return user;
-    }
-
-    public User GetById(Guid id)
-    {
-        var user = _context.Users.FirstOrDefault(u => u.Id == id);
-
-        return user;
-    }
-
-    public void Update(User user)
-    {
-        _context.Entry(user).State = EntityState.Modified;
-        _context.SaveChanges();
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
     }
 }

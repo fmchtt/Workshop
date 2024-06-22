@@ -1,42 +1,16 @@
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
-using Workshop.Domain.Contracts;
-using Workshop.Domain.Repositories;
+using Workshop.Api.Filters;
+using Workshop.Infra;
 using Workshop.Infra.Contexts;
-using Workshop.Infra.Repositories;
-using Workshop.Infra.Utils;
-
-var secret = Environment.GetEnvironmentVariable("SECRET_KEY");
-if (secret == null)
-{
-    throw new Exception();
-}
-
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-if (connectionString == null)
-{
-    throw new Exception();
-}
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<WorkshopDBContext>(options => options.UseNpgsql(connectionString));
-
-// Utils configurations
-builder.Services.AddTransient<IHasher, BCryptHasher>();
-builder.Services.AddTransient<ITokenService, TokenService>();
-
-// Repositories configuration
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
-builder.Services.AddTransient<IRoleRepository, RoleRepository>();
-builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddTransient<IPermissionRepository, PermissionRepository>();
-builder.Services.AddTransient<IOrderRepository, OrderRepository>();
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddInfraestructure(builder.Configuration);
+builder.Services.AddControllers(x => x.Filters.Add(new ExceptionHandlerFilter()));
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -67,6 +41,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+var secret = builder.Configuration.GetValue<string>("SecretKey");
+if (secret == null)
+{
+    throw new Exception();
+}
 
 var key = Encoding.ASCII.GetBytes(secret);
 
@@ -114,5 +93,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<WorkshopDBContext>();
+    db.Database.Migrate();
+}
 
 app.Run();

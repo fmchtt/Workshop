@@ -1,5 +1,5 @@
 ﻿using Workshop.Domain.Contracts;
-using Workshop.Domain.Entities;
+using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Tests.Utils;
 

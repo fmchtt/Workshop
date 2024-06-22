@@ -1,11 +1,11 @@
 ﻿using Workshop.Domain.Contracts;
 using Workshop.Domain.Repositories;
-using Workshop.Domain.Entities;
 using Workshop.Domain.Tests.Repositories;
 using Workshop.Domain.Tests.Utils;
 using Workshop.Domain.UseCases.UserUseCases;
 using Workshop.Domain.DTO.Input.UserDTO;
 using Workshop.Domain.Contracts.Results;
+using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Domain.Tests.UseCasesTests.UserTests;
 

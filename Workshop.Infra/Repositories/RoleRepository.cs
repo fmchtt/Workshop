@@ -1,4 +1,5 @@
-﻿using Workshop.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
@@ -13,35 +14,31 @@ public class RoleRepository : IRoleRepository
         _context = context;
     }
 
-    public void Create(Role role)
+    public async Task<ICollection<Role>> GetAll(Guid companyId)
+    {
+        return await _context.Roles.Where(x => x.CompanyId == companyId).ToListAsync();
+    }
+
+    public async Task<Role?> GetById(Guid roleId, Guid companyId)
+    {
+        return await _context.Roles.FirstOrDefaultAsync(x => x.Id == roleId && x.CompanyId == companyId);
+    }
+
+    public async Task Create(Role role)
     {
         _context.Roles.Add(role);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void Delete(Role role)
-    {
-        _context.Roles.Remove(role);
-        _context.SaveChanges();
-    }
-
-    public List<Role> GetAll(Guid companyId)
-    {
-        var roles = _context.Roles.Where(x => x.CompanyId == companyId).ToList();
-
-        return roles;
-    }
-
-    public Role GetById(Guid roleId, Guid companyId)
-    {
-        var role = _context.Roles.First(x => x.Id == roleId && x.CompanyId == companyId);
-
-        return role;
-    }
-
-    public void Update(Role role)
+    public async Task Update(Role role)
     {
         _context.Roles.Update(role);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Delete(Role role)
+    {
+        _context.Roles.Remove(role);
+        await _context.SaveChangesAsync();
     }
 }

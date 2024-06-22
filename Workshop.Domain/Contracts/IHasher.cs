@@ -2,6 +2,6 @@
 
 public interface IHasher
 {
-    string hash(string key);
-    bool validate(string hashedKey, string plainKey);
+    Task<string> Hash(string key);
+    Task<bool> Validate(string hashedKey, string plainKey);
 }

@@ -3,13 +3,13 @@ namespace Workshop.Infra.Utils;
 
 public class BCryptHasher : IHasher
 {
-    public string hash(string key)
+    public Task<string> Hash(string key)
     {
-        return BCrypt.Net.BCrypt.HashPassword(key);
+        return Task.FromResult(BCrypt.Net.BCrypt.HashPassword(key));
     }
 
-    public bool validate(string hashedKey, string plainKey)
+    public Task<bool> Validate(string hashedKey, string plainKey)
     {
-        return BCrypt.Net.BCrypt.Verify(plainKey, hashedKey);
+        return Task.FromResult(BCrypt.Net.BCrypt.Verify(plainKey, hashedKey));
     }
 }
