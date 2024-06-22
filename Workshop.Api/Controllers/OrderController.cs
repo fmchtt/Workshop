@@ -10,10 +10,10 @@ using Workshop.Application.Service.Orders.GetById;
 
 namespace Workshop.Api.Controllers;
 
-[ApiController, Route("orders")]
+[ApiController, Route("orders"), Authorize]
 public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
-    [HttpGet("{id}"), Authorize]
+    [HttpGet("{id}")]
     public async Task<OrderResult> GetOrder(
         [FromRoute] Guid id
     )
@@ -22,14 +22,14 @@ public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseC
         return _mapper.Map<OrderResult>(await _mediator.Send(query));
     }
 
-    [HttpGet, Authorize]
+    [HttpGet]
     public async Task<ICollection<OrderResult>> GetProducts()
     {
         var query = new GetAllOrdersQuery { Actor = await GetUser() };
         return _mapper.Map<ICollection<OrderResult>>(await _mediator.Send(query));
     }
 
-    [HttpPost, Authorize]
+    [HttpPost]
     public async Task<OrderResult> CreateOrder(
         [FromBody] CreateOrderCommand command
     )
@@ -38,7 +38,7 @@ public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseC
         return _mapper.Map<OrderResult>(await _mediator.Send(command));
     }
 
-    [HttpPost("product"), Authorize]
+    [HttpPost("product")]
     public async Task<ProductInOrderResult> AddProduct(
         [FromBody] CreateProductInOrderCommand command
     )

@@ -9,6 +9,7 @@ public class Company : Entity
     public virtual User Owner { get; set; } = null!;
     public virtual List<Employee> Employees { get; set; } = [];
     public virtual List<Role> Roles { get; set; } = [];
+    public virtual List<Client> Clients { get; set; } = [];
 
     public Company(string name, Guid ownerId, List<Employee> employees)
     {

@@ -14,5 +14,6 @@ internal class ClientConfiguration : IEntityTypeConfiguration<Client>
 
         builder.HasMany(x => x.Orders).WithOne(x => x.Client).HasForeignKey(x => x.ClientId);
         builder.HasOne(x => x.Representative).WithMany().HasForeignKey(x => x.RepresentativeId);
+        builder.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId);
     }
 }

@@ -19,12 +19,23 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders.Where(x => x.Employee.CompanyId == CompanyId).ToListAsync();
     }
 
+    public async Task<Order?> GetById(Guid id)
+    {
+        return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<Order?> GetById(Guid id, Guid CompanyId)
     {
         return await _context.Orders.FirstOrDefaultAsync(x => x.Employee.CompanyId == CompanyId && x.Id == id);
     }
 
-    public async Task<Order> Create(Order order)
+    public async Task Create(Order order)
+    {
+        _context.Add(order);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Order> CreateAndReturn(Order order)
     {
         var newOrder = _context.Add(order);
         await _context.SaveChangesAsync();

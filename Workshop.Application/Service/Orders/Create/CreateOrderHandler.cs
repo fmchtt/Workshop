@@ -15,7 +15,7 @@ public class CreateOrderHandler(IOrderRepository orderRepository) : IRequestHand
         }
 
         var order = new Order(request.Actor.Employee.CompanyId, request.EmployeeId, request.ClientId);
-        order = await orderRepository.Create(order);
+        order = await orderRepository.CreateAndReturn(order);
 
         return order;
     }

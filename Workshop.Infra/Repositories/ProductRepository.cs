@@ -19,6 +19,11 @@ public class ProductRepository : IProductRepository
         return await _context.Products.Where(p => p.OwnerId == companyId).ToListAsync();
     }
 
+    public async Task<Product?> GetById(Guid id)
+    {
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+    }
+
     public async Task<Product?> GetById(Guid id, Guid companyId)
     {
         return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == companyId);

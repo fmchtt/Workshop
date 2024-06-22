@@ -1,12 +1,11 @@
-﻿using Workshop.Domain.Entities.Service;
+﻿using Workshop.Domain.Contracts;
+using Workshop.Domain.Entities.Service;
 
 namespace Workshop.Domain.Repositories;
 
-public interface IOrderRepository
+public interface IOrderRepository : IRepository<Order>
 {
-    Task<Order?> GetById(Guid id, Guid CompanyId);
+    Task<Order?> GetById(Guid id, Guid companyId);
     Task<ICollection<Order>> GetAll(Guid CompanyId);
-    Task<Order> Create(Order order);
-    Task Update(Order order);
-    Task Delete(Order order);
+    Task<Order> CreateAndReturn(Order order);
 }

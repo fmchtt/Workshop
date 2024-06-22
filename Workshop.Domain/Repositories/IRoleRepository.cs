@@ -1,12 +1,10 @@
-﻿using Workshop.Domain.Entities.Management;
+﻿using Workshop.Domain.Contracts;
+using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Domain.Repositories;
 
-public interface IRoleRepository
+public interface IRoleRepository : IRepository<Role>
 {
-    Task<Role?> GetById(Guid roleId, Guid companyId);
+    Task<Role?> GetById(Guid id, Guid companyId);
     Task<ICollection<Role>> GetAll(Guid companyId);
-    Task Create(Role role);
-    Task Update(Role role);
-    Task Delete(Role role);
 }

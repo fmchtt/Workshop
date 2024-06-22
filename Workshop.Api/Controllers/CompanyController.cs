@@ -9,10 +9,10 @@ using Workshop.Application.Results.Management;
 
 namespace Workshop.Api.Controllers;
 
-[ApiController, Route("company")]
+[ApiController, Route("company"), Authorize]
 public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
-    [HttpGet, Authorize]
+    [HttpGet]
     public async Task<CompanyResult> GetCompany()
     {
         var user = await GetUser();
@@ -20,7 +20,7 @@ public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBas
         return _mapper.Map<CompanyResult>(await _mediator.Send(query));
     }
 
-    [HttpPost(), Authorize]
+    [HttpPost]
     public async Task<CompanyResult> CreateCompany(
         [FromBody] CreateCompanyCommand command
     )
@@ -29,7 +29,7 @@ public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBas
         return _mapper.Map<CompanyResult>(await _mediator.Send(command));
     }
 
-    [HttpPost("employee"), Authorize]
+    [HttpPost("employee")]
     public async Task<EmployeeResult> AddEmployee(
         [FromBody] CreateEmployeeCommand command
     )

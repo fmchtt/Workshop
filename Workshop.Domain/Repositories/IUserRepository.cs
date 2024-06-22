@@ -1,11 +1,9 @@
-﻿using Workshop.Domain.Entities.Management;
+﻿using Workshop.Domain.Contracts;
+using Workshop.Domain.Entities.Management;
 namespace Workshop.Domain.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<User>
 {
-    Task<User?> GetById(Guid id);
     Task<User?> GetByEmail(string email);
-    Task Create(User user);
-    Task Update(User user);
 }
 

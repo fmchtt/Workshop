@@ -24,6 +24,11 @@ public class RoleRepository : IRoleRepository
         return await _context.Roles.FirstOrDefaultAsync(x => x.Id == roleId && x.CompanyId == companyId);
     }
 
+    public async Task<Role?> GetById(Guid id)
+    {
+        return await _context.Roles.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task Create(Role role)
     {
         _context.Roles.Add(role);

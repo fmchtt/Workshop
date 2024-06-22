@@ -1,10 +1,8 @@
-﻿using Workshop.Domain.Entities.Management;
+﻿using Workshop.Domain.Contracts;
+using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Domain.Repositories;
 
-public interface ICompanyRepository
+public interface ICompanyRepository : IRepository<Company>
 {
-    Task<Company?> GetById(Guid id);
-    Task Create(Company company);
-    Task Update(Company company);
 }

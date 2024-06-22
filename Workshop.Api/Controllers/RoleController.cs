@@ -10,10 +10,10 @@ using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Api.Controllers;
 
-[ApiController, Route("roles")]
+[ApiController, Route("roles"), Authorize]
 public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
-    [HttpGet, Authorize]
+    [HttpGet]
     public async Task<ICollection<RoleResult>> GetRoles()
     {
         var user = await GetUser();
@@ -24,7 +24,7 @@ public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseCo
         return _mapper.Map<ICollection<RoleResult>>(await _mediator.Send(query));
     }
 
-    [HttpPost, Authorize]
+    [HttpPost]
     public async Task<RoleResult> CreateRole(
         [FromBody] CreateRoleCommand command
     )
@@ -33,7 +33,7 @@ public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseCo
         return _mapper.Map<Role, RoleResult>(await _mediator.Send(command));
     }
 
-    [HttpPost("permission"), Authorize]
+    [HttpPost("permission")]
     public async Task<RoleResult> AddPermission(
         [FromBody] CreatePermissionCommand command
     )
