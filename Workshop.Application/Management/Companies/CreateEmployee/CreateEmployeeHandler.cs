@@ -10,7 +10,7 @@ public class CreateEmployeeHandler(IUserRepository userRepository, IEmployeeRepo
 {
     public async Task<Employee> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
-        if (request.Actor.Employee?.HasPermission("management", "addEmployee") != true)
+        if (request.Actor.Employee?.HasPermission("management", "manageEmployee") != true)
         {
             throw new AuthorizationException("Usuário sem permissão!");
         }

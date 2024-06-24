@@ -16,6 +16,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Password).IsRequired();
 
         builder.HasMany(x => x.Employees).WithOne(x => x.User).HasForeignKey(x => x.UserId);
-        builder.HasOne(x => x.Employee).WithOne().HasForeignKey<User>(x => x.ActiveEmployeeId);
+        builder.HasOne(x => x.Employee).WithOne().HasForeignKey<User>(x => x.ActiveEmployeeId).OnDelete(DeleteBehavior.SetNull);
     }
 }

@@ -19,7 +19,7 @@ public class Permission : Entity
 
     public static readonly Dictionary<string, List<string>> List = new()
     {
-        { "management", ["addRole", "addEmployee", "addPermission", "manageClient"] },
+        { "management", ["addRole", "manageEmployee", "addPermission", "manageClient", "manageCompany"] },
         { "stock", ["manageProduct"] },
         { "service", ["manageOrder"] }
     };

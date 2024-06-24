@@ -37,7 +37,7 @@ public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<ClientResult> Update([FromRoute] Guid id [FromBody] UpdateClientCommand command)
+    public async Task<ClientResult> Update([FromRoute] Guid id, [FromBody] UpdateClientCommand command)
     {
         command.Actor = await GetUser();
         command.ClientId = id;

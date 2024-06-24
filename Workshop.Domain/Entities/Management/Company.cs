@@ -23,4 +23,9 @@ public class Company : Entity
         Name = name;
         OwnerId = ownerId;
     }
+
+    public bool IsEmployee(User user)
+    {
+        return Employees.Any(x => x.User == user);
+    }
 }
