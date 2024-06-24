@@ -8,6 +8,8 @@ public class GetAllProductsHandler(IProductRepository productRepository) : IRequ
 {
     public async Task<ICollection<Product>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
+        if (request.Actor.Employee == null) return [];
+
         return await productRepository.GetAll(request.Actor.Employee.CompanyId);
     }
 }

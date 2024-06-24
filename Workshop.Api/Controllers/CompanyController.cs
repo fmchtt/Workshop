@@ -71,7 +71,7 @@ public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBas
     }
 
     [HttpDelete("employee/{id}")]
-    public async Task<MessageResult> AddEmployee(
+    public async Task<MessageResult> RemoveEmployee(
         [FromRoute] Guid id
     )
     {

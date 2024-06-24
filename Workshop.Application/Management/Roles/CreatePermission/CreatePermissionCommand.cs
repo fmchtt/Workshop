@@ -8,6 +8,7 @@ public class CreatePermissionCommand : ICommand<Role>
 {
     [JsonIgnore]
     public User Actor { get; set; } = User.Empty;
+    [JsonIgnore]
     public Guid RoleId { get; set; } = Guid.Empty;
     public string Type { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;

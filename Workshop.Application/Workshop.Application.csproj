@@ -15,8 +15,4 @@
     <ProjectReference Include="..\Workshop.Domain\Workshop.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Management\Users\" />
-  </ItemGroup>
-
 </Project>

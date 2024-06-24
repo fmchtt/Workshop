@@ -13,6 +13,7 @@ internal class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.Property(x => x.Name).IsRequired();
 
         builder.HasMany(x => x.Permissions).WithOne(p => p.Role).HasForeignKey(x => x.RoleId);
+        builder.HasMany(x => x.Employees).WithOne(x => x.Role).HasForeignKey(x => x.RoleId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.Company).WithMany(x => x.Roles).HasForeignKey(x => x.CompanyId).IsRequired();
     }
 }

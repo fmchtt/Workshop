@@ -13,6 +13,6 @@ internal class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 
         builder.HasOne(e => e.User).WithMany(e => e.Employees).HasForeignKey(e => e.UserId).IsRequired();
         builder.HasOne(e => e.Company).WithMany(c => c.Employees).HasForeignKey(c => c.CompanyId).IsRequired();
-        builder.HasOne(e => e.Role).WithMany().HasForeignKey(e => e.RoleId).IsRequired();
+        builder.HasOne(e => e.Role).WithMany(e => e.Employees).HasForeignKey(e => e.RoleId).IsRequired().OnDelete(DeleteBehavior.Restrict);
     }
 }

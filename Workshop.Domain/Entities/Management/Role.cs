@@ -5,10 +5,11 @@ namespace Workshop.Domain.Entities.Management;
 
 public class Role : Entity
 {
-    public string Name { get; init; }
+    public string Name { get; set; }
     public Guid CompanyId { get; init; }
     public virtual Company Company { get; init; } = null!;
     public virtual List<Permission> Permissions { get; init; } = [];
+    public virtual List<Employee> Employees { get; init; } = [];
 
     public Role(string name, Guid companyId)
     {

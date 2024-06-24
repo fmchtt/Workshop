@@ -8,6 +8,8 @@ public class GetAllOrdersHandler(IOrderRepository orderRepository) : IRequestHan
 {
     public async Task<ICollection<Order>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
     {
+        if (request.Actor.Employee == null) return [];
+
         return await orderRepository.GetAll(request.Actor.Employee.CompanyId);
     }
 }

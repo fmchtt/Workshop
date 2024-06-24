@@ -8,6 +8,8 @@ public class GetAllClientsHandler(IClientRepository clientRepository) : IRequest
 {
     public async Task<ICollection<Client>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
     {
-        return await clientRepository.GetAll(request.Actor.Employee?.CompanyId ?? Guid.Empty);
+        if (request.Actor.Employee == null) return [];
+
+        return await clientRepository.GetAll(request.Actor.Employee.CompanyId);
     }
 }

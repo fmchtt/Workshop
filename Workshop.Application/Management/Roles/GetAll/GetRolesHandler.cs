@@ -8,6 +8,8 @@ public class GetRolesHandler(IRoleRepository roleRepository) : IRequestHandler<G
 {
     public async Task<ICollection<Role>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
     {
-        return await roleRepository.GetAll(request.CompanyId);
+        if (request.Actor.Employee == null) return [];
+
+        return await roleRepository.GetAll(request.Actor.Employee.CompanyId);
     }
 }

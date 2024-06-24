@@ -9,7 +9,7 @@ internal class CreateRoleHandler(IRoleRepository repository) : IRequestHandler<C
 {
     public async Task<Role> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-        if (request.Actor.Employee?.HasPermission("management", "addRole") != true)
+        if (request.Actor.Employee?.HasPermission("management", "manageRole") != true)
         {
             throw new AuthorizationException("Usuário sem permissão!");
         }

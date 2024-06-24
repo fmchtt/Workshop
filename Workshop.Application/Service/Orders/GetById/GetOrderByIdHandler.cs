@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Workshop.Domain.Entities.Service;
+using Workshop.Domain.Exceptions;
 using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Service.Orders.GetById;
@@ -8,6 +9,11 @@ public class GetOrderByIdHandler(IOrderRepository orderRepository) : IRequestHan
 {
     public async Task<Order?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
     {
-        return await orderRepository.GetById(request.OrderId, request.Actor.Employee.CompanyId);
+        if (request.Actor.Employee == null) throw new AuthorizationException("Usuário sem permissão");
+
+        var order = await orderRepository.GetById(request.OrderId, request.Actor.Employee.CompanyId);
+        NotFoundException.ThrowIfNull(order, "Ordem de serviço não encontrada!");
+
+        return order;
     }
 }
