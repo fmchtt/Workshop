@@ -38,4 +38,9 @@ public class Role : Entity
         }
         Permissions.Add(new Permission(type, value, Id));
     }
+
+    public void RemovePermission(Permission permission)
+    {
+        Permissions.Remove(permission);
+    }
 }

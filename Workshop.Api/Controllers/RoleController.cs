@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Workshop.Application.Management.Roles.Create;
 using Workshop.Application.Management.Roles.CreatePermission;
 using Workshop.Application.Management.Roles.Delete;
+using Workshop.Application.Management.Roles.DeletePermission;
 using Workshop.Application.Management.Roles.GetRoles;
 using Workshop.Application.Management.Roles.Update;
 using Workshop.Application.Results;
@@ -63,5 +64,15 @@ public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseCo
         command.Actor = await GetUser();
         command.RoleId = id;
         return _mapper.Map<RoleResult>(await _mediator.Send(command));
+    }
+
+    [HttpDelete("{id}/permission/{permissionId}")]
+    public async Task<MessageResult> RemovePermission(
+        [FromRoute] Guid id,
+        [FromRoute] Guid permissionId
+    )
+    {
+        var command = new DeletePermissionCommand { Actor = await GetUser(), PermissionId = permissionId, RoleId = id };
+        return new MessageResult(await _mediator.Send(command));
     }
 }
