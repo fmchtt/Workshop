@@ -17,6 +17,11 @@ public class CreateProductInOrderHandler(IOrderRepository orderRepository, IProd
         var order = await orderRepository.GetById(request.OrderId, request.Actor.Employee.CompanyId);
         NotFoundException.ThrowIfNull(order, "Ordem de serviço não encontrada!");
 
+        if (order.Complete)
+        {
+            throw new AuthorizationException("Ordem de serviço concluída não pode ser editada!");
+        }
+
         var product = await productRepository.GetById(request.ProductId, request.Actor.Employee.CompanyId);
         NotFoundException.ThrowIfNull(product, "Produto não encontrado!");
 

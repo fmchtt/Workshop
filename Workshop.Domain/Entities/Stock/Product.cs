@@ -10,6 +10,7 @@ public class Product : Entity
     public DateTime ModifiedDate { get; set; }
     public decimal Price { get; set; }
     public int QuantityInStock { get; set; }
+    public bool Deleted { get; set; }
     public Guid OwnerId { get; set; }
     public virtual Company Owner { get; set; } = null!;
 

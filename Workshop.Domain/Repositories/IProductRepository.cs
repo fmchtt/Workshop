@@ -7,4 +7,5 @@ public interface IProductRepository : IRepository<Product>
 {
     Task<Product?> GetById(Guid id, Guid companyId);
     Task<ICollection<Product>> GetAll(Guid companyId);
+    Task UpdateRange(ICollection<Product> products);
 }

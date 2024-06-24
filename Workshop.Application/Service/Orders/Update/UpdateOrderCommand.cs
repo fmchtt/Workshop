@@ -3,14 +3,14 @@ using Workshop.Application.Shared;
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Entities.Service;
 
-namespace Workshop.Application.Service.Orders.CreateProductInOrder;
+namespace Workshop.Application.Service.Orders.Update;
 
-public class CreateProductInOrderCommand : ICommand<ProductInOrder>
+public class UpdateOrderCommand : ICommand<Order>
 {
-    public Guid ProductId { get; set; }
     [JsonIgnore]
     public Guid OrderId { get; set; }
-    public int Quantity { get; set; }
+    public Guid? ClientId { get; set; }
+    public Guid? EmployeeId { get; set; }
     [JsonIgnore]
     public User Actor { get; set; } = User.Empty;
 }

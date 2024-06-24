@@ -16,7 +16,9 @@ internal class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.ModifiedDate);
         builder.Property(x => x.Price).IsRequired();
         builder.Property(x => x.QuantityInStock).IsRequired();
+        builder.Property(x => x.Deleted).HasDefaultValue(false);
 
         builder.HasOne(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId).IsRequired();
+        builder.HasQueryFilter(x => !x.Deleted);
     }
 }
