@@ -5,7 +5,7 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Management.Roles.CreatePermission;
 
-public class CreatePermissionHandler(IRoleRepository roleRepository) : IRequestHandler<CreatePermissionCommand, Role>
+public class CreatePermissionHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository) : IRequestHandler<CreatePermissionCommand, Role>
 {
     public async Task<Role> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
@@ -18,7 +18,7 @@ public class CreatePermissionHandler(IRoleRepository roleRepository) : IRequestH
         NotFoundException.ThrowIfNull(role, "Cargo não encontrado!");
 
         role.AddPermission(request.Type, request.Value);
-        await roleRepository.Update(role);
+        await permissionRepository.Create(role.Permissions.Last());
 
         return role;
     }

@@ -61,7 +61,7 @@ public class Order : Entity
 
         product.QuantityInStock += quantity;
         Products[index].Quantity -= quantity;
-        if (Products[index].Quantity >= 0)
+        if (Products[index].Quantity <= 0)
         {
             Products.RemoveAt(index);
         }

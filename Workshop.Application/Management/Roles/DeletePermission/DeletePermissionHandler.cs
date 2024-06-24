@@ -4,7 +4,7 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Management.Roles.DeletePermission;
 
-public class DeletePermissionHandler(IRoleRepository roleRepository) : IRequestHandler<DeletePermissionCommand, string>
+public class DeletePermissionHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository) : IRequestHandler<DeletePermissionCommand, string>
 {
     public async Task<string> Handle(DeletePermissionCommand request, CancellationToken cancellationToken)
     {
@@ -19,7 +19,7 @@ public class DeletePermissionHandler(IRoleRepository roleRepository) : IRequestH
         NotFoundException.ThrowIfNull(permission, "Permissão não encontrada!");
         role.RemovePermission(permission);
 
-        await roleRepository.Update(role);
+        await permissionRepository.Delete(permission);
 
         return "Permissão removida com sucesso!";
     }

@@ -4,7 +4,7 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Service.Orders.DeleteProductInOrder;
 
-public class DeleteProductInOrderHandler(IOrderRepository orderRepository) : IRequestHandler<DeleteProductInOrderCommand, string>
+public class DeleteProductInOrderHandler(IOrderRepository orderRepository, IProductInOrderRepository productInOrderRepository) : IRequestHandler<DeleteProductInOrderCommand, string>
 {
     public async Task<string> Handle(DeleteProductInOrderCommand request, CancellationToken cancellationToken)
     {
@@ -25,7 +25,7 @@ public class DeleteProductInOrderHandler(IOrderRepository orderRepository) : IRe
         NotFoundException.ThrowIfNull(productInOrder, "Produto não encontrado na ordem de serviço!");
 
         order.RemoveProduct(productInOrder.Product, request.Quantity);
-        await orderRepository.Update(order);
+        await productInOrderRepository.Delete(productInOrder);
 
         return "Produto removido da ordem de serviço com sucesso!";
     }

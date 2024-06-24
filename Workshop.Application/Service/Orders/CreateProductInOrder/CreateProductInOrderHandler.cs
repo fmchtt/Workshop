@@ -5,7 +5,7 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Service.Orders.CreateProductInOrder;
 
-public class CreateProductInOrderHandler(IOrderRepository orderRepository, IProductRepository productRepository) : IRequestHandler<CreateProductInOrderCommand, ProductInOrder>
+public class CreateProductInOrderHandler(IOrderRepository orderRepository, IProductRepository productRepository, IProductInOrderRepository productInOrderRepository) : IRequestHandler<CreateProductInOrderCommand, ProductInOrder>
 {
     public async Task<ProductInOrder> Handle(CreateProductInOrderCommand request, CancellationToken cancellationToken)
     {
@@ -26,6 +26,7 @@ public class CreateProductInOrderHandler(IOrderRepository orderRepository, IProd
         NotFoundException.ThrowIfNull(product, "Produto não encontrado!");
 
         var productInOrder = order.AddProduct(product, request.Quantity);
+        await productInOrderRepository.Create(productInOrder);
         await orderRepository.Update(order);
         await productRepository.Update(product);
 

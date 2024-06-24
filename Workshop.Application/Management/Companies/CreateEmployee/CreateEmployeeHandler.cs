@@ -15,7 +15,13 @@ public class CreateEmployeeHandler(IUserRepository userRepository, IEmployeeRepo
             throw new AuthorizationException("Usuário sem permissão!");
         }
 
-        var user = await userRepository.GetByEmail(request.Email) ?? new User(request.Name, request.Email, Guid.NewGuid().ToString());
+        var user = await userRepository.GetByEmail(request.Email);
+        if (user == null)
+        {
+            user = new User(request.Name, request.Email, Guid.NewGuid().ToString());
+            await userRepository.Create(user);
+        }
+
         var employee = new Employee(user.Id, request.Actor.Employee.CompanyId, request.RoleId);
         await employeeRepository.Create(employee);
 
