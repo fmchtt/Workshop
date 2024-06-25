@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Workshop.Api/Properties/launchSettings.json
 /Workshop.Api/appsettings.Development.json
+/Workshop.UI/.env

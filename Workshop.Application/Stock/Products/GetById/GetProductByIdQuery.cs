@@ -6,5 +6,5 @@ namespace Workshop.Application.Stock.Products.GetById;
 public class GetProductByIdQuery : IQuery<Product?>
 {
     public Guid ProductId { get; set; }
-    public User Actor { get; set; }
+    public User Actor { get; set; } = User.Empty;
 }

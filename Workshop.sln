@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Infra", "Workshop.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Api", "Workshop.Api\Workshop.Api.csproj", "{3090F651-44D2-4D4F-A4A9-27FC3730C69C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workshop.Application", "Workshop.Application\Workshop.Application.csproj", "{F7678D37-55E7-4492-AEDB-68630197FE27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshop.Application", "Workshop.Application\Workshop.Application.csproj", "{F7678D37-55E7-4492-AEDB-68630197FE27}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Workshop.UI", "Workshop.UI\Workshop.UI.esproj", "{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,12 @@ Global
 		{F7678D37-55E7-4492-AEDB-68630197FE27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7678D37-55E7-4492-AEDB-68630197FE27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7678D37-55E7-4492-AEDB-68630197FE27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D51D7A-D8D1-4988-A2F8-3A49F3AE1D57}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
