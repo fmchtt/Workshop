@@ -15,5 +15,6 @@ internal class CompanyConfiguration : IEntityTypeConfiguration<Company>
         builder.HasOne(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId).IsRequired();
         builder.HasMany(x => x.Employees).WithOne(x => x.Company).HasForeignKey(x => x.CompanyId);
         builder.HasMany(x => x.Roles).WithOne(x => x.Company).HasForeignKey(x => x.CompanyId);
+        builder.HasMany(x => x.Clients).WithOne(x => x.Company).HasForeignKey(c => c.CompanyId);
     }
 }

@@ -19,7 +19,7 @@ public class DeleteOrderHandler(IOrderRepository orderRepository, IProductReposi
 
         if (order.Complete)
         {
-            throw new AuthorizationException("Ordem de serviço concluída não pode ser editada!");
+            throw new AuthorizationException("Ordem de serviço concluída não pode ser apagada!");
         }
 
         var products = new List<Product>();

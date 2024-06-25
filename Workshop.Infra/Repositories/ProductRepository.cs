@@ -16,17 +16,17 @@ public class ProductRepository : IProductRepository
 
     public async Task<ICollection<Product>> GetAll(Guid companyId)
     {
-        return await _context.Products.Where(p => p.OwnerId == companyId).ToListAsync();
+        return await _context.Products.Where(p => p.OwnerId == companyId && !p.Deleted).ToListAsync();
     }
 
     public async Task<Product?> GetById(Guid id)
     {
-        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && !p.Deleted);
     }
 
     public async Task<Product?> GetById(Guid id, Guid companyId)
     {
-        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == companyId);
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == companyId && !p.Deleted);
     }
 
     public async Task Create(Product product)

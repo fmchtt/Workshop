@@ -30,9 +30,15 @@ public class PermissionRepository(WorkshopDBContext context) : IPermissionReposi
         await context.SaveChangesAsync();
     }
 
-    public async Task CreateRange(ICollection<Permission> permissions)
+    public async Task CreateOrUpdateRange(ICollection<Permission> permissions)
     {
-        context.Permissions.AddRange(permissions);
+        var existentPermissionIds = await context.Permissions.Where(p => permissions.Contains(p)).Select(p => p.Id).ToListAsync();
+        var existentPermissions = permissions.Where(x => existentPermissionIds.Contains(x.Id)).ToList();
+        var newPermissions = permissions.Where(x => !existentPermissionIds.Contains(x.Id)).ToList();
+
+        context.Permissions.AddRange(newPermissions);
+        context.Permissions.UpdateRange(existentPermissions);
+
         await context.SaveChangesAsync();
     }
 }

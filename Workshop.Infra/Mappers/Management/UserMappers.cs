@@ -9,5 +9,6 @@ public class UserMappers : Profile
     public UserMappers()
     {
         CreateMap<User, ActualUserResult>().ForMember(dest => dest.Working, opts => opts.MapFrom(src => src.Employee));
+        CreateMap<User, ResumedUserResult>();
     }
 }

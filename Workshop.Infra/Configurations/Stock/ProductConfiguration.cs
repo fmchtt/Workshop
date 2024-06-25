@@ -19,6 +19,5 @@ internal class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Deleted).HasDefaultValue(false);
 
         builder.HasOne(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId).IsRequired();
-        builder.HasQueryFilter(x => !x.Deleted);
     }
 }

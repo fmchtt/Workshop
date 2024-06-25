@@ -29,4 +29,18 @@ public class ProductInOrderRepository(WorkshopDBContext context) : IProductInOrd
         context.ProductInOrders.Remove(entity);
         await context.SaveChangesAsync();
     }
+
+    public async Task CreateOrUpdate(ProductInOrder productInOrder)
+    {
+        var exists = await context.ProductInOrders.ContainsAsync(productInOrder);
+        if (exists)
+        {
+            context.ProductInOrders.Update(productInOrder);
+        }
+        else
+        {
+            context.ProductInOrders.Add(productInOrder);
+        }
+        await context.SaveChangesAsync();
+    }
 }

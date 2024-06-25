@@ -7,6 +7,7 @@ using Workshop.Application.Management.Companies.Create;
 using Workshop.Application.Management.Companies.Delete;
 using Workshop.Application.Management.Companies.GetAll;
 using Workshop.Application.Management.Companies.GetById;
+using Workshop.Application.Management.Companies.GetEmployees;
 using Workshop.Application.Management.Companies.RemoveEmployee;
 using Workshop.Application.Management.Companies.Update;
 using Workshop.Application.Results;
@@ -59,6 +60,13 @@ public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBas
     {
         var command = new DeleteCompanyCommand { CompanyId = id, Actor = await GetUser() };
         return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpGet("employee")]
+    public async Task<ICollection<EmployeeResult>> GetEmployees()
+    {
+        var query = new GetAllEmployeesQuery { Actor = await GetUser() };
+        return _mapper.Map<ICollection<EmployeeResult>>(await _mediator.Send(query));
     }
 
     [HttpPost("employee")]

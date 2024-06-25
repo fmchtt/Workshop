@@ -5,4 +5,5 @@ namespace Workshop.Domain.Repositories;
 
 public interface IProductInOrderRepository : IRepository<ProductInOrder>
 {
+    Task CreateOrUpdate(ProductInOrder productInOrder);
 }

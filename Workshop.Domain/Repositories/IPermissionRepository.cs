@@ -5,5 +5,5 @@ namespace Workshop.Domain.Repositories;
 
 public interface IPermissionRepository : IRepository<Permission>
 {
-    Task CreateRange(ICollection<Permission> permissions);
+    Task CreateOrUpdateRange(ICollection<Permission> permissions);
 }

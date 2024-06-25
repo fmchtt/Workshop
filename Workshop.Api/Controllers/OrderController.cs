@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Workshop.Application.Results;
 using Workshop.Application.Results.Service;
+using Workshop.Application.Service.Orders.CompleteOrder;
 using Workshop.Application.Service.Orders.Create;
 using Workshop.Application.Service.Orders.CreateProductInOrder;
 using Workshop.Application.Service.Orders.Delete;
@@ -60,6 +61,15 @@ public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseC
     {
         var command = new DeleteOrderCommand { OrderId = id, Actor = await GetUser() };
         return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpPost("{id}/complete")]
+    public async Task<OrderResult> CompleteOrder(
+        [FromRoute] Guid id
+    )
+    {
+        var command = new CompleteOrderCommand { Actor = await GetUser(), OrderId = id };
+        return _mapper.Map<OrderResult>(await _mediator.Send(command));
     }
 
     [HttpPost("{id}/product")]

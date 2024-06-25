@@ -18,7 +18,7 @@ public class CreatePermissionHandler(IRoleRepository roleRepository, IPermission
         NotFoundException.ThrowIfNull(role, "Cargo não encontrado!");
 
         role.AddPermission(request.Type, request.Value);
-        await permissionRepository.Create(role.Permissions.Last());
+        await permissionRepository.CreateOrUpdateRange(role.Permissions);
 
         return role;
     }

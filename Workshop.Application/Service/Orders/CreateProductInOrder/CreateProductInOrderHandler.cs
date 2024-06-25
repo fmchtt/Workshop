@@ -26,7 +26,7 @@ public class CreateProductInOrderHandler(IOrderRepository orderRepository, IProd
         NotFoundException.ThrowIfNull(product, "Produto não encontrado!");
 
         var productInOrder = order.AddProduct(product, request.Quantity);
-        await productInOrderRepository.Create(productInOrder);
+        await productInOrderRepository.CreateOrUpdate(productInOrder);
         await orderRepository.Update(order);
         await productRepository.Update(product);
 
