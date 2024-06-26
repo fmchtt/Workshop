@@ -1,56 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Workshop.Domain.Entities.Management;
+using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
 namespace Workshop.Infra.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, Product>(context), IProductRepository
 {
-    private readonly WorkshopDBContext _context;
-
-    public ProductRepository(WorkshopDBContext context)
-    {
-        _context = context;
-    }
+    private readonly DbSet<Product> _products = context.Set<Product>();
 
     public async Task<ICollection<Product>> GetAll(Guid companyId)
     {
-        return await _context.Products.Where(p => p.OwnerId == companyId && !p.Deleted).ToListAsync();
-    }
-
-    public async Task<Product?> GetById(Guid id)
-    {
-        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && !p.Deleted);
+        return await _products.Where(p => p.OwnerId == companyId && !p.Deleted).ToListAsync();
     }
 
     public async Task<Product?> GetById(Guid id, Guid companyId)
     {
-        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == companyId && !p.Deleted);
+        return await _products.FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == companyId && !p.Deleted);
     }
 
-    public async Task Create(Product product)
+    public Task UpdateRange(ICollection<Product> products)
     {
-        _context.Add(product);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task Update(Product product)
-    {
-        _context.Update(product);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateRange(ICollection<Product> products)
-    {
-        _context.UpdateRange(products);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task Delete(Product product)
-    {
-        product.Deleted = true;
-        _context.Products.Update(product);
-        await _context.SaveChangesAsync();
+        _products.UpdateRange(products);
+        return Task.CompletedTask;
     }
 }

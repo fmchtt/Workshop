@@ -1,56 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
 namespace Workshop.Infra.Repositories;
 
-public class OrderRepository : IOrderRepository
+public class OrderRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, Order>(context),IOrderRepository
 {
-    private readonly WorkshopDBContext _context;
-
-    public OrderRepository(WorkshopDBContext context)
-    {
-        _context = context;
-    }
+    private readonly DbSet<Order> _orders = context.Set<Order>();
 
     public async Task<ICollection<Order>> GetAll(Guid CompanyId)
     {
-        return await _context.Orders.Where(x => x.Employee.CompanyId == CompanyId).ToListAsync();
-    }
-
-    public async Task<Order?> GetById(Guid id)
-    {
-        return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
+        return await _orders.Where(x => x.Employee.CompanyId == CompanyId).ToListAsync();
     }
 
     public async Task<Order?> GetById(Guid id, Guid CompanyId)
     {
-        return await _context.Orders.FirstOrDefaultAsync(x => x.Employee.CompanyId == CompanyId && x.Id == id);
+        return await _orders.FirstOrDefaultAsync(x => x.Employee.CompanyId == CompanyId && x.Id == id);
     }
 
-    public async Task Create(Order order)
+    public Task<Order> CreateAndReturn(Order order)
     {
-        _context.Add(order);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task<Order> CreateAndReturn(Order order)
-    {
-        var newOrder = _context.Add(order);
-        await _context.SaveChangesAsync();
-        return newOrder.Entity;
-    }
-
-    public async Task Update(Order order)
-    {
-        _context.Update(order);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task Delete(Order order)
-    {
-        _context.Remove(order);
-        await _context.SaveChangesAsync();
+        var newOrder = _orders.Add(order);
+        return Task.FromResult(newOrder.Entity);
     }
 }
