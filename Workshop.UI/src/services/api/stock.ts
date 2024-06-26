@@ -1,4 +1,5 @@
 import { Product } from "../../types/entities/product";
+import { Message } from "../../types/valueObjects/message";
 import { http } from "../http";
 
 export async function getProducts() {
@@ -29,6 +30,6 @@ export async function updateProduct({ id, ...props }: UpdateProductProps) {
 }
 
 export async function deleteProduct(id: string) {
-  const { data } = await http.delete(`/products/${id}`);
+  const { data } = await http.delete<Message>(`/products/${id}`);
   return data;
 }

@@ -1,4 +1,5 @@
 import { Client } from "../../types/entities/client";
+import { Message } from "../../types/valueObjects/message";
 import { http } from "../http";
 
 export async function getClients() {
@@ -20,5 +21,10 @@ export type UpdateClientProps = {
 };
 export async function updateClient({ id, ...props }: UpdateClientProps) {
   const { data } = await http.patch<Client>(`/clients/${id}`, props);
+  return data;
+}
+
+export async function deleteClient(id: string) {
+  const { data } = await http.delete<Message>(`/clients/${id}`);
   return data;
 }

@@ -9,6 +9,8 @@ import { useClients } from "../../../services/queries/client.queries";
 import ClientForm from "../../../components/forms/clientForm";
 import { useState } from "react";
 import { Client } from "../../../types/entities/client";
+import ConfirmationModal from "../../../components/confirmationModal";
+import { useDeleteClientMutation } from "../../../services/mutations/client.mutations";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -16,7 +18,12 @@ export const Route = createLazyFileRoute("/_protected/customer/")({
 
 function CustomerHome() {
   const [clientEdit, setClientEdit] = useState<Client | undefined>();
+  const [clientDelete, setClientDelete] = useState<Client | undefined>();
   const { data } = useClients();
+
+  const deleteMutation = useDeleteClientMutation({
+    onSuccess: () => setClientDelete(undefined),
+  });
 
   return (
     <ClientContainer>
@@ -31,11 +38,19 @@ function CustomerHome() {
           rows={data || []}
           columns={[{ key: "name", title: "Nome" }]}
           showDelete
-          onDelete={(data) => console.log(data)}
+          onDelete={(data) => setClientDelete(data)}
           showEdit
           onEdit={(data) => setClientEdit(data)}
         />
       </TableContainer>
+      <ConfirmationModal
+        title="Deletar cliente"
+        text={`Tem certeza que deseja apagar o cliente ${clientDelete?.name} ?`}
+        onSuccess={() => clientDelete && deleteMutation.mutate(clientDelete.id)}
+        onClose={() => setClientDelete(undefined)}
+        show={!!clientDelete}
+        $loading={deleteMutation.isPending}
+      />
     </ClientContainer>
   );
 }

@@ -9,6 +9,7 @@ import {
   updateProduct,
   UpdateProductProps,
 } from "../api/stock";
+import { Message } from "../../types/valueObjects/message";
 
 export function useCreateProductMutation(
   props?: MutationProps<Product, CreateProductProps>
@@ -52,7 +53,9 @@ export function useUpdateProductMutation(
   });
 }
 
-export function useDeleteProductMutation(props?: MutationProps<null, string>) {
+export function useDeleteProductMutation(
+  props?: MutationProps<Message, string>
+) {
   const client = useQueryClient();
 
   return useMutation({
