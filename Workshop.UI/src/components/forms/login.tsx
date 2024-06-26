@@ -1,5 +1,5 @@
-import { useAuth } from "../../../contexts/authContext";
-import Form from "../../form";
+import { useAuth } from "../../contexts/authContext";
+import Form from "../form";
 
 export default function LoginForm() {
   const { login } = useAuth();

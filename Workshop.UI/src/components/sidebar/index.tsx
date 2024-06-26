@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Logo, ModuleButton, ModulesWrapper, StyledSidebar } from "./styles";
 import { FaBoxes, FaRegUser, FaWrench } from "react-icons/fa";
+import { useAuth } from "../../contexts/authContext";
 
 export default function Sidebar() {
+  const { user } = useAuth();
+
   const modules = [
     {
       name: "Estoque",
@@ -27,12 +30,13 @@ export default function Sidebar() {
         <h1>Workshop</h1>
       </Logo>
       <ModulesWrapper>
-        {modules.map((m) => (
-          <ModuleButton key={m.name} as={Link} to={m.link}>
-            {m.icon}
-            {m.name}
-          </ModuleButton>
-        ))}
+        {user?.working &&
+          modules.map((m) => (
+            <ModuleButton key={m.name} as={Link} to={m.link}>
+              {m.icon}
+              {m.name}
+            </ModuleButton>
+          ))}
       </ModulesWrapper>
       <ModuleButton>Sair</ModuleButton>
     </StyledSidebar>

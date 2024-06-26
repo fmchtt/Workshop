@@ -8,6 +8,11 @@ export default function Header() {
   return (
     <StyledHeader>
       {user && (
+        <h3>
+          {user?.working ? user.working.company.name : "Selecione uma empresa"}
+        </h3>
+      )}
+      {user && (
         <UserWrapper>
           {user.name} <FaCog />
         </UserWrapper>

@@ -9,5 +9,6 @@ public class EmployeeMappers : Profile
     public EmployeeMappers()
     {
         CreateMap<Employee, EmployeeResult>();
+        CreateMap<Employee, EmployeeWithCompanyResult>();
     }
 }
