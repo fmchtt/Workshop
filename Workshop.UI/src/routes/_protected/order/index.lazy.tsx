@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { OrderContainer } from "../../../components/pages/order.style";
 import {
   FormContainer,
@@ -8,7 +8,7 @@ import { Table } from "../../../components/table";
 import { useOrders } from "../../../services/queries/order.queries";
 import OrderForm from "../../../components/forms/orderForm";
 
-export const Route = createFileRoute("/_protected/order/")({
+export const Route = createLazyFileRoute("/_protected/order/")({
   component: OrderHome,
 });
 

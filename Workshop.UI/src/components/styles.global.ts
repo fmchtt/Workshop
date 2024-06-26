@@ -29,10 +29,31 @@ export const PageContainer = styled.div`
 export type TextProps = {
   $size?: "sm" | "md" | "lg" | "xl";
   $color?: "primary" | "secondary" | "thernary";
-  $weight?: "light" | "medium" | "bold";
+  $weight?: "light" | "medium" | "semibold" | "bold";
 };
 export const Text = styled.p<TextProps>`
   font-size: ${(props) => props.theme.font[props.$size || "sm"]};
   color: ${(props) => props.theme.colors[props.$color || "primary"]};
   font-weight: ${(props) => props.theme.font.weight[props.$weight || "medium"]};
+`;
+
+export const IconButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
+export const SpinnerContainer = styled.main`
+  width: 100vw;
+  height: 100vh;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: ${(props) => props.theme.colors.background};
 `;

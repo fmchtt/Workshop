@@ -10,4 +10,5 @@ export interface FilledButtonProps {
   type?: "button" | "reset" | "submit" | undefined;
   $margin?: string;
   $height?: string;
+  $color?: "light" | "dark" | "undefined";
 }

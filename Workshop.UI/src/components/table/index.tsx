@@ -1,5 +1,5 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Text } from "../styles.global";
+import { IconButton, Text } from "../styles.global";
 import {
   ActionContainer,
   BodyCell,
@@ -27,6 +27,7 @@ type TableProps<T> = {
   onEdit?: (props: T) => void;
   showDelete?: boolean;
   onDelete?: (props: T) => void;
+  actionsDisabled?: boolean;
 };
 export function Table<T>(props: TableProps<T>) {
   return (
@@ -55,18 +56,20 @@ export function Table<T>(props: TableProps<T>) {
               <BodyCell>
                 <ActionContainer>
                   {props.showEdit && (
-                    <FaEdit
+                    <IconButton
                       onClick={() => props.onEdit && props.onEdit(row)}
-                      cursor="pointer"
-                      size={18}
-                    />
+                      disabled={props.actionsDisabled}
+                    >
+                      <FaEdit size={18} />
+                    </IconButton>
                   )}
                   {props.showDelete && (
-                    <FaTrash
+                    <IconButton
                       onClick={() => props.onDelete && props.onDelete(row)}
-                      cursor="pointer"
-                      size={18}
-                    />
+                      disabled={props.actionsDisabled}
+                    >
+                      <FaTrash size={18} />
+                    </IconButton>
                   )}
                 </ActionContainer>
               </BodyCell>

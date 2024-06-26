@@ -10,7 +10,7 @@ const theme: DefaultTheme = {
   font: {
     sm: "1rem",
     md: "1.15rem",
-    lg: "2rem",
+    lg: "1.6rem",
     xl: "2.2rem",
     weight: {
       light: 200,

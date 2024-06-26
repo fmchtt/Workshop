@@ -10,6 +10,8 @@ import { LoginProps, RegisterProps } from "../services/api/auth";
 import { http } from "../services/http";
 import { UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { Token } from "../types/valueObjects/token";
+import Spinner from "../components/spinner";
+import { SpinnerContainer } from "../components/styles.global";
 
 export type AuthContextProps = {
   user?: User;
@@ -21,7 +23,7 @@ const authContext = createContext<AuthContextProps>({} as AuthContextProps);
 export function AuthContextProvider(props: { children: ReactNode }) {
   const [authToken, setAuthToken] = useState<string | null>(getToken());
 
-  const { data } = useMe({ enabled: !!authToken });
+  const { data, isLoading } = useMe({ enabled: !!authToken });
   const client = useQueryClient();
 
   http.interceptors.response.use(
@@ -66,7 +68,13 @@ export function AuthContextProvider(props: { children: ReactNode }) {
     <authContext.Provider
       value={{ user: data, login: loginMutation, register: registerMutation }}
     >
-      {props.children}
+      {isLoading ? (
+        <SpinnerContainer>
+          <Spinner size="60px" />
+        </SpinnerContainer>
+      ) : (
+        props.children
+      )}
     </authContext.Provider>
   );
 }

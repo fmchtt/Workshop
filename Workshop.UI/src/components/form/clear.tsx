@@ -5,13 +5,19 @@ type SubmitProps = StyledButtonProps & {
   label: string;
   $loading?: boolean;
 };
-export default function SubmitButton({
+export default function ClearButton({
   label,
   $loading,
   ...props
 }: SubmitProps) {
   return (
-    <FilledButton {...props} $margin="0" type="submit" $loading={$loading}>
+    <FilledButton
+      {...props}
+      $margin="0"
+      $color="light"
+      type="reset"
+      $loading={$loading}
+    >
       {label}
     </FilledButton>
   );

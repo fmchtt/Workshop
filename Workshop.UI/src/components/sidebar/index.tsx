@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Logo, ModuleButton, ModulesWrapper, StyledSidebar } from "./styles";
 import { FaBoxes, FaRegUser, FaWrench } from "react-icons/fa";
 import { useAuth } from "../../contexts/authContext";
+import { Text } from "../styles.global";
 
 export default function Sidebar() {
   const { user } = useAuth();
@@ -27,7 +28,9 @@ export default function Sidebar() {
   return (
     <StyledSidebar>
       <Logo as={Link} to="/home">
-        <h1>Workshop</h1>
+        <Text $size="lg" $color="thernary" $weight="bold">
+          Workshop
+        </Text>
       </Logo>
       <ModulesWrapper>
         {user?.working &&
