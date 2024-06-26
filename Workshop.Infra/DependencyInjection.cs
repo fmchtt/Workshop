@@ -3,11 +3,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Workshop.Application.Behavior;
 using Workshop.Domain.Contracts;
 using Workshop.Domain.Repositories;
+using Workshop.Domain.Repositories.Core;
 using Workshop.Infra.Behaviors;
 using Workshop.Infra.Contexts;
 using Workshop.Infra.Repositories;
+using Workshop.Infra.Repositories.Core;
 using Workshop.Infra.Utils;
 
 namespace Workshop.Infra;
@@ -31,6 +34,7 @@ public static class DependencyInjection
         // Mediatr configurations
         services.AddMediatR(x => x.RegisterServicesFromAssembly(AppDomain.CurrentDomain.Load("Workshop.Application")));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
 
         // FluentValidation configurations
         services.AddValidatorsFromAssembly(AppDomain.CurrentDomain.Load("Workshop.Application"));
@@ -52,6 +56,8 @@ public static class DependencyInjection
 
         // Mappers configuration
         services.AddAutoMapper(AppDomain.CurrentDomain.Load("Workshop.Infra"));
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

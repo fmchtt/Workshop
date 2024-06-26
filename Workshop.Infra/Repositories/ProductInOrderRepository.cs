@@ -1,46 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
 
 namespace Workshop.Infra.Repositories;
 
-public class ProductInOrderRepository(WorkshopDBContext context) : IProductInOrderRepository
+public class ProductInOrderRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, ProductInOrder>(context), IProductInOrderRepository
 {
-    public async Task<ProductInOrder?> GetById(Guid id)
-    {
-        return await context.ProductInOrders.FirstOrDefaultAsync(c => c.Id == id);
-    }
-
-    public async Task Create(ProductInOrder entity)
-    {
-        context.ProductInOrders.Add(entity);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Update(ProductInOrder entity)
-    {
-        context.ProductInOrders.Update(entity);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Delete(ProductInOrder entity)
-    {
-        context.ProductInOrders.Remove(entity);
-        await context.SaveChangesAsync();
-    }
+    private readonly DbSet<ProductInOrder> _productInOrders = context.Set<ProductInOrder>();
 
     public async Task CreateOrUpdate(ProductInOrder productInOrder)
     {
-        var exists = await context.ProductInOrders.ContainsAsync(productInOrder);
+        var exists = await _productInOrders.ContainsAsync(productInOrder);
         if (exists)
         {
-            context.ProductInOrders.Update(productInOrder);
+            _productInOrders.Update(productInOrder);
         }
         else
         {
-            context.ProductInOrders.Add(productInOrder);
+            _productInOrders.Add(productInOrder);
         }
-        await context.SaveChangesAsync();
     }
 }

@@ -5,40 +5,12 @@ using Workshop.Infra.Contexts;
 
 namespace Workshop.Infra.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, User>(context), IUserRepository
 {
-    private readonly WorkshopDBContext _context;
-
-    public UserRepository(WorkshopDBContext context)
-    {
-        _context = context;
-    }
+    private readonly DbSet<User> _users = context.Set<User>();
 
     public async Task<User?> GetByEmail(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-    }
-
-    public async Task<User?> GetById(Guid id)
-    {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-    }
-
-    public async Task Create(User user)
-    {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task Update(User user)
-    {
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task Delete(User entity)
-    {
-        _context.Remove(entity);
-        await _context.SaveChangesAsync();
+        return await _users.FirstOrDefaultAsync(u => u.Email == email);
     }
 }
