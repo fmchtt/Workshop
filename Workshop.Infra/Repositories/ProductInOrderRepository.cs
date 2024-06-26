@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
+using Workshop.Infra.Shared;
 
 namespace Workshop.Infra.Repositories;
 
-public class ProductInOrderRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, ProductInOrder>(context), IProductInOrderRepository
+public class ProductInOrderRepository(WorkshopDBContext context) : BaseRepository<ProductInOrder>(context), IProductInOrderRepository
 {
     private readonly DbSet<ProductInOrder> _productInOrders = context.Set<ProductInOrder>();
 

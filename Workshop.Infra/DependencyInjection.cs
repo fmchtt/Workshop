@@ -4,13 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Workshop.Application.Behavior;
-using Workshop.Domain.Contracts;
 using Workshop.Domain.Repositories;
-using Workshop.Domain.Repositories.Core;
+using Workshop.Domain.Utils;
 using Workshop.Infra.Behaviors;
 using Workshop.Infra.Contexts;
 using Workshop.Infra.Repositories;
-using Workshop.Infra.Repositories.Core;
 using Workshop.Infra.Utils;
 
 namespace Workshop.Infra;
@@ -42,6 +40,7 @@ public static class DependencyInjection
         // Utils configurations
         services.AddTransient<IHasher, BCryptHasher>();
         services.AddTransient<ITokenService, TokenService>(x => new TokenService(configuration.GetValue<string>("SecretKey") ?? Guid.NewGuid().ToString()));
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
 
         // Repositories configuration
         services.AddTransient<IUserRepository, UserRepository>();
@@ -57,7 +56,6 @@ public static class DependencyInjection
         // Mappers configuration
         services.AddAutoMapper(AppDomain.CurrentDomain.Load("Workshop.Infra"));
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

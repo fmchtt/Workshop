@@ -1,6 +1,6 @@
 ﻿using Workshop.Domain.Entities.Management;
 
-namespace Workshop.Domain.Contracts;
+namespace Workshop.Domain.Utils;
 
 public interface ITokenService
 {
