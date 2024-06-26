@@ -13,14 +13,10 @@ declare module "styled-components" {
       md: string;
       lg: string;
       xl: string;
-      colors: {
-        primary: string;
-        secondary: string;
-        thernary: string;
-      };
       weight: {
         light: number;
         medium: number;
+        semibold: number;
         bold: number;
       };
     };

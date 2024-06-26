@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Workshop.Application.Management.Companies.AddEmployee;
+using Workshop.Application.Management.Companies.ChangeCompany;
 using Workshop.Application.Management.Companies.Create;
 using Workshop.Application.Management.Companies.Delete;
 using Workshop.Application.Management.Companies.GetAll;
@@ -85,5 +86,14 @@ public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBas
     {
         var command = new DeleteEmployeeCommand { Actor = await GetUser(), EmployeeId = id };
         return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpPost("change/{companyId}")]
+    public async Task<ActualUserResult> ChangeEmployee(
+        [FromRoute] Guid companyId
+    )
+    {
+        var command = new ChangeCompanyCommand { Actor = await GetUser(), CompanyId = companyId };
+        return _mapper.Map<ActualUserResult>(await _mediator.Send(command));
     }
 }

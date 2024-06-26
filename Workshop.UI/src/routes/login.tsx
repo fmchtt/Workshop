@@ -8,6 +8,7 @@ import Header from "../components/header";
 import { useAuth } from "../contexts/authContext";
 import { useEffect, useState } from "react";
 import RegisterForm from "../components/forms/register";
+import { Text } from "../components/styles.global";
 
 export const Route = createFileRoute("/login")({
   component: Login,
@@ -37,18 +38,22 @@ function Login() {
           {isLogin ? (
             <>
               <LoginForm />
-              <p>
+              <Text>
                 Não possui conta ?{" "}
-                <a onClick={() => setLogin((x) => !x)}>Registrar</a>
-              </p>
+                <Text as="a" $weight="bold" onClick={() => setLogin((x) => !x)}>
+                  Registrar
+                </Text>
+              </Text>
             </>
           ) : (
             <>
               <RegisterForm />
-              <p>
+              <Text>
                 Já possui conta ?{" "}
-                <a onClick={() => setLogin((x) => !x)}>Entrar</a>
-              </p>
+                <Text as="a" $weight="bold" onClick={() => setLogin((x) => !x)}>
+                  Entrar
+                </Text>
+              </Text>
             </>
           )}
         </FormContainer>

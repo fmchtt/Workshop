@@ -19,26 +19,29 @@ export const InputGroup = styled.div<InputGroupProps>`
     top: 40px;
     right: 20px;
     font-size: 25px;
-    color: ${(props) => props.theme.font.colors.thernary};
+    color: ${(props) => props.theme.colors.thernary};
     cursor: pointer;
   }
 `;
 
+type ColorProps = {
+  $color?: "primary" | "secondary" | "thernary";
+};
 export const Title = styled.h2`
-  color: ${(props) => props.theme.font.colors.secondary};
+  color: ${(props) => props.theme.colors.primary};
   font-size: ${(props) => props.theme.font.md};
-  font-weight: ${(props) => props.theme.font.weight.medium};
+  font-weight: ${(props) => props.theme.font.weight.semibold};
   text-align: center;
 `;
 
-export const Label = styled.label`
-  color: ${(props) => props.theme.font.colors.secondary};
+export const Label = styled.label<ColorProps>`
+  color: ${(props) => props.theme.colors[props.$color || "primary"]};
   font-size: ${(props) => props.theme.font.sm};
   font-weight: ${(props) => props.theme.font.weight.medium};
 `;
 
 export const Description = styled.span`
-  color: ${(props) => props.theme.font.colors.secondary};
+  color: ${(props) => props.theme.colors.primary};
   font-size: 14px;
   font-weight: 100;
 `;
@@ -66,11 +69,11 @@ type InputProps = ComponentPropsWithoutRef<"input"> & {
   flexible?: boolean;
 };
 export const StyledInput = styled.input<InputProps>`
-  background-color: ${(props) => props.theme.colors.thernary};
-  color: ${(props) => props.theme.font.colors.thernary};
+  background-color: ${(props) => props.theme.colors.background};
+  color: ${(props) => props.theme.colors.primary};
 
   &::placeholder {
-    color: ${(props) => props.theme.font.colors.thernary};
+    color: ${(props) => props.theme.colors.primary};
   }
 
   outline: none;
@@ -84,11 +87,11 @@ export const StyledInput = styled.input<InputProps>`
 `;
 
 export const StyledSelect = styled.select`
-  background-color: ${(props) => props.theme.colors.thernary};
-  color: ${(props) => props.theme.font.colors.thernary};
+  background-color: ${(props) => props.theme.colors.background};
+  color: ${(props) => props.theme.colors.primary};
 
   &::placeholder {
-    color: ${(props) => props.theme.font.colors.thernary};
+    color: ${(props) => props.theme.colors.primary};
   }
 
   outline: none;
@@ -100,11 +103,11 @@ export const StyledSelect = styled.select`
 `;
 
 export const StyledTextArea = styled.textarea`
-  background-color: ${(props) => props.theme.colors.thernary};
-  color: ${(props) => props.theme.font.colors.thernary};
+  background-color: ${(props) => props.theme.colors.background};
+  color: ${(props) => props.theme.colors.primary};
 
   &::placeholder {
-    color: ${(props) => props.theme.font.colors.thernary};
+    color: ${(props) => props.theme.colors.primary};
   }
 
   outline: none;

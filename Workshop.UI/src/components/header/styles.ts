@@ -12,7 +12,7 @@ export const StyledHeader = styled.header`
   padding: 0 20px;
 
   background-color: ${(props) => props.theme.colors.thernary};
-  color: ${(props) => props.theme.font.colors.thernary};
+  color: ${(props) => props.theme.colors.primary};
 `;
 
 export const UserWrapper = styled.div`

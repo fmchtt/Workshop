@@ -12,14 +12,10 @@ const theme: DefaultTheme = {
     md: "1.15rem",
     lg: "2rem",
     xl: "2.2rem",
-    colors: {
-      primary: "white",
-      secondary: "white",
-      thernary: "#222222",
-    },
     weight: {
       light: 200,
       medium: 400,
+      semibold: 500,
       bold: 800,
     },
   },

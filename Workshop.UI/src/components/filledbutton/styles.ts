@@ -10,7 +10,7 @@ export const ButtonStyle = styled.button<StyledButtonProps>`
   min-width: 100px;
 
   background-color: ${(props) => props.theme.colors.primary};
-  color: ${(props) => props.theme.font.colors.primary};
+  color: ${(props) => props.theme.colors.thernary};
   margin: ${(props) => props.$margin || "23px 0"};
   cursor: pointer;
   display: flex;

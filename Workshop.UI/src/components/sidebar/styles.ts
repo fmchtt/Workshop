@@ -11,7 +11,7 @@ export const StyledSidebar = styled.aside`
   justify-content: space-between;
   align-items: center;
 
-  color: ${(props) => props.theme.font.colors.secondary};
+  color: ${(props) => props.theme.colors.thernary};
 `;
 
 export const Logo = styled.div`
@@ -37,7 +37,7 @@ export const ModuleButton = styled.a`
   gap: 10px;
   width: 100%;
   padding: 10px;
-  color: ${(props) => props.theme.font.colors.secondary};
+  color: ${(props) => props.theme.colors.thernary};
   text-decoration: none;
   font-size: ${(props) => props.theme.font.md};
 

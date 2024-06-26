@@ -13,6 +13,7 @@ export default function Input({
   description,
   name,
   placeholder,
+  type,
 }: FormInputProps) {
   return (
     <Field name={name}>
@@ -23,6 +24,7 @@ export default function Input({
             {...field}
             placeholder={placeholder}
             onChange={form.handleChange}
+            type={type || "text"}
           />
           {description && <Description>{description}</Description>}
           {meta.touched && meta.error && (

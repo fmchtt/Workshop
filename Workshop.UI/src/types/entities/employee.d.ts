@@ -8,3 +8,5 @@ export type Employee = {
   role: ResumedRole;
   company: Company;
 };
+
+export type ResumedEmployee = Omit<Employee, "company">;

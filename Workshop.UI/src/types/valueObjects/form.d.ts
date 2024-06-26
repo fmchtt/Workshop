@@ -3,4 +3,5 @@ export type FormInputProps = {
   name: string;
   description?: string;
   placeholder?: string;
+  type?: "number" | "text" | "email";
 };

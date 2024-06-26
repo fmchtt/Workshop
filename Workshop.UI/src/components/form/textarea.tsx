@@ -24,7 +24,12 @@ export default function TextArea({
       {({ field, form, meta }: FieldProps) => (
         <InputGroup>
           <Label>{label}</Label>
-          <StyledTextArea {...field} {...props} onChange={form.handleChange} />
+          <StyledTextArea
+            rows={8}
+            {...field}
+            {...props}
+            onChange={form.handleChange}
+          />
           {description && <Description>{description}</Description>}
           {meta.touched && meta.error && (
             <ErrorMessage>{meta.error}</ErrorMessage>
