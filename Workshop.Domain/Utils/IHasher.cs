@@ -1,4 +1,4 @@
-﻿namespace Workshop.Domain.Contracts;
+﻿namespace Workshop.Domain.Utils;
 
 public interface IHasher
 {

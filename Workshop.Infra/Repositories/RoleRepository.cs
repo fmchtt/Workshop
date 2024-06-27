@@ -2,10 +2,11 @@
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
+using Workshop.Infra.Shared;
 
 namespace Workshop.Infra.Repositories;
 
-public class RoleRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, Role>(context), IRoleRepository
+public class RoleRepository(WorkshopDBContext context) : BaseRepository<Role>(context), IRoleRepository
 {
     private readonly DbSet<Role> _roles = context.Set<Role>();
 

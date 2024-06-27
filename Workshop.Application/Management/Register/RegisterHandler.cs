@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Workshop.Application.Results.Management;
-using Workshop.Domain.Contracts;
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Exceptions;
 using Workshop.Domain.Repositories;
+using Workshop.Domain.Utils;
 
 namespace Workshop.Application.Management.Register;
 

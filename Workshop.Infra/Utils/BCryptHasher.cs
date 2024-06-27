@@ -1,4 +1,4 @@
-﻿using Workshop.Domain.Contracts;
+﻿using Workshop.Domain.Utils;
 namespace Workshop.Infra.Utils;
 
 public class BCryptHasher : IHasher

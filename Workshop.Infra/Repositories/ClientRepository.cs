@@ -2,10 +2,11 @@
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Infra.Contexts;
+using Workshop.Infra.Shared;
 
 namespace Workshop.Infra.Repositories;
 
-public class ClientRepository(WorkshopDBContext context) : RepositoryBase<WorkshopDBContext, Client>(context), IClientRepository
+public class ClientRepository(WorkshopDBContext context) : BaseRepository<Client>(context), IClientRepository
 {
     private readonly DbSet<Client> _clients = context.Set<Client>();
 

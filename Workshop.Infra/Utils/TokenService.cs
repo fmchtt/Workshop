@@ -2,8 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Workshop.Domain.Contracts;
 using Workshop.Domain.Entities.Management;
+using Workshop.Domain.Utils;
 
 namespace Workshop.Infra.Utils;
 

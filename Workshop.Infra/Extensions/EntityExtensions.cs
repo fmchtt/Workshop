@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
+using Workshop.Domain.Entities.Shared;
 
 namespace Workshop.Infra.Extensions;
 
@@ -13,19 +10,24 @@ public static class EntityExtensions
     {
         return query.Skip((page - 1) * pageSize).Take(pageSize);
     }
-    public static void TryUpdateManyToMany<T, TKey>(this DbContext db, IEnumerable<T> currentItems,
-           IEnumerable<T> newItems, Func<T, TKey> getKey) where T : class
+
+    public static async Task AddOrRemove<T>(this DbSet<T> dbSet, IEnumerable<T> currentItems, Expression<Func<T, bool>> findKey) where T : Entity
     {
-        db.Set<T>().RemoveRange(currentItems.Except(newItems, getKey));
-        db.Set<T>().AddRange(newItems.Except(currentItems, getKey));
+        var items = await dbSet.Where(findKey).ToListAsync();
+        var newItems = currentItems.Where(i => !items.Contains(i)).ToList();
+        var removeItems = items.Where(i => !currentItems.Contains(i)).ToList();
+
+        dbSet.RemoveRange(removeItems);
+        dbSet.AddRange(newItems);
     }
 
-    public static IEnumerable<T> Except<T, TKey>(this IEnumerable<T> items, IEnumerable<T> otherItems, Func<T, TKey> getKeyFunc)
+    public static async Task AddOrUpdateRange<T>(this DbSet<T> dbSet, IEnumerable<T> currentItems) where T : Entity
     {
-        return items
-            .GroupJoin(otherItems, getKeyFunc, getKeyFunc, (item, tempItems) => new { item, tempItems })
-            .SelectMany(t => t.tempItems.DefaultIfEmpty(), (t, tempItem) => new { t, tempItem })
-            .Where(t => ReferenceEquals(null, t.tempItem) || t.tempItem.Equals(default(T)))
-            .Select(t => t.t.item);
+        var itemsIds = await dbSet.Where(i => currentItems.Contains(i)).Select(x => x.Id).ToListAsync();
+        var newItems = currentItems.Where(i => !itemsIds.Contains(i.Id)).ToList();
+        var updateItems = currentItems.Where(i => itemsIds.Contains(i.Id)).ToList();
+
+        dbSet.UpdateRange(updateItems);
+        dbSet.AddRange(newItems);
     }
 }
