@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Logo, ModuleButton, ModulesWrapper, StyledSidebar } from "./styles";
-import { FaBoxes, FaRegUser, FaWrench } from "react-icons/fa";
+import { FaBoxes, FaUser, FaWrench } from "react-icons/fa";
 import { useAuth } from "../../contexts/authContext";
 import { Text } from "../styles.global";
 
@@ -20,7 +20,7 @@ export default function Sidebar() {
     },
     {
       name: "Clientes",
-      icon: <FaRegUser />,
+      icon: <FaUser />,
       link: "/customer",
     },
   ];
