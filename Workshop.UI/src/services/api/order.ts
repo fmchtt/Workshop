@@ -1,4 +1,4 @@
-import { Order } from "../../types/entities/order";
+import { Order, ProductInOrder } from "../../types/entities/order";
 import { Message } from "../../types/valueObjects/message";
 import { http } from "../http";
 
@@ -33,5 +33,23 @@ export async function updateOrder({ id, ...props }: UpdateOrderProps) {
 
 export async function deleteOrder(id: string) {
   const { data } = await http.delete<Message>(`/orders/${id}`);
+  return data;
+}
+
+export type AddProductProps = {
+  orderId: string;
+  productId: string;
+  quantity: number;
+};
+export async function addProduct({ orderId, ...props }: AddProductProps) {
+  const { data } = await http.post<ProductInOrder>(
+    `/orders/${orderId}/product`,
+    props
+  );
+  return data;
+}
+
+export async function concludeOrder(orderId: string) {
+  const { data } = await http.post<Order>(`/orders/${orderId}/complete`);
   return data;
 }

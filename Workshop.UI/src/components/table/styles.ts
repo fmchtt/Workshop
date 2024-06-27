@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 
 export const StyledTable = styled.table`
   width: 100%;
+
+  color: ${(props) => props.theme.colors.primary};
 `;
 
 export const HeadRow = styled.tr``;
@@ -10,6 +12,7 @@ export const HeadRow = styled.tr``;
 export const HeadCell = styled.th`
   border-bottom: 1px solid ${(props) => props.theme.colors.primary};
   padding: 15px 0;
+  font-size: ${(props) => props.theme.font.sm};
 `;
 
 type BodyRowProps = ComponentPropsWithoutRef<"tr"> & {
@@ -28,6 +31,7 @@ export const BodyRow = styled.tr<BodyRowProps>`
 export const BodyCell = styled.td`
   border-bottom: 1px solid ${(props) => props.theme.colors.primary};
   padding: 15px 0;
+  text-align: center;
 `;
 
 export const ActionContainer = styled.div`

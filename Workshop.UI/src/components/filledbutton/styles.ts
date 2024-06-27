@@ -3,10 +3,9 @@ import { StyledButtonProps } from "./types";
 
 export const ButtonStyle = styled.button<StyledButtonProps>`
   border: none;
-  border-radius: 20px;
+  border-radius: ${(props) => props.theme.borderRadius};
 
-  height: ${(props) => props.$height || "60px"};
-  padding: 10px;
+  padding: 15px;
   min-width: 100px;
 
   background-color: ${(props) =>
@@ -20,7 +19,7 @@ export const ButtonStyle = styled.button<StyledButtonProps>`
   justify-content: center;
   align-items: center;
 
-  font-size: 1rem;
+  font-size: ${(props) => props.theme.font.sm};
 
   &:hover {
     background-color: ${(props) => props.theme.colors.primary + "d1"};

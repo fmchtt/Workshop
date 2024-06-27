@@ -11,5 +11,5 @@ export const StyledModal = styled.aside`
   height: 100vh;
   width: 30%;
 
-  box-shadow: -5px 0px 26px -12px rgba(0, 0, 0, 0.75);
+  box-shadow: -5px 0px 12px -12px rgba(0, 0, 0, 0.75);
 `;

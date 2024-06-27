@@ -49,6 +49,11 @@ function OrderHome() {
               title: "Quantidade de produtos",
               parser: (data) => data.length,
             },
+            {
+              key: "complete",
+              title: "Situação",
+              parser: (data) => (data == true ? "Concluída" : "Aberta"),
+            },
           ]}
           showDelete
           onDelete={(data) => setOrderDelete(data)}

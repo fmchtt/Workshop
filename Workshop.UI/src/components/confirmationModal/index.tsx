@@ -13,7 +13,7 @@ type ConfirmationModalProps = {
 };
 export default function ConfirmationModal(props: ConfirmationModalProps) {
   return (
-    <Modal show={props.show}>
+    <Modal show={props.show} hideClose={true}>
       <ConfirmationWrapper>
         <Text $size="lg" $weight="bold">
           {props.title}
