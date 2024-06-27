@@ -18,11 +18,18 @@ public class Order : Entity
 
     public decimal Total { get { return Products.Sum(p => p.Product.Price * p.Quantity); } }
 
-    public Order(Guid companyId, Guid employeeId, Guid clientId)
+    public Order()
     {
-        EmployeeId = employeeId;
-        ClientId = clientId;
-        CompanyId = companyId;
+    }
+
+    public Order(Company company, Employee employee, Client client)
+    {
+        Employee = employee;
+        EmployeeId = employee.Id;
+        Client = client;
+        ClientId = client.Id;
+        Company = company;
+        CompanyId = company.Id;
     }
 
     public ProductInOrder AddProduct(Product product, int quantity)
@@ -36,7 +43,7 @@ public class Order : Entity
         var index = Products.FindIndex(p => p.ProductId == product.Id);
         if (index == -1)
         {
-            var productInOrder = new ProductInOrder(product.Id, Id, quantity);
+            var productInOrder = new ProductInOrder(product, this, quantity);
             Products.Add(productInOrder);
             return productInOrder;
         }

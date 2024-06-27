@@ -13,7 +13,7 @@ public class DeleteEmployeeHandler(IEmployeeRepository employeeRepository) : IRe
             throw new AuthorizationException("Usuário sem permissão!");
         }
 
-        var employee = await employeeRepository.GetById(request.EmployeeId);
+        var employee = await employeeRepository.GetById(request.EmployeeId, request.Actor.Employee.CompanyId);
         NotFoundException.ThrowIfNull(employee, "Colaborador não encontrado!");
 
         if (employee.CompanyId != request.Actor.Employee.CompanyId)

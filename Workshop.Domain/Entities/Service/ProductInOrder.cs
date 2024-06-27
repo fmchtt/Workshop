@@ -11,10 +11,14 @@ public class ProductInOrder : Entity
     public Guid OrderId { get; set; }
     public virtual Order Order { get; set; } = null!;
 
-    public ProductInOrder(Guid productId, Guid orderId, int quantity)
+    public ProductInOrder()
     {
-        ProductId = productId;
-        OrderId = orderId;
+    }
+
+    public ProductInOrder(Product product, Order order, int quantity)
+    {
+        ProductId = product.Id;
+        OrderId = order.Id;
         Quantity = quantity;
     }
 }

@@ -8,10 +8,10 @@ public class CreateCompanyHandler(ICompanyRepository repository, IRoleRepository
 {
     public async Task<Company> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        var company = new Company(request.Name, request.Actor.Id);
+        var company = new Company(request.Name, request.Actor);
         await repository.Create(company);
 
-        var role = new Role("Administrador", company.Id);
+        var role = new Role("Administrador", company);
         foreach (var type in Permission.List.Keys)
         {
             foreach (var value in Permission.List[type])
@@ -21,7 +21,7 @@ public class CreateCompanyHandler(ICompanyRepository repository, IRoleRepository
         }
         await roleRepository.Create(role);
 
-        var employee = new Employee(request.Actor.Id, company.Id, role.Id);
+        var employee = new Employee(request.Actor, company, role);
         await employeeRepository.Create(employee);
 
         request.Actor.ActiveEmployeeId = employee.Id;

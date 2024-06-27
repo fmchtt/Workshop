@@ -14,7 +14,7 @@ internal class CreateRoleHandler(IRoleRepository repository) : IRequestHandler<C
             throw new AuthorizationException("Usuário sem permissão!");
         }
 
-        var role = new Role(request.Name, request.Actor.Employee.CompanyId);
+        var role = new Role(request.Name, request.Actor.Employee.Company);
         await repository.Create(role);
 
         return role;

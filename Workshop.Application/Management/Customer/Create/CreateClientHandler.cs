@@ -14,7 +14,7 @@ public class CreateClientHandler(IClientRepository clientRepository) : IRequestH
             throw new AuthorizationException("Usuário sem permissão!");
         }
 
-        var client = new Client(request.Name, request.Actor.Employee.CompanyId);
+        var client = new Client(request.Name, request.Actor.Employee.Company);
         await clientRepository.Create(client);
 
         return client;

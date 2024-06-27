@@ -4,17 +4,22 @@ namespace Workshop.Domain.Entities.Management;
 
 public class Permission : Entity
 {
-    public string Type { get; init; }
-    public string Value { get; init; }
+    public string Type { get; init; } = string.Empty;
+    public string Value { get; init; } = string.Empty;
 
     public Guid RoleId { get; init; }
     public virtual Role Role { get; set; } = null!;
 
-    public Permission(string type, string value, Guid roleId)
+    public Permission()
+    {
+    }
+
+    public Permission(string type, string value, Role role)
     {
         Type = type;
         Value = value;
-        RoleId = roleId;
+        Role = role;
+        RoleId = role.Id;
     }
 
     public static readonly Dictionary<string, List<string>> List = new()

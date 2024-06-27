@@ -19,7 +19,7 @@ function OrderView() {
   const { data } = useOrder(params.orderId);
 
   return (
-    <OrderContainer>
+    <OrderContainer $column>
       <TableContainer>
         <Text $weight="bold" $size="md">
           Dados da ordem de serviço:
@@ -47,6 +47,9 @@ function OrderView() {
           <Text $weight="semibold">
             Cliente: <Detail>{data?.client.name}</Detail>
           </Text>
+          <Text $weight="semibold">
+            Situação: <Detail>{data?.complete ? "Concluída" : "Aberta"}</Detail>
+          </Text>
         </InformationContainer>
         <Text $weight="bold" $size="md">
           Produtos utilizados:
@@ -72,15 +75,19 @@ function OrderView() {
           onEdit={(data) => console.log(data)}
         />
         <FooterContainer>
-          {data?.complete ? (
-            <Text $margin="15px 0" $weight="bold">
-              Ordem de serviço concluida!
-            </Text>
-          ) : (
-            <FilledButton>Concluir</FilledButton>
-          )}
+          {!data?.complete && <FilledButton>Adicionar produto</FilledButton>}
         </FooterContainer>
       </TableContainer>
+      <FooterContainer>
+        {!data?.complete && (
+          <>
+            <FilledButton $margin="0">Concluir</FilledButton>
+            <FilledButton $margin="0" $color="light">
+              Excluir
+            </FilledButton>
+          </>
+        )}
+      </FooterContainer>
     </OrderContainer>
   );
 }

@@ -10,12 +10,18 @@ public class Employee : Entity
     public virtual Company Company { get; set; } = null!;
     public Guid RoleId { get; set; }
     public virtual Role Role { get; set; } = null!;
-
-    public Employee(Guid userId, Guid companyId, Guid roleId)
+    public Employee()
     {
-        UserId = userId;
-        CompanyId = companyId;
-        RoleId = roleId;
+    }
+
+    public Employee(User user, Company company, Role role)
+    {
+        User = user;
+        UserId = user.Id;
+        Company = company;
+        CompanyId = company.Id;
+        Role = role;
+        RoleId = role.Id;
     }
 
     public bool HasPermission(string type, string value)

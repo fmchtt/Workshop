@@ -6,7 +6,7 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Management.Companies.CreateEmployee;
 
-public class CreateEmployeeHandler(IUserRepository userRepository, IEmployeeRepository employeeRepository) : IRequestHandler<CreateEmployeeCommand, Employee>
+public class CreateEmployeeHandler(IUserRepository userRepository, IEmployeeRepository employeeRepository, IRoleRepository roleRepository) : IRequestHandler<CreateEmployeeCommand, Employee>
 {
     public async Task<Employee> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
@@ -15,6 +15,9 @@ public class CreateEmployeeHandler(IUserRepository userRepository, IEmployeeRepo
             throw new AuthorizationException("Usuário sem permissão!");
         }
 
+        var role = await roleRepository.GetById(request.RoleId, request.Actor.Employee.CompanyId);
+        NotFoundException.ThrowIfNull(role, "Cargo não encontrado!");
+
         var user = await userRepository.GetByEmail(request.Email);
         if (user == null)
         {
@@ -22,7 +25,7 @@ public class CreateEmployeeHandler(IUserRepository userRepository, IEmployeeRepo
             await userRepository.Create(user);
         }
 
-        var employee = new Employee(user.Id, request.Actor.Employee.CompanyId, request.RoleId);
+        var employee = new Employee(user, request.Actor.Employee.Company, role);
         await employeeRepository.Create(employee);
 
         return employee;

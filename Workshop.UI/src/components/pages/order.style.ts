@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
-export const OrderContainer = styled.div`
+type ContainerProps = {
+  $column?: boolean;
+};
+export const OrderContainer = styled.div<ContainerProps>`
   width: 100%;
   height: 100%;
   display: flex;
   gap: 20px;
 
   overflow-y: auto;
+  flex-direction: ${(props) => (props.$column ? "column" : "row")};
 `;
 
 export const InformationContainer = styled.div`
@@ -15,4 +19,7 @@ export const InformationContainer = styled.div`
   grid-template-columns: 1fr 1fr;
 `;
 
-export const FooterContainer = styled.div``;
+export const FooterContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;

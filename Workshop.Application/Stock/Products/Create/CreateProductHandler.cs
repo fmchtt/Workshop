@@ -14,7 +14,7 @@ public class CreateProductHandler(IProductRepository productRepository) : IReque
             throw new AuthorizationException("Usuário sem permissão!");
         }
 
-        var product = new Product(request.Name, request.Description, request.Price, request.Quantity, request.Actor.Employee.CompanyId);
+        var product = new Product(request.Name, request.Description, request.Price, request.Quantity, request.Actor.Employee.Company);
         await productRepository.Create(product);
 
         return product;

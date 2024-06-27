@@ -5,22 +5,28 @@ namespace Workshop.Domain.Entities.Management;
 
 public class Role : Entity
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public Guid CompanyId { get; init; }
     public virtual Company Company { get; init; } = null!;
     public virtual List<Permission> Permissions { get; init; } = [];
     public virtual List<Employee> Employees { get; init; } = [];
 
-    public Role(string name, Guid companyId)
+    public Role()
     {
-        Name = name;
-        CompanyId = companyId;
     }
 
-    public Role(string name, Guid companyId, List<Permission> permissions)
+    public Role(string name, Company company)
     {
         Name = name;
-        CompanyId = companyId;
+        Company = company;
+        CompanyId = company.Id;
+    }
+
+    public Role(string name, Company company, List<Permission> permissions)
+    {
+        Name = name;
+        Company = company;
+        CompanyId = company.Id;
         Permissions = permissions;
     }
 
@@ -36,7 +42,7 @@ public class Role : Entity
         {
             throw new ValidationException("Permissão inválida!");
         }
-        Permissions.Add(new Permission(type, value, Id));
+        Permissions.Add(new Permission(type, value, this));
     }
 
     public void RemovePermission(Permission permission)
