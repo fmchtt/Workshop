@@ -55,7 +55,7 @@ export default function OrderForm(props: OrderFormProps) {
         clientId: "",
         employeeId: "",
       }}
-      title="Criar nova ordem de serviço"
+      title={`${props.orderEdit ? "Editar" : "Criar nova"} ordem de serviço`}
       innerRef={(ref) => (formRef.current = ref)}
       onSubmit={(data) => {
         if (data.id !== "") {
@@ -63,7 +63,7 @@ export default function OrderForm(props: OrderFormProps) {
         }
         return createMutation.mutate(data);
       }}
-      onReset={() => props.onClear}
+      onReset={() => props.onClear()}
     >
       <Form.Select
         label="Cliente"
@@ -90,7 +90,7 @@ export default function OrderForm(props: OrderFormProps) {
         }
       />
       <Form.Submit
-        label="Criar"
+        label={props.orderEdit ? "Editar" : "Criar"}
         $loading={createMutation.isPending || updateMutation.isPending}
       />
       <Form.Clear label="Limpar" />

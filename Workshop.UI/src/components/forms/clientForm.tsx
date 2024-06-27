@@ -58,7 +58,7 @@ export default function ClientForm(props: {
       innerRef={(ref) => (formRef.current = ref)}
       title={`${props.clientEdit ? "Editar" : "Criar novo"} cliente`}
     >
-      <Form.Input label="Nome" name="name" />
+      <Form.Input label="Nome" name="name" placeholder="Ex: Empresa 1" />
       <Form.Submit
         label={props.clientEdit ? "Editar" : "Criar"}
         $loading={createMutation.isPending || updateMutation.isPending}

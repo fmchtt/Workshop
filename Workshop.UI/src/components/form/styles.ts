@@ -69,16 +69,15 @@ type InputProps = ComponentPropsWithoutRef<"input"> & {
   flexible?: boolean;
 };
 export const StyledInput = styled.input<InputProps>`
-  background-color: ${(props) => props.theme.colors.background};
   color: ${(props) => props.theme.colors.primary};
 
   &::placeholder {
-    color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.primary + "61"};
   }
 
   outline: none;
 
-  border: none;
+  border: 1px solid ${(props) => props.theme.colors.primary + "51"};
   border-radius: 20px;
 
   padding: 15px 25px;
@@ -91,7 +90,7 @@ export const StyledSelect = styled.select`
   color: ${(props) => props.theme.colors.primary};
 
   &::placeholder {
-    color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.primary + "61"};
   }
 
   outline: none;
@@ -103,16 +102,15 @@ export const StyledSelect = styled.select`
 `;
 
 export const StyledTextArea = styled.textarea`
-  background-color: ${(props) => props.theme.colors.background};
   color: ${(props) => props.theme.colors.primary};
 
   &::placeholder {
-    color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.primary + "61"};
   }
 
   outline: none;
 
-  border: none;
+  border: 1px solid ${(props) => props.theme.colors.primary + "51"};
   border-radius: 20px;
 
   padding: 15px 25px;

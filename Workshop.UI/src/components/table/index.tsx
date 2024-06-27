@@ -28,12 +28,14 @@ type LinkProps = {
   };
 };
 
+type Updater<T> = (data: T) => boolean;
+
 type TableProps<T> = {
   columns: ColumnDefinition<T>[];
   rows: T[];
-  showEdit?: boolean;
+  showEdit?: boolean | Updater<T>;
   onEdit?: (props: T) => void;
-  showDelete?: boolean;
+  showDelete?: boolean | Updater<T>;
   onDelete?: (props: T) => void;
   actionsDisabled?: boolean;
   link?: (props: T) => LinkProps;
@@ -73,7 +75,9 @@ export function Table<T>(props: TableProps<T>) {
             {(props.showDelete || props.showEdit) && (
               <BodyCell>
                 <ActionContainer>
-                  {props.showEdit && (
+                  {(props.showEdit instanceof Function
+                    ? props.showEdit(row)
+                    : props.showEdit) && (
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
@@ -84,7 +88,9 @@ export function Table<T>(props: TableProps<T>) {
                       <FaEdit size={18} />
                     </IconButton>
                   )}
-                  {props.showDelete && (
+                  {(props.showDelete instanceof Function
+                    ? props.showDelete(row)
+                    : props.showDelete) && (
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();

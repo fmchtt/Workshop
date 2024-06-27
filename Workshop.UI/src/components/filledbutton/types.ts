@@ -1,4 +1,5 @@
 import { ComponentPropsWithoutRef } from "react";
+import { defaultTheme } from "../../themes";
 
 export type StyledButtonProps = ComponentPropsWithoutRef<"button"> &
   FilledButtonProps;
@@ -10,5 +11,5 @@ export interface FilledButtonProps {
   type?: "button" | "reset" | "submit" | undefined;
   $margin?: string;
   $height?: string;
-  $color?: "light" | "dark" | "undefined";
+  $color?: keyof typeof defaultTheme.colors;
 }

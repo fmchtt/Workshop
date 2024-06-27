@@ -55,9 +55,9 @@ function OrderHome() {
               parser: (data) => (data == true ? "Concluída" : "Aberta"),
             },
           ]}
-          showDelete
+          showDelete={(data) => !data.complete}
           onDelete={(data) => setOrderDelete(data)}
-          showEdit
+          showEdit={(data) => !data.complete}
           onEdit={(data) => setOrderEdit(data)}
           link={(p) => {
             return {

@@ -19,7 +19,13 @@ export const InformationContainer = styled.div`
   grid-template-columns: 1fr 1fr;
 `;
 
-export const FooterContainer = styled.div`
+type FooterContainerProps = {
+  $justifyBetween?: boolean;
+};
+export const FooterContainer = styled.div<FooterContainerProps>`
   display: flex;
   gap: 10px;
+
+  justify-content: ${(props) =>
+    props.$justifyBetween ? "space-between" : "unset"};
 `;

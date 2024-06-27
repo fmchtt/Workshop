@@ -5,6 +5,7 @@ const theme: DefaultTheme = {
     primary: "#222222",
     secondary: "#1c5d99",
     thernary: "#ffffff",
+    danger: "#b91c1c",
     background: "#efefef",
   },
   font: {

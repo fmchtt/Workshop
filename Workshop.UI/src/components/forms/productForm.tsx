@@ -65,8 +65,12 @@ export default function ProductForm(props: {
       title={`${props.productEdit ? "Editar" : "Criar novo"} produto`}
       innerRef={(ref) => (formRef.current = ref)}
     >
-      <Form.Input label="Nome" name="name" />
-      <Form.TextArea label="Descrição" name="description" />
+      <Form.Input label="Nome" name="name" placeholder="Ex: Lâmpada H4" />
+      <Form.TextArea
+        label="Descrição"
+        name="description"
+        placeholder="Ex: Serve nos veiculos X, Y e Z"
+      />
       <Form.Input label="Preço" name="price" type="number" />
       <Form.Input label="Quantidade" name="quantity" type="number" />
       <Form.Submit label={props.productEdit ? "Editar" : "Criar"} />

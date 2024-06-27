@@ -14,7 +14,7 @@ export default function ClearButton({
     <FilledButton
       {...props}
       $margin="0"
-      $color="light"
+      $color="primary"
       type="reset"
       $loading={$loading}
     >

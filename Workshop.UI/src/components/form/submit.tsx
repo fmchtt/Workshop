@@ -11,7 +11,13 @@ export default function SubmitButton({
   ...props
 }: SubmitProps) {
   return (
-    <FilledButton {...props} $margin="0" type="submit" $loading={$loading}>
+    <FilledButton
+      {...props}
+      $color="secondary"
+      $margin="0"
+      type="submit"
+      $loading={$loading}
+    >
       {label}
     </FilledButton>
   );

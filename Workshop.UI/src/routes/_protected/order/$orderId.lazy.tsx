@@ -11,12 +11,12 @@ import { Detail, Text } from "../../../components/styles.global";
 import FilledButton from "../../../components/filledbutton";
 import { useState } from "react";
 import Modal from "../../../components/modal";
-import AddProductInOrderForm from "../../../components/forms/addProductInOrderForm";
 import ConfirmationModal from "../../../components/confirmationModal";
 import {
   useConcludeOrderMutation,
   useDeleteOrderMutation,
 } from "../../../services/mutations/order.mutations";
+import AddProductInOrderForm from "../../../components/forms/addProductInOrderForm";
 
 export const Route = createLazyFileRoute("/_protected/order/$orderId")({
   component: OrderView,
@@ -101,38 +101,46 @@ function OrderView() {
               parser: (data) => `R$ ${data.toFixed(2)}`,
             },
           ]}
-          showDelete
-          onDelete={(data) => console.log(data)}
-          showEdit
-          onEdit={(data) => console.log(data)}
         />
-        <FooterContainer>
-          {!data?.complete && (
-            <FilledButton onClick={() => setShowCreateForm(true)}>
-              Adicionar produto
-            </FilledButton>
-          )}
-        </FooterContainer>
       </TableContainer>
-      <FooterContainer>
+      <FooterContainer $justifyBetween>
         {data?.complete ? (
           <>
-            <FilledButton $margin="0" onClick={() => print()}>
+            <FilledButton
+              $color="secondary"
+              $margin="0"
+              onClick={() => print()}
+            >
               Imprimir
             </FilledButton>
           </>
         ) : (
           <>
-            <FilledButton $margin="0" onClick={() => setShowConclusion(true)}>
-              Concluir
-            </FilledButton>
-            <FilledButton
-              $margin="0"
-              $color="light"
-              onClick={() => setShowDelete(true)}
-            >
-              Excluir
-            </FilledButton>
+            <div>
+              <FilledButton
+                $margin="0"
+                $color="secondary"
+                onClick={() => setShowCreateForm(true)}
+              >
+                Adicionar produto
+              </FilledButton>
+            </div>
+            <FooterContainer>
+              <FilledButton
+                $margin="0"
+                $color="secondary"
+                onClick={() => setShowConclusion(true)}
+              >
+                Concluir
+              </FilledButton>
+              <FilledButton
+                $margin="0"
+                $color="danger"
+                onClick={() => setShowDelete(true)}
+              >
+                Excluir
+              </FilledButton>
+            </FooterContainer>
           </>
         )}
       </FooterContainer>

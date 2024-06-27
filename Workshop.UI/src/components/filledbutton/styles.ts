@@ -8,10 +8,7 @@ export const ButtonStyle = styled.button<StyledButtonProps>`
   padding: 15px;
   min-width: 100px;
 
-  background-color: ${(props) =>
-    props.$color === "light"
-      ? props.theme.colors.secondary
-      : props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors[props.$color || "primary"]};
   color: ${(props) => props.theme.colors.thernary};
   margin: ${(props) => props.$margin || "23px 0"};
   cursor: pointer;

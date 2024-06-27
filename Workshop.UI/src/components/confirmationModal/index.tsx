@@ -22,6 +22,7 @@ export default function ConfirmationModal(props: ConfirmationModalProps) {
         <FilledButton
           $loading={props.$loading}
           $margin="0"
+          $color="danger"
           onClick={props.onSuccess}
         >
           Confirmar
@@ -29,7 +30,7 @@ export default function ConfirmationModal(props: ConfirmationModalProps) {
         <FilledButton
           $loading={props.$loading}
           $margin="0"
-          $color="light"
+          $color="primary"
           onClick={props.onClose}
         >
           Cancelar

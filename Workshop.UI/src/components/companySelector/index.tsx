@@ -1,7 +1,8 @@
 import { useAuth } from "../../contexts/authContext";
 import { useCompanyChangeMutation } from "../../services/mutations/company.mutations";
 import { useCompanies } from "../../services/queries/company.queries";
-import { Label, StyledSelect } from "../form/styles";
+import { Select } from "../form/select";
+import { Label } from "../form/styles";
 import { SelectorContainer } from "./styles";
 
 export default function CompanySelector() {
@@ -13,26 +14,22 @@ export default function CompanySelector() {
     return null;
   }
 
+  const options = data?.map((company) => ({
+    label: company.name,
+    value: company.id,
+  }));
+
   return (
     <SelectorContainer>
       <Label>Selecione uma empresa para trocar</Label>
-      <StyledSelect
-        onChange={(e) => {
-          e.preventDefault();
-          const companyId = e.target.value;
-          changeCompanyMutation.mutate(companyId);
+      <Select
+        options={options}
+        value={options?.find((c) => c.value === user?.working?.company.id)}
+        isDisabled={changeCompanyMutation.isPending}
+        onChange={(option) => {
+          if (option) changeCompanyMutation.mutate(option.value);
         }}
-        value={user?.working?.company.id}
-        disabled={changeCompanyMutation.isPending}
-      >
-        {data?.map((company) => {
-          return (
-            <option key={company.id} value={company.id}>
-              {company.name}
-            </option>
-          );
-        })}
-      </StyledSelect>
+      />
     </SelectorContainer>
   );
 }

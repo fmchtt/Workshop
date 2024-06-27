@@ -2,11 +2,11 @@ import { Formik, FormikConfig, FormikValues } from "formik";
 import { PropsWithChildren } from "react";
 import { FormContainer, FormProps, Title } from "./styles";
 import Input from "./input";
-import Select from "./select";
 import TextArea from "./textarea";
 import Password from "./password";
 import SubmitButton from "./submit";
 import ClearButton from "./clear";
+import FieldSelect from "./select";
 
 export default function Form<T>({
   children,
@@ -32,7 +32,7 @@ export default function Form<T>({
 }
 
 Form.Input = Input;
-Form.Select = Select;
+Form.Select = FieldSelect;
 Form.TextArea = TextArea;
 Form.Password = Password;
 Form.Submit = SubmitButton;
