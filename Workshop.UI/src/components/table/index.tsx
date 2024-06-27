@@ -9,6 +9,7 @@ import {
   StyledTable,
 } from "./styles";
 import { ReactNode } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 type Values<T> = T[keyof T];
 
@@ -20,6 +21,13 @@ type ColumnDefinition<T> = Values<{
   };
 }>;
 
+type LinkProps = {
+  to: string;
+  params?: {
+    [key: string]: string | number;
+  };
+};
+
 type TableProps<T> = {
   columns: ColumnDefinition<T>[];
   rows: T[];
@@ -28,8 +36,11 @@ type TableProps<T> = {
   showDelete?: boolean;
   onDelete?: (props: T) => void;
   actionsDisabled?: boolean;
+  link?: (props: T) => LinkProps;
 };
 export function Table<T>(props: TableProps<T>) {
+  const navigate = useNavigate();
+
   return (
     <StyledTable>
       <thead>
@@ -42,7 +53,14 @@ export function Table<T>(props: TableProps<T>) {
       </thead>
       <tbody>
         {props.rows.map((row, index) => (
-          <BodyRow key={"row_" + index}>
+          <BodyRow
+            key={"row_" + index}
+            $clickable={!!props.link}
+            onClick={(e) => {
+              e.stopPropagation();
+              props.link && navigate(props.link(row));
+            }}
+          >
             {props.columns.map((column) => (
               <BodyCell key={"row_" + index + column.key.toString()}>
                 {column.parser ? (
@@ -57,7 +75,10 @@ export function Table<T>(props: TableProps<T>) {
                 <ActionContainer>
                   {props.showEdit && (
                     <IconButton
-                      onClick={() => props.onEdit && props.onEdit(row)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        props.onEdit && props.onEdit(row);
+                      }}
                       disabled={props.actionsDisabled}
                     >
                       <FaEdit size={18} />
@@ -65,7 +86,10 @@ export function Table<T>(props: TableProps<T>) {
                   )}
                   {props.showDelete && (
                     <IconButton
-                      onClick={() => props.onDelete && props.onDelete(row)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        props.onDelete && props.onDelete(row);
+                      }}
                       disabled={props.actionsDisabled}
                     >
                       <FaTrash size={18} />

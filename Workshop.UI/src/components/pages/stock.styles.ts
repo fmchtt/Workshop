@@ -5,6 +5,8 @@ export const StockContainer = styled.div`
   height: 100%;
   display: flex;
   gap: 20px;
+
+  overflow-y: auto;
 `;
 
 export const FormContainer = styled.div`
@@ -25,4 +27,7 @@ export const TableContainer = styled.div`
   background-color: ${(props) => props.theme.colors.thernary};
   border-radius: ${(props) => props.theme.borderRadius};
   padding: 20px;
+
+  display: flex;
+  flex-direction: column;
 `;

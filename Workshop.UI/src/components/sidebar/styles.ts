@@ -41,6 +41,10 @@ export const ModuleButton = styled.a`
   text-decoration: none;
   font-size: ${(props) => props.theme.font.md};
 
+  &.active {
+    background-color: #ffffff40;
+  }
+
   &:hover {
     background-color: #ffffff21;
   }

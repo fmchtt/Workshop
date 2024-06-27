@@ -5,4 +5,6 @@ export const ClientContainer = styled.div`
   height: 100%;
   display: flex;
   gap: 20px;
+
+  overflow-y: auto;
 `;

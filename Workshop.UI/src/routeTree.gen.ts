@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
@@ -25,6 +26,9 @@ const ProtectedOrderIndexLazyImport = createFileRoute('/_protected/order/')()
 const ProtectedCustomerIndexLazyImport = createFileRoute(
   '/_protected/customer/',
 )()
+const ProtectedOrderOrderIdLazyImport = createFileRoute(
+  '/_protected/order/$orderId',
+)()
 const ProtectedManagementRolesLazyImport = createFileRoute(
   '/_protected/management/roles',
 )()
@@ -36,6 +40,11 @@ const ProtectedManagementCompanyLazyImport = createFileRoute(
 )()
 
 // Create/Update Routes
+
+const RegisterRoute = RegisterImport.update({
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   path: '/login',
@@ -78,6 +87,13 @@ const ProtectedCustomerIndexLazyRoute = ProtectedCustomerIndexLazyImport.update(
   } as any,
 ).lazy(() =>
   import('./routes/_protected/customer/index.lazy').then((d) => d.Route),
+)
+
+const ProtectedOrderOrderIdLazyRoute = ProtectedOrderOrderIdLazyImport.update({
+  path: '/order/$orderId',
+  getParentRoute: () => ProtectedRoute,
+} as any).lazy(() =>
+  import('./routes/_protected/order/$orderId.lazy').then((d) => d.Route),
 )
 
 const ProtectedManagementRolesLazyRoute =
@@ -131,6 +147,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
     '/_protected/home': {
       id: '/_protected/home'
       path: '/home'
@@ -157,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/management/roles'
       fullPath: '/management/roles'
       preLoaderRoute: typeof ProtectedManagementRolesLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/order/$orderId': {
+      id: '/_protected/order/$orderId'
+      path: '/order/$orderId'
+      fullPath: '/order/$orderId'
+      preLoaderRoute: typeof ProtectedOrderOrderIdLazyImport
       parentRoute: typeof ProtectedImport
     }
     '/_protected/customer/': {
@@ -192,11 +222,13 @@ export const routeTree = rootRoute.addChildren({
     ProtectedManagementCompanyLazyRoute,
     ProtectedManagementEmployeesLazyRoute,
     ProtectedManagementRolesLazyRoute,
+    ProtectedOrderOrderIdLazyRoute,
     ProtectedCustomerIndexLazyRoute,
     ProtectedOrderIndexLazyRoute,
     ProtectedStockIndexLazyRoute,
   }),
   LoginRoute,
+  RegisterRoute,
 })
 
 /* prettier-ignore-end */
@@ -209,7 +241,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_protected",
-        "/login"
+        "/login",
+        "/register"
       ]
     },
     "/": {
@@ -222,6 +255,7 @@ export const routeTree = rootRoute.addChildren({
         "/_protected/management/company",
         "/_protected/management/employees",
         "/_protected/management/roles",
+        "/_protected/order/$orderId",
         "/_protected/customer/",
         "/_protected/order/",
         "/_protected/stock/"
@@ -229,6 +263,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/register": {
+      "filePath": "register.tsx"
     },
     "/_protected/home": {
       "filePath": "_protected/home.tsx",
@@ -244,6 +281,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_protected/management/roles": {
       "filePath": "_protected/management/roles.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/order/$orderId": {
+      "filePath": "_protected/order/$orderId.lazy.tsx",
       "parent": "/_protected"
     },
     "/_protected/customer/": {

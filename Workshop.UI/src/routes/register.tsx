@@ -4,16 +4,16 @@ import {
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
-import LoginForm from "../components/forms/login";
-import { useAuth } from "../contexts/authContext";
-import { useEffect } from "react";
+import RegisterForm from "../components/forms/register";
 import { Text } from "../components/styles.global";
 import { FormContainer } from "../components/pages/stock.styles";
+import { useEffect } from "react";
+import { useAuth } from "../contexts/authContext";
 import { LoginContainer, SideContainer } from "../components/pages/login.style";
 import WorkshopImage from "../assets/images/bicicle-workshop.png";
 
-export const Route = createFileRoute("/login")({
-  component: Login,
+export const Route = createFileRoute("/register")({
+  component: Register,
   beforeLoad: ({ context }) => {
     if (context.auth.user) {
       throw redirect({ to: "/home" });
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/login")({
   },
 });
 
-function Login() {
+function Register() {
   const { user } = useAuth();
   const navigate = useNavigate({ from: Route.fullPath });
 
@@ -34,11 +34,11 @@ function Login() {
   return (
     <LoginContainer>
       <FormContainer>
-        <LoginForm />
+        <RegisterForm />
         <Text $margin="8px">
-          Não possui conta ?{" "}
-          <Text as={Link} to="/register" $weight="bold">
-            Registrar
+          Já possui conta ?{" "}
+          <Text as={Link} to="/login" $weight="bold">
+            Entrar
           </Text>
         </Text>
       </FormContainer>

@@ -38,7 +38,7 @@ export default function Password({
             onChange={form.handleChange}
           />
           {showPassword === "password" ? (
-            <TbEye className="eye" onClick={eyeInput} />
+            <TbEye onClick={eyeInput} className="eye" />
           ) : (
             <TbEyeOff onClick={eyeInput} className="eye" />
           )}

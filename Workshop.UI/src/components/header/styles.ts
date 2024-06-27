@@ -49,6 +49,10 @@ export const MenuItem = styled.a`
   background-color: #00000009;
   border-radius: ${(props) => props.theme.borderRadius};
 
+  &.active {
+    background-color: #00000040;
+  }
+
   &:hover {
     background-color: #00000019;
   }

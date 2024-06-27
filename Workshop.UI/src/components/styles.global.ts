@@ -30,8 +30,22 @@ export type TextProps = {
   $size?: "sm" | "md" | "lg" | "xl";
   $color?: "primary" | "secondary" | "thernary";
   $weight?: "light" | "medium" | "semibold" | "bold";
+  $margin?: string;
 };
 export const Text = styled.p<TextProps>`
+  font-size: ${(props) => props.theme.font[props.$size || "sm"]};
+  color: ${(props) => props.theme.colors[props.$color || "primary"]};
+  font-weight: ${(props) => props.theme.font.weight[props.$weight || "medium"]};
+  margin: ${(props) => props.$margin || "unset"};
+`;
+
+export type DetailProps = {
+  $size?: "sm" | "md" | "lg" | "xl";
+  $color?: "primary" | "secondary" | "thernary";
+  $weight?: "light" | "medium" | "semibold" | "bold";
+  $margin?: string;
+};
+export const Detail = styled.span<DetailProps>`
   font-size: ${(props) => props.theme.font[props.$size || "sm"]};
   color: ${(props) => props.theme.colors[props.$color || "primary"]};
   font-weight: ${(props) => props.theme.font.weight[props.$weight || "medium"]};
@@ -56,4 +70,11 @@ export const SpinnerContainer = styled.main`
   align-items: center;
 
   background-color: ${(props) => props.theme.colors.background};
+`;
+
+export const Divider = styled.hr`
+  height: 1px;
+  background-color: ${(props) => props.theme.colors.primary};
+  margin: 15px 0;
+  border: none;
 `;

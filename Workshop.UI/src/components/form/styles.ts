@@ -19,7 +19,7 @@ export const InputGroup = styled.div<InputGroupProps>`
     top: 40px;
     right: 20px;
     font-size: 25px;
-    color: ${(props) => props.theme.colors.thernary};
+    color: ${(props) => props.theme.colors.primary};
     cursor: pointer;
   }
 `;
