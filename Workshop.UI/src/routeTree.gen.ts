@@ -25,6 +25,15 @@ const ProtectedOrderIndexLazyImport = createFileRoute('/_protected/order/')()
 const ProtectedCustomerIndexLazyImport = createFileRoute(
   '/_protected/customer/',
 )()
+const ProtectedManagementRolesLazyImport = createFileRoute(
+  '/_protected/management/roles',
+)()
+const ProtectedManagementEmployeesLazyImport = createFileRoute(
+  '/_protected/management/employees',
+)()
+const ProtectedManagementCompanyLazyImport = createFileRoute(
+  '/_protected/management/company',
+)()
 
 // Create/Update Routes
 
@@ -71,6 +80,32 @@ const ProtectedCustomerIndexLazyRoute = ProtectedCustomerIndexLazyImport.update(
   import('./routes/_protected/customer/index.lazy').then((d) => d.Route),
 )
 
+const ProtectedManagementRolesLazyRoute =
+  ProtectedManagementRolesLazyImport.update({
+    path: '/management/roles',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/management/roles.lazy').then((d) => d.Route),
+  )
+
+const ProtectedManagementEmployeesLazyRoute =
+  ProtectedManagementEmployeesLazyImport.update({
+    path: '/management/employees',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/management/employees.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const ProtectedManagementCompanyLazyRoute =
+  ProtectedManagementCompanyLazyImport.update({
+    path: '/management/company',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/management/company.lazy').then((d) => d.Route),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -103,6 +138,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedHomeImport
       parentRoute: typeof ProtectedImport
     }
+    '/_protected/management/company': {
+      id: '/_protected/management/company'
+      path: '/management/company'
+      fullPath: '/management/company'
+      preLoaderRoute: typeof ProtectedManagementCompanyLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/management/employees': {
+      id: '/_protected/management/employees'
+      path: '/management/employees'
+      fullPath: '/management/employees'
+      preLoaderRoute: typeof ProtectedManagementEmployeesLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/management/roles': {
+      id: '/_protected/management/roles'
+      path: '/management/roles'
+      fullPath: '/management/roles'
+      preLoaderRoute: typeof ProtectedManagementRolesLazyImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_protected/customer/': {
       id: '/_protected/customer/'
       path: '/customer'
@@ -133,6 +189,9 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   ProtectedRoute: ProtectedRoute.addChildren({
     ProtectedHomeRoute,
+    ProtectedManagementCompanyLazyRoute,
+    ProtectedManagementEmployeesLazyRoute,
+    ProtectedManagementRolesLazyRoute,
     ProtectedCustomerIndexLazyRoute,
     ProtectedOrderIndexLazyRoute,
     ProtectedStockIndexLazyRoute,
@@ -160,6 +219,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_protected.tsx",
       "children": [
         "/_protected/home",
+        "/_protected/management/company",
+        "/_protected/management/employees",
+        "/_protected/management/roles",
         "/_protected/customer/",
         "/_protected/order/",
         "/_protected/stock/"
@@ -170,6 +232,18 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_protected/home": {
       "filePath": "_protected/home.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/management/company": {
+      "filePath": "_protected/management/company.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/management/employees": {
+      "filePath": "_protected/management/employees.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/management/roles": {
+      "filePath": "_protected/management/roles.lazy.tsx",
       "parent": "/_protected"
     },
     "/_protected/customer/": {

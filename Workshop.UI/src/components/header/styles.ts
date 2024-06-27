@@ -15,7 +15,27 @@ export const StyledHeader = styled.header`
   color: ${(props) => props.theme.colors.primary};
 `;
 
-export const UserWrapper = styled.div`
+export const MenuContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 15px;
+`;
+
+export const MenuItemContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 15px;
+  transition: 0.8s;
+  opacity: 1;
+
+  &.closed {
+    opacity: 0;
+  }
+`;
+
+export const MenuItem = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,6 +43,8 @@ export const UserWrapper = styled.div`
   height: 60%;
   padding: 0 25px;
   cursor: pointer;
+  text-decoration: none;
+  color: ${(props) => props.theme.colors.primary};
 
   background-color: #00000009;
   border-radius: ${(props) => props.theme.borderRadius};
