@@ -2,12 +2,16 @@ import { Field, FieldProps } from "formik";
 import { Description, ErrorMessage, InputGroup, Label } from "./styles";
 import RCSwitch from "rc-switch";
 
-type SwitchProps = {
+type FormSwitchProps = {
   name: string;
   description: string;
   label: string;
 };
-export default function Switch({ label, description, name }: SwitchProps) {
+export default function FormSwitch({
+  label,
+  description,
+  name,
+}: FormSwitchProps) {
   return (
     <Field name={name}>
       {({ field, form, meta }: FieldProps) => (
@@ -15,7 +19,7 @@ export default function Switch({ label, description, name }: SwitchProps) {
           <Label>{label}</Label>
           <RCSwitch
             {...field}
-            defaultValue={field.value || false}
+            checked={field.value}
             onChange={(value) => form.setFieldValue(field.name, value)}
           />
           {description && <Description>{description}</Description>}
@@ -25,5 +29,22 @@ export default function Switch({ label, description, name }: SwitchProps) {
         </InputGroup>
       )}
     </Field>
+  );
+}
+
+type SwitchProps = {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onChange?: (value: boolean) => void;
+  disabled?: boolean;
+};
+export function Switch(props: SwitchProps) {
+  return (
+    <RCSwitch
+      checked={props.checked}
+      defaultChecked={props.defaultChecked}
+      onChange={props.onChange}
+      disabled={props.disabled}
+    />
   );
 }

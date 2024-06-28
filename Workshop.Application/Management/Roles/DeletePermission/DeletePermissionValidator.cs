@@ -7,7 +7,8 @@ public class DeletePermissionValidator : AbstractValidator<DeletePermissionComma
 {
     public DeletePermissionValidator()
     {
-        RuleFor(c => c.PermissionId).NotEmpty();
+        RuleFor(c => c.Value).NotEmpty();
+        RuleFor(c => c.Type).NotEmpty();
         RuleFor(c => c.RoleId).NotEmpty();
         RuleFor(c => c.Actor).NotNull().NotEqual(User.Empty);
     }

@@ -39,6 +39,7 @@ type TableProps<T> = {
   onDelete?: (props: T) => void;
   actionsDisabled?: boolean;
   link?: (props: T) => LinkProps;
+  onClick?: (props: T) => void;
 };
 export function Table<T>(props: TableProps<T>) {
   const navigate = useNavigate();
@@ -59,10 +60,11 @@ export function Table<T>(props: TableProps<T>) {
         {props.rows.map((row, rowIdx) => (
           <BodyRow
             key={"row_" + rowIdx}
-            $clickable={!!props.link}
+            $clickable={!!props.link || !!props.onClick}
             onClick={(e) => {
               e.stopPropagation();
               props.link && navigate(props.link(row));
+              props.onClick && props.onClick(row);
             }}
           >
             {props.columns.map((column, colIdx) => (

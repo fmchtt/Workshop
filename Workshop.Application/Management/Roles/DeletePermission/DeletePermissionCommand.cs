@@ -8,6 +8,8 @@ public class DeletePermissionCommand : ICommand<string>
 {
     [JsonIgnore]
     public User Actor { get; set; } = User.Empty;
+    [JsonIgnore]
     public Guid RoleId { get; set; }
-    public Guid PermissionId { get; set; }
+    public string Type { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
 }

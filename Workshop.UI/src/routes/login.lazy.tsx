@@ -1,9 +1,4 @@
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import LoginForm from "../components/forms/login";
 import { useAuth } from "../contexts/authContext";
 import { useEffect } from "react";
@@ -15,24 +10,19 @@ import {
 import { LoginSideContainer } from "../components/pages/login.style";
 import WorkshopImage from "../assets/images/bicicle-workshop.png";
 
-export const Route = createFileRoute("/login")({
+export const Route = createLazyFileRoute("/login")({
   component: Login,
-  beforeLoad: ({ context }) => {
-    if (context.auth.user) {
-      throw redirect({ to: "/home" });
-    }
-  },
 });
 
 function Login() {
-  const { user } = useAuth();
-  const navigate = useNavigate({ from: Route.fullPath });
+  const { authed } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (authed) {
       navigate({ to: "/home" });
     }
-  }, [user, navigate]);
+  }, [authed, navigate]);
 
   return (
     <RouteContainer>

@@ -10,7 +10,7 @@ import { useAuth } from "../contexts/authContext";
 export const Route = createFileRoute("/_protected")({
   component: ProtectedLayout,
   beforeLoad: ({ context }) => {
-    if (!context.auth.user) {
+    if (!context.auth.authed) {
       throw redirect({ to: "/login" });
     }
   },

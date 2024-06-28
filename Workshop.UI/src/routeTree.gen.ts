@@ -13,14 +13,14 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RegisterImport } from './routes/register'
-import { Route as LoginImport } from './routes/login'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProtectedHomeImport } from './routes/_protected/home'
 
 // Create Virtual Routes
 
+const RegisterLazyImport = createFileRoute('/register')()
+const LoginLazyImport = createFileRoute('/login')()
+const ProtectedHomeLazyImport = createFileRoute('/_protected/home')()
 const ProtectedStockIndexLazyImport = createFileRoute('/_protected/stock/')()
 const ProtectedOrderIndexLazyImport = createFileRoute('/_protected/order/')()
 const ProtectedCustomerIndexLazyImport = createFileRoute(
@@ -29,27 +29,30 @@ const ProtectedCustomerIndexLazyImport = createFileRoute(
 const ProtectedOrderOrderIdLazyImport = createFileRoute(
   '/_protected/order/$orderId',
 )()
-const ProtectedManagementRolesLazyImport = createFileRoute(
-  '/_protected/management/roles',
-)()
 const ProtectedManagementEmployeesLazyImport = createFileRoute(
   '/_protected/management/employees',
 )()
 const ProtectedManagementCompanyLazyImport = createFileRoute(
   '/_protected/management/company',
 )()
+const ProtectedManagementRolesIndexLazyImport = createFileRoute(
+  '/_protected/management/roles/',
+)()
+const ProtectedManagementRolesRoleIdLazyImport = createFileRoute(
+  '/_protected/management/roles/$roleId',
+)()
 
 // Create/Update Routes
 
-const RegisterRoute = RegisterImport.update({
+const RegisterLazyRoute = RegisterLazyImport.update({
   path: '/register',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
 
-const LoginRoute = LoginImport.update({
+const LoginLazyRoute = LoginLazyImport.update({
   path: '/login',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const ProtectedRoute = ProtectedImport.update({
   id: '/_protected',
@@ -61,10 +64,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProtectedHomeRoute = ProtectedHomeImport.update({
+const ProtectedHomeLazyRoute = ProtectedHomeLazyImport.update({
   path: '/home',
   getParentRoute: () => ProtectedRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_protected/home.lazy').then((d) => d.Route),
+)
 
 const ProtectedStockIndexLazyRoute = ProtectedStockIndexLazyImport.update({
   path: '/stock/',
@@ -96,14 +101,6 @@ const ProtectedOrderOrderIdLazyRoute = ProtectedOrderOrderIdLazyImport.update({
   import('./routes/_protected/order/$orderId.lazy').then((d) => d.Route),
 )
 
-const ProtectedManagementRolesLazyRoute =
-  ProtectedManagementRolesLazyImport.update({
-    path: '/management/roles',
-    getParentRoute: () => ProtectedRoute,
-  } as any).lazy(() =>
-    import('./routes/_protected/management/roles.lazy').then((d) => d.Route),
-  )
-
 const ProtectedManagementEmployeesLazyRoute =
   ProtectedManagementEmployeesLazyImport.update({
     path: '/management/employees',
@@ -120,6 +117,26 @@ const ProtectedManagementCompanyLazyRoute =
     getParentRoute: () => ProtectedRoute,
   } as any).lazy(() =>
     import('./routes/_protected/management/company.lazy').then((d) => d.Route),
+  )
+
+const ProtectedManagementRolesIndexLazyRoute =
+  ProtectedManagementRolesIndexLazyImport.update({
+    path: '/management/roles/',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/management/roles/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const ProtectedManagementRolesRoleIdLazyRoute =
+  ProtectedManagementRolesRoleIdLazyImport.update({
+    path: '/management/roles/$roleId',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/management/roles/$roleId.lazy').then(
+      (d) => d.Route,
+    ),
   )
 
 // Populate the FileRoutesByPath interface
@@ -144,21 +161,21 @@ declare module '@tanstack/react-router' {
       id: '/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
+      preLoaderRoute: typeof LoginLazyImport
       parentRoute: typeof rootRoute
     }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
+      preLoaderRoute: typeof RegisterLazyImport
       parentRoute: typeof rootRoute
     }
     '/_protected/home': {
       id: '/_protected/home'
       path: '/home'
       fullPath: '/home'
-      preLoaderRoute: typeof ProtectedHomeImport
+      preLoaderRoute: typeof ProtectedHomeLazyImport
       parentRoute: typeof ProtectedImport
     }
     '/_protected/management/company': {
@@ -173,13 +190,6 @@ declare module '@tanstack/react-router' {
       path: '/management/employees'
       fullPath: '/management/employees'
       preLoaderRoute: typeof ProtectedManagementEmployeesLazyImport
-      parentRoute: typeof ProtectedImport
-    }
-    '/_protected/management/roles': {
-      id: '/_protected/management/roles'
-      path: '/management/roles'
-      fullPath: '/management/roles'
-      preLoaderRoute: typeof ProtectedManagementRolesLazyImport
       parentRoute: typeof ProtectedImport
     }
     '/_protected/order/$orderId': {
@@ -210,6 +220,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedStockIndexLazyImport
       parentRoute: typeof ProtectedImport
     }
+    '/_protected/management/roles/$roleId': {
+      id: '/_protected/management/roles/$roleId'
+      path: '/management/roles/$roleId'
+      fullPath: '/management/roles/$roleId'
+      preLoaderRoute: typeof ProtectedManagementRolesRoleIdLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/management/roles/': {
+      id: '/_protected/management/roles/'
+      path: '/management/roles'
+      fullPath: '/management/roles'
+      preLoaderRoute: typeof ProtectedManagementRolesIndexLazyImport
+      parentRoute: typeof ProtectedImport
+    }
   }
 }
 
@@ -218,17 +242,18 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   ProtectedRoute: ProtectedRoute.addChildren({
-    ProtectedHomeRoute,
+    ProtectedHomeLazyRoute,
     ProtectedManagementCompanyLazyRoute,
     ProtectedManagementEmployeesLazyRoute,
-    ProtectedManagementRolesLazyRoute,
     ProtectedOrderOrderIdLazyRoute,
     ProtectedCustomerIndexLazyRoute,
     ProtectedOrderIndexLazyRoute,
     ProtectedStockIndexLazyRoute,
+    ProtectedManagementRolesRoleIdLazyRoute,
+    ProtectedManagementRolesIndexLazyRoute,
   }),
-  LoginRoute,
-  RegisterRoute,
+  LoginLazyRoute,
+  RegisterLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -254,21 +279,22 @@ export const routeTree = rootRoute.addChildren({
         "/_protected/home",
         "/_protected/management/company",
         "/_protected/management/employees",
-        "/_protected/management/roles",
         "/_protected/order/$orderId",
         "/_protected/customer/",
         "/_protected/order/",
-        "/_protected/stock/"
+        "/_protected/stock/",
+        "/_protected/management/roles/$roleId",
+        "/_protected/management/roles/"
       ]
     },
     "/login": {
-      "filePath": "login.tsx"
+      "filePath": "login.lazy.tsx"
     },
     "/register": {
-      "filePath": "register.tsx"
+      "filePath": "register.lazy.tsx"
     },
     "/_protected/home": {
-      "filePath": "_protected/home.tsx",
+      "filePath": "_protected/home.lazy.tsx",
       "parent": "/_protected"
     },
     "/_protected/management/company": {
@@ -277,10 +303,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_protected/management/employees": {
       "filePath": "_protected/management/employees.lazy.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/management/roles": {
-      "filePath": "_protected/management/roles.lazy.tsx",
       "parent": "/_protected"
     },
     "/_protected/order/$orderId": {
@@ -297,6 +319,14 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_protected/stock/": {
       "filePath": "_protected/stock/index.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/management/roles/$roleId": {
+      "filePath": "_protected/management/roles/$roleId.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/management/roles/": {
+      "filePath": "_protected/management/roles/index.lazy.tsx",
       "parent": "/_protected"
     }
   }

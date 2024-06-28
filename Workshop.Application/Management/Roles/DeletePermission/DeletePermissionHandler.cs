@@ -15,7 +15,7 @@ public class DeletePermissionHandler(IRoleRepository roleRepository, IPermission
 
         var role = await roleRepository.GetById(request.RoleId, request.Actor.Employee.CompanyId);
         NotFoundException.ThrowIfNull(role, "Cargo não encontrado!");
-        var permission = role.Permissions.Find(x => x.Id == request.PermissionId);
+        var permission = role.Permissions.Find(x => x.Type == request.Type && x.Value == request.Value);
         NotFoundException.ThrowIfNull(permission, "Permissão não encontrada!");
         role.RemovePermission(permission);
 

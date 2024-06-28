@@ -6,6 +6,7 @@ using Workshop.Application.Management.Roles.Create;
 using Workshop.Application.Management.Roles.CreatePermission;
 using Workshop.Application.Management.Roles.Delete;
 using Workshop.Application.Management.Roles.DeletePermission;
+using Workshop.Application.Management.Roles.GetById;
 using Workshop.Application.Management.Roles.GetPermissions;
 using Workshop.Application.Management.Roles.GetRoles;
 using Workshop.Application.Management.Roles.Update;
@@ -25,6 +26,17 @@ public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseCo
             Actor = await GetUser()
         };
         return _mapper.Map<ICollection<RoleResult>>(await _mediator.Send(query));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<RoleResult> GetRoleById([FromRoute] Guid id)
+    {
+        var query = new GetRoleByIdQuery
+        {
+            RoleId = id,
+            Actor = await GetUser()
+        };
+        return _mapper.Map<RoleResult>(await _mediator.Send(query));
     }
 
     [HttpPost]
@@ -74,13 +86,14 @@ public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseCo
         return _mapper.Map<RoleResult>(await _mediator.Send(command));
     }
 
-    [HttpDelete("{id}/permission/{permissionId}")]
+    [HttpPost("{id}/permission/remove")]
     public async Task<MessageResult> RemovePermission(
         [FromRoute] Guid id,
-        [FromRoute] Guid permissionId
+        [FromBody] DeletePermissionCommand command
     )
     {
-        var command = new DeletePermissionCommand { Actor = await GetUser(), PermissionId = permissionId, RoleId = id };
+        command.Actor = await GetUser();
+        command.RoleId = id;
         return new MessageResult(await _mediator.Send(command));
     }
 }

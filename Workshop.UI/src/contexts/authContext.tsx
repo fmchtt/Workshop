@@ -10,8 +10,7 @@ import { LoginProps, RegisterProps } from "../services/api/auth";
 import { http } from "../services/http";
 import { UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { Token } from "../types/valueObjects/token";
-import Spinner from "../components/spinner";
-import { SpinnerContainer } from "../components/styles.global";
+import PendingComponent from "../components/pendingComponent";
 
 export type AuthContextProps = {
   user?: User;
@@ -34,8 +33,9 @@ export function AuthContextProvider(props: { children: ReactNode }) {
     },
     (error) => {
       if (error.response.status === 401 || error.response.status === 403) {
-        setAuthToken(null);
+        http.defaults.headers.common.Authorization = undefined;
         localStorage.removeItem("token");
+        setAuthToken(null);
         client.removeQueries();
       }
 
@@ -48,16 +48,18 @@ export function AuthContextProvider(props: { children: ReactNode }) {
       setToken(data.accessToken);
     },
   });
+
   const registerMutation = useRegisterMutation({
     onSuccess: (data) => {
       setToken(data.accessToken);
     },
   });
+
   function logout() {
     localStorage.removeItem("token");
     http.defaults.headers.common.Authorization = undefined;
-    client.removeQueries();
     setAuthToken(null);
+    client.removeQueries();
   }
 
   function setToken(token: string) {
@@ -82,13 +84,7 @@ export function AuthContextProvider(props: { children: ReactNode }) {
         logout,
       }}
     >
-      {isLoading ? (
-        <SpinnerContainer>
-          <Spinner size="60px" />
-        </SpinnerContainer>
-      ) : (
-        props.children
-      )}
+      {!!authToken && isLoading ? <PendingComponent /> : props.children}
     </authContext.Provider>
   );
 }

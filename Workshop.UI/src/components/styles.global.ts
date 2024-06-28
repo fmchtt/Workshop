@@ -117,7 +117,10 @@ export const SideContainer = styled.div`
   flex-direction: column;
 `;
 
-export const FlexibleContainer = styled.div`
+export type FlexibleContainerProps = {
+  $gap?: string;
+};
+export const FlexibleContainer = styled.div<FlexibleContainerProps>`
   height: 100%;
   flex: 1;
 
@@ -129,6 +132,7 @@ export const FlexibleContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+  gap: ${(props) => props.$gap || "unset"};
 `;
 
 export const ButtonWrapper = styled.div`

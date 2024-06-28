@@ -16,6 +16,7 @@ import {
   AuthContextProvider,
   useAuth,
 } from "./contexts/authContext";
+import "rc-switch/assets/index.css";
 
 const router = createRouter({
   routeTree,

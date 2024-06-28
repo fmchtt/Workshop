@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import CompanySelector from "../../components/companySelector";
 import CompanyForm from "../../components/forms/companyForm";
 import Spinner from "../../components/spinner";
@@ -6,7 +6,7 @@ import { useMe } from "../../services/queries/auth.queries";
 import { useCompanies } from "../../services/queries/company.queries";
 import { RouteContainer, SideContainer } from "../../components/styles.global";
 
-export const Route = createFileRoute("/_protected/home")({
+export const Route = createLazyFileRoute("/_protected/home")({
   component: Home,
 });
 
