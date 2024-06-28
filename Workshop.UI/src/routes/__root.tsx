@@ -23,6 +23,6 @@ export const Route = createRootRoute({
       <TanStackRouterDevtools />
     </Container>
   ),
-  pendingComponent: () => <PendingComponent />,
+  pendingComponent: () => <PendingComponent $fullWindow />,
   errorComponent: (props) => <ErrorComponent {...props} />,
 });

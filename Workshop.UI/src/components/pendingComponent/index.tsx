@@ -1,9 +1,12 @@
 import Spinner from "../spinner";
 import { SpinnerContainer } from "../styles.global";
 
-export default function PendingComponent() {
+type SpinnerContainerProps = {
+  $fullWindow?: boolean;
+};
+export default function PendingComponent(props: SpinnerContainerProps) {
   return (
-    <SpinnerContainer>
+    <SpinnerContainer $fullWindow={props.$fullWindow}>
       <Spinner size="60px" />
     </SpinnerContainer>
   );

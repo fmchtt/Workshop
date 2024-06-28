@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Order } from "../../../types/entities/order";
 import ConfirmationModal from "../../../components/confirmationModal";
 import { useDeleteOrderMutation } from "../../../services/mutations/order.mutations";
+import usePermissions from "../../../hooks/usePermissions";
+import PendingComponent from "../../../components/pendingComponent";
 import {
   FlexibleContainer,
   RouteContainer,
@@ -19,11 +21,16 @@ export const Route = createLazyFileRoute("/_protected/order/")({
 function OrderHome() {
   const [orderEdit, setOrderEdit] = useState<Order | undefined>();
   const [orderDelete, setOrderDelete] = useState<Order | undefined>();
+  const validatingPermission = usePermissions();
   const { data } = useOrders();
 
   const deleteMutation = useDeleteOrderMutation({
     onSuccess: () => setOrderDelete(undefined),
   });
+
+  if (validatingPermission([{ type: "service", value: "manageOrder" }])) {
+    return <PendingComponent />;
+  }
 
   return (
     <RouteContainer>

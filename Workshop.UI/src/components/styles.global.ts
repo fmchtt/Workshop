@@ -57,9 +57,12 @@ export const IconButton = styled.button`
   cursor: pointer;
 `;
 
-export const SpinnerContainer = styled.main`
-  width: 100vw;
-  height: 100vh;
+type SpinnerContainerProps = {
+  $fullWindow?: boolean;
+};
+export const SpinnerContainer = styled.main<SpinnerContainerProps>`
+  width: ${(props) => (props.$fullWindow ? "100vw" : "100%")};
+  height: ${(props) => (props.$fullWindow ? "100vh" : "100%")};
 
   position: absolute;
   left: 0;
