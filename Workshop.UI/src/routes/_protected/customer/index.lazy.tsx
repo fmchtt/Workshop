@@ -1,9 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { ClientContainer } from "../../../components/pages/client.style";
-import {
-  FormContainer,
-  TableContainer,
-} from "../../../components/pages/stock.styles";
 import { Table } from "../../../components/table";
 import { useClients } from "../../../services/queries/client.queries";
 import ClientForm from "../../../components/forms/clientForm";
@@ -11,6 +6,11 @@ import { useState } from "react";
 import { Client } from "../../../types/entities/client";
 import ConfirmationModal from "../../../components/confirmationModal";
 import { useDeleteClientMutation } from "../../../services/mutations/client.mutations";
+import {
+  FlexibleContainer,
+  RouteContainer,
+  SideContainer,
+} from "../../../components/styles.global";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -26,14 +26,14 @@ function CustomerHome() {
   });
 
   return (
-    <ClientContainer>
-      <FormContainer>
+    <RouteContainer>
+      <SideContainer>
         <ClientForm
           clientEdit={clientEdit}
           onClear={() => setClientEdit(undefined)}
         />
-      </FormContainer>
-      <TableContainer>
+      </SideContainer>
+      <FlexibleContainer>
         <Table
           rows={data || []}
           columns={[{ key: "name", title: "Nome" }]}
@@ -42,7 +42,7 @@ function CustomerHome() {
           showEdit
           onEdit={(data) => setClientEdit(data)}
         />
-      </TableContainer>
+      </FlexibleContainer>
       <ConfirmationModal
         title="Deletar cliente"
         text={`Tem certeza que deseja apagar o cliente ${clientDelete?.name} ?`}
@@ -51,6 +51,6 @@ function CustomerHome() {
         show={!!clientDelete}
         $loading={deleteMutation.isPending}
       />
-    </ClientContainer>
+    </RouteContainer>
   );
 }

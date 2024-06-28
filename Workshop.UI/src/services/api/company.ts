@@ -1,6 +1,7 @@
 import { Company } from "../../types/entities/company";
 import { ResumedEmployee } from "../../types/entities/employee";
 import { User } from "../../types/entities/user";
+import { Message } from "../../types/valueObjects/message";
 import { http } from "../http";
 
 export async function getCompanies() {
@@ -20,6 +21,23 @@ export async function changeCompany(companyId: string) {
 
 export async function getEmployees() {
   const { data } = await http.get<ResumedEmployee[]>("/company/employee");
+  return data;
+}
+
+export type CreateEmployeeProps = {
+  name: string;
+  email: string;
+  roleId: string;
+};
+export async function createEmployee(props: CreateEmployeeProps) {
+  const { data } = await http.post<ResumedEmployee>("/company/employee", props);
+  return data;
+}
+
+export async function deleteEmployee(employeeId: string) {
+  const { data } = await http.delete<Message>(
+    `/company/employee/${employeeId}`
+  );
   return data;
 }
 

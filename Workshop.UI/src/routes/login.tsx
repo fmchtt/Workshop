@@ -7,9 +7,12 @@ import {
 import LoginForm from "../components/forms/login";
 import { useAuth } from "../contexts/authContext";
 import { useEffect } from "react";
-import { Text } from "../components/styles.global";
-import { FormContainer } from "../components/pages/stock.styles";
-import { LoginContainer, SideContainer } from "../components/pages/login.style";
+import {
+  RouteContainer,
+  SideContainer,
+  Text,
+} from "../components/styles.global";
+import { LoginSideContainer } from "../components/pages/login.style";
 import WorkshopImage from "../assets/images/bicicle-workshop.png";
 
 export const Route = createFileRoute("/login")({
@@ -32,8 +35,8 @@ function Login() {
   }, [user, navigate]);
 
   return (
-    <LoginContainer>
-      <FormContainer>
+    <RouteContainer>
+      <SideContainer>
         <LoginForm />
         <Text $margin="8px">
           Não possui conta ?{" "}
@@ -41,13 +44,13 @@ function Login() {
             Registrar
           </Text>
         </Text>
-      </FormContainer>
-      <SideContainer>
+      </SideContainer>
+      <LoginSideContainer>
         <Text $size="xl" $weight="bold">
           Bem vindo ao Workshop
         </Text>
         <img src={WorkshopImage} />
-      </SideContainer>
-    </LoginContainer>
+      </LoginSideContainer>
+    </RouteContainer>
   );
 }
