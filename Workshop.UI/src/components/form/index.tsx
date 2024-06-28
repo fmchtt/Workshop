@@ -7,6 +7,7 @@ import Password from "./password";
 import SubmitButton from "./submit";
 import ClearButton from "./clear";
 import FieldSelect from "./select";
+import Switch from "./switch";
 
 export default function Form<T>({
   children,
@@ -35,5 +36,6 @@ Form.Input = Input;
 Form.Select = FieldSelect;
 Form.TextArea = TextArea;
 Form.Password = Password;
+Form.Switch = Switch;
 Form.Submit = SubmitButton;
 Form.Clear = ClearButton;

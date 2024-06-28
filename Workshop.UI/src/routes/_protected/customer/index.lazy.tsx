@@ -9,10 +9,15 @@ import { useDeleteClientMutation } from "../../../services/mutations/client.muta
 import usePermissions from "../../../hooks/usePermissions";
 import PendingComponent from "../../../components/pendingComponent";
 import {
+  ButtonWrapper,
   FlexibleContainer,
+  IconButton,
   RouteContainer,
   SideContainer,
 } from "../../../components/styles.global";
+import FilledButton from "../../../components/filledbutton";
+import { FaX } from "react-icons/fa6";
+import { FaBuilding, FaFilter } from "react-icons/fa";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -22,6 +27,7 @@ function CustomerHome() {
   const [clientEdit, setClientEdit] = useState<Client | undefined>();
   const [clientDelete, setClientDelete] = useState<Client | undefined>();
   const validatingPermission = usePermissions();
+  const [form, setForm] = useState<"add" | "filter" | undefined>(undefined);
   const { data } = useClients();
 
   const deleteMutation = useDeleteClientMutation({
@@ -33,31 +39,63 @@ function CustomerHome() {
   }
 
   return (
-    <RouteContainer>
-      <SideContainer>
-        <ClientForm
-          clientEdit={clientEdit}
-          onClear={() => setClientEdit(undefined)}
+    <RouteContainer $column>
+      <ButtonWrapper>
+        <FilledButton $margin="0" onClick={() => setForm("filter")}>
+          <FaFilter />
+          Filtros
+        </FilledButton>
+        <FilledButton
+          disabled={form === "add"}
+          $margin="0"
+          onClick={() => {
+            setForm("add");
+            setClientEdit(undefined);
+          }}
+        >
+          <FaBuilding />
+          Adicionar cliente
+        </FilledButton>
+      </ButtonWrapper>
+      <RouteContainer>
+        {form !== undefined && (
+          <SideContainer>
+            <IconButton $alignEnd>
+              <FaX onClick={() => setForm(undefined)} />
+            </IconButton>
+            {form === "add" && (
+              <ClientForm
+                clientEdit={clientEdit}
+                onClear={() => setClientEdit(undefined)}
+              />
+            )}
+            {form === "filter" && <>Filtro</>}
+          </SideContainer>
+        )}
+        <FlexibleContainer>
+          <Table
+            rows={data || []}
+            columns={[{ key: "name", title: "Nome" }]}
+            showDelete
+            onDelete={(data) => setClientDelete(data)}
+            showEdit
+            onEdit={(data) => {
+              setForm("add");
+              setClientEdit(data);
+            }}
+          />
+        </FlexibleContainer>
+        <ConfirmationModal
+          title="Deletar cliente"
+          text={`Tem certeza que deseja apagar o cliente ${clientDelete?.name} ?`}
+          onSuccess={() =>
+            clientDelete && deleteMutation.mutate(clientDelete.id)
+          }
+          onClose={() => setClientDelete(undefined)}
+          show={!!clientDelete}
+          $loading={deleteMutation.isPending}
         />
-      </SideContainer>
-      <FlexibleContainer>
-        <Table
-          rows={data || []}
-          columns={[{ key: "name", title: "Nome" }]}
-          showDelete
-          onDelete={(data) => setClientDelete(data)}
-          showEdit
-          onEdit={(data) => setClientEdit(data)}
-        />
-      </FlexibleContainer>
-      <ConfirmationModal
-        title="Deletar cliente"
-        text={`Tem certeza que deseja apagar o cliente ${clientDelete?.name} ?`}
-        onSuccess={() => clientDelete && deleteMutation.mutate(clientDelete.id)}
-        onClose={() => setClientDelete(undefined)}
-        show={!!clientDelete}
-        $loading={deleteMutation.isPending}
-      />
+      </RouteContainer>
     </RouteContainer>
   );
 }

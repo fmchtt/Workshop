@@ -4,4 +4,5 @@ export type FormInputProps = {
   description?: string;
   placeholder?: string;
   type?: "number" | "text" | "email";
+  isClearable?: boolean;
 };

@@ -80,7 +80,7 @@ export const StyledInput = styled.input<InputProps>`
   border: 1px solid ${(props) => props.theme.colors.primary + "51"};
   border-radius: 20px;
 
-  padding: 15px 25px;
+  padding: 13px 25px;
 
   ${(props) => (props.flexible ? "flex: 1;" : "")}
 `;
@@ -98,7 +98,7 @@ export const StyledSelect = styled.select`
   border: none;
   border-radius: 20px;
 
-  padding: 15px 25px;
+  padding: 13px 25px;
 `;
 
 export const StyledTextArea = styled.textarea`
@@ -113,5 +113,5 @@ export const StyledTextArea = styled.textarea`
   border: 1px solid ${(props) => props.theme.colors.primary + "51"};
   border-radius: 20px;
 
-  padding: 15px 25px;
+  padding: 13px 25px;
 `;

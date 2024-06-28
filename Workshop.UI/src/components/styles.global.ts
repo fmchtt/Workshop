@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { ComponentPropsWithoutRef } from "react";
+import styled, { css } from "styled-components";
 
 export const Container = styled.main`
   width: 100vw;
@@ -51,10 +52,19 @@ export const Detail = styled.span<DetailProps>`
   font-weight: ${(props) => props.theme.font.weight[props.$weight || "medium"]};
 `;
 
-export const IconButton = styled.button`
+type IconButtonProps = {
+  $alignEnd?: boolean;
+} & ComponentPropsWithoutRef<"button">;
+export const IconButton = styled.button<IconButtonProps>`
   background-color: transparent;
   border: none;
   cursor: pointer;
+
+  ${(props) =>
+    props.$alignEnd &&
+    css`
+      align-self: flex-end;
+    `}
 `;
 
 type SpinnerContainerProps = {
@@ -102,6 +112,9 @@ export const SideContainer = styled.div`
   padding: 20px;
   background-color: ${(props) => props.theme.colors.thernary};
   border-radius: ${(props) => props.theme.borderRadius};
+
+  display: flex;
+  flex-direction: column;
 `;
 
 export const FlexibleContainer = styled.div`
@@ -116,4 +129,9 @@ export const FlexibleContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 15px;
 `;

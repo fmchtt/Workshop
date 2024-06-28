@@ -9,10 +9,16 @@ import { useDeleteOrderMutation } from "../../../services/mutations/order.mutati
 import usePermissions from "../../../hooks/usePermissions";
 import PendingComponent from "../../../components/pendingComponent";
 import {
+  ButtonWrapper,
   FlexibleContainer,
+  IconButton,
   RouteContainer,
   SideContainer,
 } from "../../../components/styles.global";
+import FilledButton from "../../../components/filledbutton";
+import { FaX } from "react-icons/fa6";
+import { FaFileContract, FaFilter } from "react-icons/fa";
+import OrderFilter from "../../../components/filters/orderFilter";
 
 export const Route = createLazyFileRoute("/_protected/order/")({
   component: OrderHome,
@@ -22,6 +28,7 @@ function OrderHome() {
   const [orderEdit, setOrderEdit] = useState<Order | undefined>();
   const [orderDelete, setOrderDelete] = useState<Order | undefined>();
   const validatingPermission = usePermissions();
+  const [form, setForm] = useState<"add" | "filter" | undefined>(undefined);
   const { data } = useOrders();
 
   const deleteMutation = useDeleteOrderMutation({
@@ -33,63 +40,97 @@ function OrderHome() {
   }
 
   return (
-    <RouteContainer>
-      <SideContainer>
-        <OrderForm
-          orderEdit={orderEdit}
-          onClear={() => setOrderEdit(undefined)}
-        />
-      </SideContainer>
-      <FlexibleContainer>
-        <Table
-          rows={data || []}
-          columns={[
-            { key: "orderNumber", title: "Número" },
-            { key: "client", title: "Cliente", parser: (data) => data.name },
-            {
-              key: "employee",
-              title: "Colaborador",
-              parser: (data) => data.user.name,
-            },
-            {
-              key: "products",
-              title: "Quantidade de produtos",
-              parser: (data) => data.length,
-            },
-            {
-              key: "products",
-              title: "Total",
-              parser: (data) =>
-                `R$ ${data.reduce((prev, actual) => prev + actual.product.price * actual.quantity, 0).toFixed(2)}`,
-            },
-            {
-              key: "complete",
-              title: "Situação",
-              parser: (data) => (data == true ? "Concluída" : "Aberta"),
-            },
-          ]}
-          showDelete={(data) => !data.complete}
-          onDelete={(data) => setOrderDelete(data)}
-          showEdit={(data) => !data.complete}
-          onEdit={(data) => setOrderEdit(data)}
-          link={(p) => {
-            return {
-              to: "/order/$orderId",
-              params: {
-                orderId: p.id,
-              },
-            };
+    <RouteContainer $column>
+      <ButtonWrapper>
+        <FilledButton $margin="0" onClick={() => setForm("filter")}>
+          <FaFilter />
+          Filtros
+        </FilledButton>
+        <FilledButton
+          disabled={form === "add"}
+          $margin="0"
+          onClick={() => {
+            setForm("add");
+            setOrderEdit(undefined);
           }}
-        />
-        <ConfirmationModal
-          title="Deletar ordem de serviço"
-          text={`Tem certeza que deseja apagar a ordem de serviço ${orderDelete?.orderNumber} ?`}
-          onSuccess={() => orderDelete && deleteMutation.mutate(orderDelete.id)}
-          onClose={() => setOrderDelete(undefined)}
-          show={!!orderDelete}
-          $loading={deleteMutation.isPending}
-        />
-      </FlexibleContainer>
+        >
+          <FaFileContract />
+          Adicionar order de serviço
+        </FilledButton>
+      </ButtonWrapper>
+      <RouteContainer>
+        {form !== undefined && (
+          <SideContainer>
+            <IconButton $alignEnd>
+              <FaX onClick={() => setForm(undefined)} />
+            </IconButton>
+            {form === "add" && (
+              <OrderForm
+                orderEdit={orderEdit}
+                onClear={() => setOrderEdit(undefined)}
+              />
+            )}
+            {form === "filter" && (
+              <OrderFilter onFilter={(value) => console.log(value)} />
+            )}
+          </SideContainer>
+        )}
+        <FlexibleContainer>
+          <Table
+            rows={data || []}
+            columns={[
+              { key: "orderNumber", title: "Número" },
+              { key: "client", title: "Cliente", parser: (data) => data.name },
+              {
+                key: "employee",
+                title: "Colaborador",
+                parser: (data) => data.user.name,
+              },
+              {
+                key: "products",
+                title: "Quantidade de produtos",
+                parser: (data) => data.length,
+              },
+              {
+                key: "products",
+                title: "Total",
+                parser: (data) =>
+                  `R$ ${data.reduce((prev, actual) => prev + actual.product.price * actual.quantity, 0).toFixed(2)}`,
+              },
+              {
+                key: "complete",
+                title: "Situação",
+                parser: (data) => (data == true ? "Concluída" : "Aberta"),
+              },
+            ]}
+            showDelete={(data) => !data.complete}
+            onDelete={(data) => setOrderDelete(data)}
+            showEdit={(data) => !data.complete}
+            onEdit={(data) => {
+              setForm("add");
+              setOrderEdit(data);
+            }}
+            link={(p) => {
+              return {
+                to: "/order/$orderId",
+                params: {
+                  orderId: p.id,
+                },
+              };
+            }}
+          />
+          <ConfirmationModal
+            title="Deletar ordem de serviço"
+            text={`Tem certeza que deseja apagar a ordem de serviço ${orderDelete?.orderNumber} ?`}
+            onSuccess={() =>
+              orderDelete && deleteMutation.mutate(orderDelete.id)
+            }
+            onClose={() => setOrderDelete(undefined)}
+            show={!!orderDelete}
+            $loading={deleteMutation.isPending}
+          />
+        </FlexibleContainer>
+      </RouteContainer>
     </RouteContainer>
   );
 }

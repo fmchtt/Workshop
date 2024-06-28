@@ -6,7 +6,7 @@ import { useTheme } from "styled-components";
 
 type Option = {
   label: string;
-  value: string | number;
+  value: string | number | boolean;
 };
 
 type SelectProps = {
@@ -18,6 +18,7 @@ export default function FieldSelect({
   description,
   name,
   options,
+  isClearable,
 }: FormInputProps & SelectProps) {
   return (
     <Field name={name}>
@@ -27,8 +28,13 @@ export default function FieldSelect({
           <Select
             {...field}
             options={options}
-            value={field.value && options.find((x) => x.value === field.value)}
+            value={
+              field.value !== undefined
+                ? options.find((x) => x.value === field.value)
+                : undefined
+            }
             onChange={(option) => form.setFieldValue(field.name, option?.value)}
+            isClearable={isClearable}
           />
           {description && <Description>{description}</Description>}
           {meta.touched && meta.error && (
