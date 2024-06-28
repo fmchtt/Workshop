@@ -17,6 +17,8 @@ import {
   useDeleteOrderMutation,
 } from "../../../services/mutations/order.mutations";
 import AddProductInOrderForm from "../../../components/forms/addProductInOrderForm";
+import PendingComponent from "../../../components/pendingComponent";
+import usePermissions from "../../../hooks/usePermissions";
 
 export const Route = createLazyFileRoute("/_protected/order/$orderId")({
   component: OrderView,
@@ -29,6 +31,7 @@ function OrderView() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showConclusion, setShowConclusion] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const validatingPermission = usePermissions();
 
   const concludeMutation = useConcludeOrderMutation({
     onSuccess: () => setShowConclusion(false),
@@ -40,6 +43,10 @@ function OrderView() {
       });
     },
   });
+
+  if (validatingPermission([{ type: "service", value: "manageOrder" }])) {
+    return <PendingComponent />;
+  }
 
   return (
     <OrderContainer $column>

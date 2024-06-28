@@ -11,6 +11,8 @@ import { useState } from "react";
 import { Client } from "../../../types/entities/client";
 import ConfirmationModal from "../../../components/confirmationModal";
 import { useDeleteClientMutation } from "../../../services/mutations/client.mutations";
+import usePermissions from "../../../hooks/usePermissions";
+import PendingComponent from "../../../components/pendingComponent";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -19,11 +21,16 @@ export const Route = createLazyFileRoute("/_protected/customer/")({
 function CustomerHome() {
   const [clientEdit, setClientEdit] = useState<Client | undefined>();
   const [clientDelete, setClientDelete] = useState<Client | undefined>();
+  const validatingPermission = usePermissions();
   const { data } = useClients();
 
   const deleteMutation = useDeleteClientMutation({
     onSuccess: () => setClientDelete(undefined),
   });
+
+  if (validatingPermission([{ type: "management", value: "manageClient" }])) {
+    return <PendingComponent />;
+  }
 
   return (
     <ClientContainer>
