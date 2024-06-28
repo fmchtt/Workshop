@@ -6,6 +6,7 @@ using Workshop.Application.Management.Roles.Create;
 using Workshop.Application.Management.Roles.CreatePermission;
 using Workshop.Application.Management.Roles.Delete;
 using Workshop.Application.Management.Roles.DeletePermission;
+using Workshop.Application.Management.Roles.GetPermissions;
 using Workshop.Application.Management.Roles.GetRoles;
 using Workshop.Application.Management.Roles.Update;
 using Workshop.Application.Results;
@@ -53,6 +54,13 @@ public class RoleController(IMediator mediator, IMapper mapper) : WorkshopBaseCo
     {
         var command = new DeleteRoleCommand { RoleId = id, Actor = await GetUser() };
         return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpGet("permissions")]
+    public async Task<Dictionary<string, List<string>>> GetPermissions()
+    {
+        var query = new GetAllPermissionsQuery();
+        return await _mediator.Send(query);
     }
 
     [HttpPost("{id}/permission")]
