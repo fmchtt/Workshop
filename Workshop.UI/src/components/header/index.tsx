@@ -1,4 +1,10 @@
-import { FaBuilding, FaCog, FaUnlock, FaUserPlus } from "react-icons/fa";
+import {
+  FaBuilding,
+  FaCog,
+  FaPowerOff,
+  FaUnlock,
+  FaUserPlus,
+} from "react-icons/fa";
 import { useAuth } from "../../contexts/authContext";
 import {
   MenuContainer,
@@ -12,13 +18,19 @@ import { RxCaretLeft } from "react-icons/rx";
 import { useMemo } from "react";
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [showMenu, startTransition, isPending] = useDebouce(false, {
     time: 600,
   });
 
   const menuEntries = useMemo(
     () => [
+      {
+        title: "Sair",
+        icon: <FaPowerOff />,
+        show: true,
+        onClick: () => logout(),
+      },
       {
         title: "Permissões",
         icon: <FaUnlock />,
@@ -50,7 +62,7 @@ export default function Header() {
           ),
       },
     ],
-    [user]
+    [user, logout]
   );
 
   return (
@@ -69,7 +81,12 @@ export default function Header() {
                   .filter((e) => e.show)
                   .map((entry) => {
                     return (
-                      <MenuItem key={entry.title} as={Link} to={entry.link}>
+                      <MenuItem
+                        key={entry.title}
+                        as={entry.link ? Link : undefined}
+                        to={entry.link}
+                        onClick={entry.onClick}
+                      >
                         {entry.title} {entry.icon}
                       </MenuItem>
                     );

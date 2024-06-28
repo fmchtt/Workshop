@@ -5,7 +5,6 @@ export const SelectorContainer = styled.div`
   flex-direction: column;
   gap: 10px;
   width: fit-content;
-  margin: 30px 0;
   padding: 20px;
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.thernary};

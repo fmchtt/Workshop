@@ -10,7 +10,7 @@ export default function CompanySelector() {
   const { user } = useAuth();
   const changeCompanyMutation = useCompanyChangeMutation();
 
-  if (isLoading || data?.length === 1) {
+  if (isLoading || (data?.length === 1 && !!user?.working)) {
     return null;
   }
 

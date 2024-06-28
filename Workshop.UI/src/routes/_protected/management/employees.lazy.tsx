@@ -17,12 +17,14 @@ import FilledButton from "../../../components/filledbutton";
 import { FaX } from "react-icons/fa6";
 import { FaFilter } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
+import { useAuth } from "../../../contexts/authContext";
 
 export const Route = createLazyFileRoute("/_protected/management/employees")({
   component: EmployeeManagement,
 });
 
 function EmployeeManagement() {
+  const { user } = useAuth();
   const { data } = useEmployees();
   const [employeeDelete, setEmployeeDelete] = useState<
     ResumedEmployee | undefined
@@ -68,7 +70,10 @@ function EmployeeManagement() {
               { key: "user", title: "Email", parser: (user) => user.email },
               { key: "role", title: "Cargo", parser: (role) => role.name },
             ]}
-            showDelete
+            showDelete={(employee) =>
+              employee.user.id !== user?.id &&
+              employee.user.id !== user?.working?.company.ownerId
+            }
             onDelete={(data) => setEmployeeDelete(data)}
           />
         </FlexibleContainer>

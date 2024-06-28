@@ -1,4 +1,11 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useAuth } from "../contexts/authContext";
 
 export const Route = createFileRoute("/_protected")({
   component: ProtectedLayout,
@@ -10,5 +17,16 @@ export const Route = createFileRoute("/_protected")({
 });
 
 function ProtectedLayout() {
+  const navigate = useNavigate({ from: Route.fullPath });
+  const { authed } = useAuth();
+
+  useEffect(() => {
+    if (!authed) {
+      navigate({
+        to: "/login",
+      });
+    }
+  }, [authed, navigate]);
+
   return <Outlet />;
 }

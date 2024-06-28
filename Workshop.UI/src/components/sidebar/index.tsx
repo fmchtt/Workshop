@@ -61,7 +61,7 @@ export default function Sidebar() {
               </ModuleButton>
             ))}
       </ModulesWrapper>
-      <ModuleButton>Sair</ModuleButton>
+      <div></div>
     </StyledSidebar>
   );
 }

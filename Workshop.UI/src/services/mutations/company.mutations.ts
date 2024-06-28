@@ -3,6 +3,8 @@ import { User } from "../../types/entities/user";
 import { MutationProps } from "../../types/utils/mutation";
 import {
   changeCompany,
+  createCompany,
+  CreateCompanyProps,
   createEmployee,
   CreateEmployeeProps,
   deleteEmployee,
@@ -21,6 +23,33 @@ export function useCompanyChangeMutation(props?: MutationProps<User, string>) {
     mutationFn: changeCompany,
     onSuccess: (data, variables) => {
       client.setQueryData(["me"], data);
+      props?.onSuccess && props.onSuccess(data, variables);
+    },
+    onError: props?.onError,
+  });
+}
+
+export function useCreateCompanyMutation(
+  props?: MutationProps<Company, CreateCompanyProps>
+) {
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: createCompany,
+    onSuccess: (data, variables) => {
+      client.setQueryData(
+        ["companies"],
+        produce<Company[]>((draft) => {
+          const companyIdx = draft.findIndex((x) => x.id === data.id);
+          if (companyIdx === -1) return;
+          draft[companyIdx] = data;
+        })
+      );
+
+      client.setQueryData(["company"], data);
+
+      client.invalidateQueries({ queryKey: ["me"], exact: true });
+
       props?.onSuccess && props.onSuccess(data, variables);
     },
     onError: props?.onError,

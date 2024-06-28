@@ -15,8 +15,10 @@ import { SpinnerContainer } from "../components/styles.global";
 
 export type AuthContextProps = {
   user?: User;
+  authed: boolean;
   login: UseMutationResult<Token, Error, LoginProps, unknown>;
   register: UseMutationResult<Token, Error, RegisterProps, unknown>;
+  logout: () => void;
 };
 const authContext = createContext<AuthContextProps>({} as AuthContextProps);
 
@@ -51,6 +53,12 @@ export function AuthContextProvider(props: { children: ReactNode }) {
       setToken(data.accessToken);
     },
   });
+  function logout() {
+    localStorage.removeItem("token");
+    http.defaults.headers.common.Authorization = undefined;
+    client.removeQueries();
+    setAuthToken(null);
+  }
 
   function setToken(token: string) {
     http.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -66,7 +74,13 @@ export function AuthContextProvider(props: { children: ReactNode }) {
 
   return (
     <authContext.Provider
-      value={{ user: data, login: loginMutation, register: registerMutation }}
+      value={{
+        user: data,
+        authed: !!authToken,
+        login: loginMutation,
+        register: registerMutation,
+        logout,
+      }}
     >
       {isLoading ? (
         <SpinnerContainer>
