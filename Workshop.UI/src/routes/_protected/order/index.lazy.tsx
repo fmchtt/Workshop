@@ -1,9 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { OrderContainer } from "../../../components/pages/order.style";
-import {
-  FormContainer,
-  TableContainer,
-} from "../../../components/pages/stock.styles";
 import { Table } from "../../../components/table";
 import { useOrders } from "../../../services/queries/order.queries";
 import OrderForm from "../../../components/forms/orderForm";
@@ -13,6 +8,11 @@ import ConfirmationModal from "../../../components/confirmationModal";
 import { useDeleteOrderMutation } from "../../../services/mutations/order.mutations";
 import usePermissions from "../../../hooks/usePermissions";
 import PendingComponent from "../../../components/pendingComponent";
+import {
+  FlexibleContainer,
+  RouteContainer,
+  SideContainer,
+} from "../../../components/styles.global";
 
 export const Route = createLazyFileRoute("/_protected/order/")({
   component: OrderHome,
@@ -33,14 +33,14 @@ function OrderHome() {
   }
 
   return (
-    <OrderContainer>
-      <FormContainer>
+    <RouteContainer>
+      <SideContainer>
         <OrderForm
           orderEdit={orderEdit}
           onClear={() => setOrderEdit(undefined)}
         />
-      </FormContainer>
-      <TableContainer>
+      </SideContainer>
+      <FlexibleContainer>
         <Table
           rows={data || []}
           columns={[
@@ -89,7 +89,7 @@ function OrderHome() {
           show={!!orderDelete}
           $loading={deleteMutation.isPending}
         />
-      </TableContainer>
-    </OrderContainer>
+      </FlexibleContainer>
+    </RouteContainer>
   );
 }
