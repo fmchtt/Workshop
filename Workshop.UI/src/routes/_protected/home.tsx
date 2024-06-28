@@ -5,6 +5,7 @@ import { CompanyContainer } from "../../components/pages/company.styles";
 import { FormContainer } from "../../components/pages/stock.styles";
 import Spinner from "../../components/spinner";
 import { useMe } from "../../services/queries/auth.queries";
+import { useCompanies } from "../../services/queries/company.queries";
 
 export const Route = createFileRoute("/_protected/home")({
   component: Home,
@@ -12,29 +13,27 @@ export const Route = createFileRoute("/_protected/home")({
 
 export function Home() {
   const { data, isLoading } = useMe();
+  const companiesQuery = useCompanies();
 
-  if (isLoading) {
+  if (isLoading || companiesQuery.isLoading) {
     return <Spinner />;
   }
-  
+
   return (
     <>
-      {data?.working?.company ? (
-        <>
-          <h3>Seja bem vindo ao sistema Workshop!</h3>
-          <p>Selecione o modulo deseja na barra lateral para iniciar!</p>
-          <CompanySelector />
-        </>)
-      : (
-        <>
+      {!data?.working && companiesQuery.data?.length == 0 ? (
         <CompanyContainer>
           <FormContainer>
             <CompanyForm />
           </FormContainer>
         </CompanyContainer>
+      ) : (
+        <>
+          <h3>Seja bem vindo ao sistema Workshop!</h3>
+          <p>Selecione o modulo deseja na barra lateral para iniciar!</p>
+          <CompanySelector />
         </>
       )}
-      
     </>
   );
 }

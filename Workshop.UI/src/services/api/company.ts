@@ -57,9 +57,7 @@ export type CreateCompanyProps = {
   name?: string;
 };
 
-export async function createCompany({
-  ...props
-}: CreateCompanyProps) {
+export async function createCompany(props: CreateCompanyProps) {
   const { data } = await http.post<Company>(`/company/`, props);
   return data;
 }
