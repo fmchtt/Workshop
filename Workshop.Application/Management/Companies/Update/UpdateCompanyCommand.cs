@@ -9,6 +9,6 @@ public class UpdateCompanyCommand : ICommand<Company>
     [JsonIgnore]
     public Guid CompanyId { get; set; }
     public string? Name { get; set; }
-    [JsonInclude]
+    [JsonIgnore]
     public User Actor { get; set; } = User.Empty;
 }

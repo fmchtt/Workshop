@@ -61,7 +61,7 @@ export default function ProductForm(props: {
         }
         return createMutation.mutate(data);
       }}
-      onReset={() => props.onClear}
+      onReset={() => props.onClear()}
       title={`${props.productEdit ? "Editar" : "Criar novo"} produto`}
       innerRef={(ref) => (formRef.current = ref)}
     >

@@ -41,13 +41,19 @@ function OrderHome() {
             { key: "client", title: "Cliente", parser: (data) => data.name },
             {
               key: "employee",
-              title: "Mecânico",
+              title: "Colaborador",
               parser: (data) => data.user.name,
             },
             {
               key: "products",
               title: "Quantidade de produtos",
               parser: (data) => data.length,
+            },
+            {
+              key: "products",
+              title: "Total",
+              parser: (data) =>
+                `R$ ${data.reduce((prev, actual) => prev + actual.product.price * actual.quantity, 0).toFixed(2)}`,
             },
             {
               key: "complete",

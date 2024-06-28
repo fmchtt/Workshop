@@ -52,9 +52,7 @@ export default function ClientForm(props: {
         }
         return createMutation.mutate(data);
       }}
-      onReset={() => {
-        props.onClear();
-      }}
+      onReset={() => props.onClear()}
       innerRef={(ref) => (formRef.current = ref)}
       title={`${props.clientEdit ? "Editar" : "Criar novo"} cliente`}
     >
