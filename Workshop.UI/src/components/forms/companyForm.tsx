@@ -1,4 +1,4 @@
-import { useUpdateCompanyMutation } from "../../services/mutations/company.mutations";
+import { useCreateCompanyMutation, useUpdateCompanyMutation } from "../../services/mutations/company.mutations";
 import { useCompany } from "../../services/queries/company.queries";
 import Form from "../form";
 import Spinner from "../spinner";
@@ -6,8 +6,9 @@ import Spinner from "../spinner";
 export default function CompanyForm() {
   const { data, isLoading } = useCompany();
   const updateMutation = useUpdateCompanyMutation();
+  const createMutation = useCreateCompanyMutation();
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <Spinner />;
   }
 
@@ -15,11 +16,16 @@ export default function CompanyForm() {
     <Form
       initialValues={{ name: data?.name }}
       onSubmit={(values) => {
-        updateMutation.mutate({ ...values, companyId: data.id });
+        if(data){
+          updateMutation.mutate({ ...values, companyId: data.id });
+          return;
+        }
+        createMutation.mutate({...values});
+        return;
       }}
     >
       <Form.Input label="Nome" name="name" />
-      <Form.Submit label="Editar" />
+      <Form.Submit label={data ? "Editar" : "Criar"} />
     </Form>
   );
 }

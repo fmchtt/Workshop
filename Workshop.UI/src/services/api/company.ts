@@ -52,3 +52,14 @@ export async function updateCompany({
   const { data } = await http.patch<Company>(`/company/${companyId}`, props);
   return data;
 }
+
+export type CreateCompanyProps = {
+  name?: string;
+};
+
+export async function createCompany({
+  ...props
+}: CreateCompanyProps) {
+  const { data } = await http.post<Company>(`/company/`, props);
+  return data;
+}

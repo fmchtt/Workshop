@@ -46,13 +46,7 @@ export function useUpdateCompanyMutation(
 
       client.setQueryData(["company"], data);
 
-      client.setQueryData(
-        ["me"],
-        produce<User>((draft) => {
-          if (!draft.working) return;
-          draft.working.company = data;
-        })
-      );
+      setCompanyUserWorking(client, data);
       props?.onSuccess && props.onSuccess(data, variables);
     },
     onError: props?.onError,
