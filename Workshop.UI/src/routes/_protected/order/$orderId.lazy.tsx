@@ -3,11 +3,14 @@ import { useOrder } from "../../../services/queries/order.queries";
 import {
   FooterContainer,
   InformationContainer,
-  OrderContainer,
 } from "../../../components/pages/order.style";
-import { TableContainer } from "../../../components/pages/stock.styles";
 import { Table } from "../../../components/table";
-import { Detail, Text } from "../../../components/styles.global";
+import {
+  Detail,
+  FlexibleContainer,
+  RouteContainer,
+  Text,
+} from "../../../components/styles.global";
 import FilledButton from "../../../components/filledbutton";
 import { useState } from "react";
 import Modal from "../../../components/modal";
@@ -42,8 +45,8 @@ function OrderView() {
   });
 
   return (
-    <OrderContainer $column>
-      <TableContainer>
+    <RouteContainer $column>
+      <FlexibleContainer>
         <Text $weight="bold" $size="md">
           Dados da ordem de serviço:
         </Text>
@@ -102,7 +105,7 @@ function OrderView() {
             },
           ]}
         />
-      </TableContainer>
+      </FlexibleContainer>
       <FooterContainer $justifyBetween>
         {data?.complete ? (
           <>
@@ -165,6 +168,6 @@ function OrderView() {
         show={showDelete}
         $loading={deleteMutation.isPending}
       />
-    </OrderContainer>
+    </RouteContainer>
   );
 }

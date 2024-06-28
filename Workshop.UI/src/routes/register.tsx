@@ -5,11 +5,14 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import RegisterForm from "../components/forms/register";
-import { Text } from "../components/styles.global";
-import { FormContainer } from "../components/pages/stock.styles";
+import {
+  RouteContainer,
+  SideContainer,
+  Text,
+} from "../components/styles.global";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/authContext";
-import { LoginContainer, SideContainer } from "../components/pages/login.style";
+import { LoginSideContainer } from "../components/pages/login.style";
 import WorkshopImage from "../assets/images/bicicle-workshop.png";
 
 export const Route = createFileRoute("/register")({
@@ -32,8 +35,8 @@ function Register() {
   }, [user, navigate]);
 
   return (
-    <LoginContainer>
-      <FormContainer>
+    <RouteContainer>
+      <SideContainer>
         <RegisterForm />
         <Text $margin="8px">
           Já possui conta ?{" "}
@@ -41,13 +44,13 @@ function Register() {
             Entrar
           </Text>
         </Text>
-      </FormContainer>
-      <SideContainer>
+      </SideContainer>
+      <LoginSideContainer>
         <Text $size="xl" $weight="bold">
           Bem vindo ao Workshop
         </Text>
         <img src={WorkshopImage} />
-      </SideContainer>
-    </LoginContainer>
+      </LoginSideContainer>
+    </RouteContainer>
   );
 }

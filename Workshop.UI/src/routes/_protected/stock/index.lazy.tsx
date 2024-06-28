@@ -1,9 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import {
-  StockContainer,
-  FormContainer,
-  TableContainer,
-} from "../../../components/pages/stock.styles";
 import ProductForm from "../../../components/forms/productForm";
 import { Table } from "../../../components/table";
 import { useProducts } from "../../../services/queries/stock.queries";
@@ -11,6 +6,11 @@ import { useState } from "react";
 import { Product } from "../../../types/entities/product";
 import ConfirmationModal from "../../../components/confirmationModal";
 import { useDeleteProductMutation } from "../../../services/mutations/product.mutations";
+import {
+  FlexibleContainer,
+  RouteContainer,
+  SideContainer,
+} from "../../../components/styles.global";
 
 export const Route = createLazyFileRoute("/_protected/stock/")({
   component: StockHome,
@@ -26,14 +26,14 @@ function StockHome() {
   });
 
   return (
-    <StockContainer>
-      <FormContainer>
+    <RouteContainer>
+      <SideContainer>
         <ProductForm
           productEdit={productEdit}
           onClear={() => setProductEdit(undefined)}
         />
-      </FormContainer>
-      <TableContainer>
+      </SideContainer>
+      <FlexibleContainer>
         <Table
           rows={data || []}
           columns={[
@@ -50,7 +50,7 @@ function StockHome() {
           showEdit
           onEdit={(data) => setProductEdit(data)}
         />
-      </TableContainer>
+      </FlexibleContainer>
       <ConfirmationModal
         title="Deletar produto"
         text={`Tem certeza que deseja apagar o produto ${productDelete?.name} ?`}
@@ -62,6 +62,6 @@ function StockHome() {
         }}
         show={!!productDelete}
       />
-    </StockContainer>
+    </RouteContainer>
   );
 }

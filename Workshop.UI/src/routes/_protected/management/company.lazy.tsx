@@ -1,7 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { CompanyContainer } from "../../../components/pages/company.styles";
-import { FormContainer } from "../../../components/pages/stock.styles";
 import CompanyForm from "../../../components/forms/companyForm";
+import {
+  RouteContainer,
+  SideContainer,
+} from "../../../components/styles.global";
 
 export const Route = createLazyFileRoute("/_protected/management/company")({
   component: UpdateCompany,
@@ -9,10 +11,10 @@ export const Route = createLazyFileRoute("/_protected/management/company")({
 
 function UpdateCompany() {
   return (
-    <CompanyContainer>
-      <FormContainer>
+    <RouteContainer>
+      <SideContainer>
         <CompanyForm />
-      </FormContainer>
-    </CompanyContainer>
+      </SideContainer>
+    </RouteContainer>
   );
 }
