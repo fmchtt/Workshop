@@ -9,6 +9,7 @@ import {
 import useDebouce from "../../hooks/useDebouce";
 import { Link } from "@tanstack/react-router";
 import { RxCaretLeft } from "react-icons/rx";
+import { useMemo } from "react";
 
 export default function Header() {
   const { user } = useAuth();
@@ -16,23 +17,41 @@ export default function Header() {
     time: 600,
   });
 
-  const menuEntries = [
-    {
-      title: "Permissões",
-      icon: <FaUnlock />,
-      link: "/management/roles",
-    },
-    {
-      title: "Colaboradores",
-      icon: <FaUserPlus />,
-      link: "/management/employees",
-    },
-    {
-      title: "Editar empresa",
-      icon: <FaBuilding />,
-      link: "/management/company",
-    },
-  ];
+  const menuEntries = useMemo(
+    () => [
+      {
+        title: "Permissões",
+        icon: <FaUnlock />,
+        link: "/management/roles",
+        show:
+          user?.working?.company.ownerId === user?.id ||
+          !!user?.working?.role.permissions.find(
+            (p) => p.type === "management" && p.value === "manageRole"
+          ),
+      },
+      {
+        title: "Colaboradores",
+        icon: <FaUserPlus />,
+        link: "/management/employees",
+        show:
+          user?.working?.company.ownerId === user?.id ||
+          !!user?.working?.role.permissions.find(
+            (p) => p.type === "management" && p.value === "manageEmployee"
+          ),
+      },
+      {
+        title: "Editar empresa",
+        icon: <FaBuilding />,
+        link: "/management/company",
+        show:
+          user?.working?.company.ownerId === user?.id ||
+          !!user?.working?.role.permissions.find(
+            (p) => p.type === "management" && p.value === "manageCompany"
+          ),
+      },
+    ],
+    [user]
+  );
 
   return (
     <StyledHeader>
@@ -46,13 +65,15 @@ export default function Header() {
           {(showMenu || isPending) && (
             <>
               <MenuItemContainer className={isPending ? "closed" : ""}>
-                {menuEntries.map((entry) => {
-                  return (
-                    <MenuItem key={entry.title} as={Link} to={entry.link}>
-                      {entry.title} {entry.icon}
-                    </MenuItem>
-                  );
-                })}
+                {menuEntries
+                  .filter((e) => e.show)
+                  .map((entry) => {
+                    return (
+                      <MenuItem key={entry.title} as={Link} to={entry.link}>
+                        {entry.title} {entry.icon}
+                      </MenuItem>
+                    );
+                  })}
               </MenuItemContainer>
               <RxCaretLeft />
             </>

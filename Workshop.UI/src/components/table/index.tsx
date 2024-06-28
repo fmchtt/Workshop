@@ -47,24 +47,28 @@ export function Table<T>(props: TableProps<T>) {
     <StyledTable>
       <thead>
         <HeadRow>
-          {props.columns.map((column) => (
-            <HeadCell key={column.key.toString()}>{column.title}</HeadCell>
+          {props.columns.map((column, colIdx) => (
+            <HeadCell key={`col_${colIdx}_${column.key.toString()}`}>
+              {column.title}
+            </HeadCell>
           ))}
           {(props.showEdit || props.showDelete) && <HeadCell>Ações</HeadCell>}
         </HeadRow>
       </thead>
       <tbody>
-        {props.rows.map((row, index) => (
+        {props.rows.map((row, rowIdx) => (
           <BodyRow
-            key={"row_" + index}
+            key={"row_" + rowIdx}
             $clickable={!!props.link}
             onClick={(e) => {
               e.stopPropagation();
               props.link && navigate(props.link(row));
             }}
           >
-            {props.columns.map((column) => (
-              <BodyCell key={"row_" + index + column.key.toString()}>
+            {props.columns.map((column, colIdx) => (
+              <BodyCell
+                key={`row_${rowIdx}_column_${colIdx}_${column.key.toString()}`}
+              >
                 {column.parser ? (
                   column.parser(row[column.key])
                 ) : (
