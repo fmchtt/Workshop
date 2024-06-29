@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { QueryProps } from "../../types/utils/queries";
-import { getCompanies, getCompany, getEmployees } from "../api/company";
+import {
+  EmployeeFilters,
+  getCompanies,
+  getCompany,
+  getEmployees,
+} from "../api/company";
 
 export function useCompanies(props?: QueryProps) {
   return useQuery({
@@ -18,10 +23,13 @@ export function useCompany(props?: QueryProps) {
   });
 }
 
-export function useEmployees(props?: QueryProps) {
+type UseEmployeeProps = {
+  filters: EmployeeFilters;
+};
+export function useEmployees(props?: QueryProps & UseEmployeeProps) {
   return useQuery({
-    queryKey: ["employees"],
-    queryFn: () => getEmployees(),
+    queryKey: ["employees", props?.filters || {}],
+    queryFn: () => getEmployees(props?.filters || {}),
     ...props,
   });
 }

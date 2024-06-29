@@ -20,6 +20,7 @@ import { FaX } from "react-icons/fa6";
 import { FaBuilding, FaFilter } from "react-icons/fa";
 import ClientFilter from "../../../components/filters/clientFilter";
 import { Helmet } from "react-helmet";
+import { ClientFilters } from "../../../services/api/client";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -30,7 +31,8 @@ function CustomerHome() {
   const [clientDelete, setClientDelete] = useState<Client | undefined>();
   const validatingPermission = usePermissions();
   const [form, setForm] = useState<"add" | "filter" | undefined>(undefined);
-  const { data } = useClients();
+  const [filters, setFilters] = useState({} as ClientFilters);
+  const { data } = useClients({ filters: filters });
 
   const deleteMutation = useDeleteClientMutation({
     onSuccess: () => setClientDelete(undefined),
@@ -79,7 +81,7 @@ function CustomerHome() {
               />
             )}
             {form === "filter" && (
-              <ClientFilter onFilter={(values) => console.log(values)} />
+              <ClientFilter onFilter={(values) => setFilters(values)} />
             )}
           </SideContainer>
         )}

@@ -1,8 +1,6 @@
+import { ClientFilters } from "../../services/api/client";
 import Form from "../form";
 
-type ClientFilters = {
-  name?: string;
-};
 type ClientFilterProps = {
   onFilter: (values: ClientFilters) => void;
 };

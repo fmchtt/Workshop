@@ -20,6 +20,7 @@ import { FaX } from "react-icons/fa6";
 import { FaFileContract, FaFilter } from "react-icons/fa";
 import OrderFilter from "../../../components/filters/orderFilter";
 import { Helmet } from "react-helmet";
+import { OrderFilters } from "../../../services/api/order";
 
 export const Route = createLazyFileRoute("/_protected/order/")({
   component: OrderHome,
@@ -30,7 +31,8 @@ function OrderHome() {
   const [orderDelete, setOrderDelete] = useState<Order | undefined>();
   const validatingPermission = usePermissions();
   const [form, setForm] = useState<"add" | "filter" | undefined>(undefined);
-  const { data } = useOrders();
+  const [filters, setFilters] = useState({} as OrderFilters);
+  const { data } = useOrders({ filters });
 
   const deleteMutation = useDeleteOrderMutation({
     onSuccess: () => setOrderDelete(undefined),
@@ -79,7 +81,7 @@ function OrderHome() {
               />
             )}
             {form === "filter" && (
-              <OrderFilter onFilter={(value) => console.log(value)} />
+              <OrderFilter onFilter={(value) => setFilters(value)} />
             )}
           </SideContainer>
         )}

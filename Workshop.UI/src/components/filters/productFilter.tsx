@@ -1,8 +1,6 @@
+import { ProductFilters } from "../../services/api/stock";
 import Form from "../form";
 
-type ProductFilters = {
-  name?: string;
-};
 type ProductFilterProps = {
   onFilter: (values: ProductFilters) => void;
 };

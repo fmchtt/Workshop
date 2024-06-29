@@ -1,9 +1,14 @@
 import { Client } from "../../types/entities/client";
 import { Message } from "../../types/valueObjects/message";
-import { http } from "../http";
+import { http, makeQueryParams } from "../http";
 
-export async function getClients() {
-  const { data } = await http.get<Client[]>("/clients");
+export type ClientFilters = {
+  name?: string;
+};
+export async function getClients(filters: ClientFilters) {
+  const { data } = await http.get<Client[]>(
+    "/clients" + makeQueryParams(filters)
+  );
   return data;
 }
 

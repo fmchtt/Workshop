@@ -20,6 +20,7 @@ import FilledButton from "../../../components/filledbutton";
 import { FaBoxes, FaFilter } from "react-icons/fa";
 import ProductFilter from "../../../components/filters/productFilter";
 import { Helmet } from "react-helmet";
+import { ProductFilters } from "../../../services/api/stock";
 
 export const Route = createLazyFileRoute("/_protected/stock/")({
   component: StockHome,
@@ -30,7 +31,8 @@ function StockHome() {
   const [productDelete, setProductDelete] = useState<Product | undefined>();
   const [form, setForm] = useState<"add" | "filter" | undefined>(undefined);
   const validatingPermission = usePermissions();
-  const { data } = useProducts();
+  const [filters, setFilters] = useState({} as ProductFilters);
+  const { data } = useProducts({ filters });
 
   const deleteMutation = useDeleteProductMutation({
     onSuccess: () => setProductDelete(undefined),
@@ -79,7 +81,7 @@ function StockHome() {
               />
             )}
             {form === "filter" && (
-              <ProductFilter onFilter={(values) => console.log(values)} />
+              <ProductFilter onFilter={(values) => setFilters(values)} />
             )}
           </SideContainer>
         )}

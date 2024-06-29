@@ -1,9 +1,6 @@
+import { EmployeeFilters } from "../../services/api/company";
 import Form from "../form";
 
-type EmployeeFilters = {
-  name?: string;
-  email?: string;
-};
 type EmployeeFilterProps = {
   onFilter: (values: EmployeeFilters) => void;
 };

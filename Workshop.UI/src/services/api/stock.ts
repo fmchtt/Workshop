@@ -1,9 +1,14 @@
 import { Product } from "../../types/entities/product";
 import { Message } from "../../types/valueObjects/message";
-import { http } from "../http";
+import { http, makeQueryParams } from "../http";
 
-export async function getProducts() {
-  const { data } = await http.get<Product[]>("/products");
+export type ProductFilters = {
+  name?: string;
+};
+export async function getProducts(filters: ProductFilters) {
+  const { data } = await http.get<Product[]>(
+    "/products" + makeQueryParams(filters)
+  );
   return data;
 }
 export type CreateProductProps = {

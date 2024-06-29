@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "../api/stock";
+import { getProducts, ProductFilters } from "../api/stock";
 import { QueryProps } from "../../types/utils/queries";
 
-export function useProducts(props?: QueryProps) {
+type UseProductProps = {
+  filters: ProductFilters;
+};
+export function useProducts(props?: QueryProps & UseProductProps) {
   return useQuery({
-    queryKey: ["products"],
-    queryFn: () => getProducts(),
+    queryKey: ["products", props?.filters || {}],
+    queryFn: () => getProducts(props?.filters || {}),
     ...props,
   });
 }

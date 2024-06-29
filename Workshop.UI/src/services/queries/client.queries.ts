@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { getClients } from "../api/client";
+import { ClientFilters, getClients } from "../api/client";
 import { QueryProps } from "../../types/utils/queries";
 
-export function useClients(props?: QueryProps) {
+type UseClientProps = {
+  filters: ClientFilters;
+};
+export function useClients(props?: QueryProps & UseClientProps) {
   return useQuery({
-    queryKey: ["clients"],
-    queryFn: () => getClients(),
+    queryKey: ["clients", props?.filters || {}],
+    queryFn: () => getClients(props?.filters || {}),
     ...props,
   });
 }

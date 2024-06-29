@@ -2,7 +2,7 @@ import { Company } from "../../types/entities/company";
 import { ResumedEmployee } from "../../types/entities/employee";
 import { User } from "../../types/entities/user";
 import { Message } from "../../types/valueObjects/message";
-import { http } from "../http";
+import { http, makeQueryParams } from "../http";
 
 export async function getCompanies() {
   const { data } = await http.get<Company[]>("/company");
@@ -19,8 +19,14 @@ export async function changeCompany(companyId: string) {
   return data;
 }
 
-export async function getEmployees() {
-  const { data } = await http.get<ResumedEmployee[]>("/company/employee");
+export type EmployeeFilters = {
+  name?: string;
+  email?: string;
+};
+export async function getEmployees(filters: EmployeeFilters) {
+  const { data } = await http.get<ResumedEmployee[]>(
+    "/company/employee" + makeQueryParams(filters)
+  );
   return data;
 }
 

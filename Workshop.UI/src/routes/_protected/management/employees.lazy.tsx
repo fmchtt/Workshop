@@ -20,6 +20,7 @@ import { IoPersonAdd } from "react-icons/io5";
 import { useAuth } from "../../../contexts/authContext";
 import EmployeeFilter from "../../../components/filters/employeeFilter";
 import { Helmet } from "react-helmet";
+import { EmployeeFilters } from "../../../services/api/company";
 
 export const Route = createLazyFileRoute("/_protected/management/employees")({
   component: EmployeeManagement,
@@ -27,7 +28,6 @@ export const Route = createLazyFileRoute("/_protected/management/employees")({
 
 function EmployeeManagement() {
   const { user } = useAuth();
-  const { data } = useEmployees();
   const [employeeDelete, setEmployeeDelete] = useState<
     ResumedEmployee | undefined
   >();
@@ -37,6 +37,8 @@ function EmployeeManagement() {
     },
   });
   const [form, setForm] = useState<"add" | "filter" | undefined>(undefined);
+  const [filters, setFilters] = useState({} as EmployeeFilters);
+  const { data } = useEmployees({ filters });
 
   return (
     <RouteContainer $column>
@@ -69,7 +71,7 @@ function EmployeeManagement() {
             </IconButton>
             {form === "add" && <EmployeeForm />}
             {form === "filter" && (
-              <EmployeeFilter onFilter={(values) => console.log(values)} />
+              <EmployeeFilter onFilter={(values) => setFilters(values)} />
             )}
           </SideContainer>
         )}

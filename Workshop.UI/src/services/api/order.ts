@@ -1,9 +1,17 @@
 import { Order, ProductInOrder } from "../../types/entities/order";
 import { Message } from "../../types/valueObjects/message";
-import { http } from "../http";
+import { http, makeQueryParams } from "../http";
 
-export async function getOrders() {
-  const { data } = await http.get<Order[]>("/orders");
+export type OrderFilters = {
+  orderNumber?: number;
+  employeeId?: string;
+  clientId?: string;
+  complete?: boolean;
+};
+export async function getOrders(filters: OrderFilters) {
+  const { data } = await http.get<Order[]>(
+    "/orders" + makeQueryParams(filters)
+  );
   return data;
 }
 

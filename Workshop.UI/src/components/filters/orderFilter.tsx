@@ -1,13 +1,8 @@
+import { OrderFilters } from "../../services/api/order";
 import { useClients } from "../../services/queries/client.queries";
 import { useEmployees } from "../../services/queries/company.queries";
 import Form from "../form";
 
-type OrderFilters = {
-  orderNumber: number;
-  employeeId: string;
-  clientId: string;
-  complete: boolean;
-};
 type OrderFilterProps = {
   onFilter: (values: OrderFilters) => void;
 };
