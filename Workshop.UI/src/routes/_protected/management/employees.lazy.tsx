@@ -18,6 +18,8 @@ import { FaX } from "react-icons/fa6";
 import { FaFilter } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
 import { useAuth } from "../../../contexts/authContext";
+import EmployeeFilter from "../../../components/filters/employeeFilter";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/management/employees")({
   component: EmployeeManagement,
@@ -38,8 +40,15 @@ function EmployeeManagement() {
 
   return (
     <RouteContainer $column>
+      <Helmet>
+        <title>Colaboradores</title>
+      </Helmet>
       <ButtonWrapper>
-        <FilledButton $margin="0" onClick={() => setForm("filter")}>
+        <FilledButton
+          disabled={form === "filter"}
+          $margin="0"
+          onClick={() => setForm("filter")}
+        >
           <FaFilter />
           Filtros
         </FilledButton>
@@ -59,7 +68,9 @@ function EmployeeManagement() {
               <FaX onClick={() => setForm(undefined)} />
             </IconButton>
             {form === "add" && <EmployeeForm />}
-            {form === "filter" && <>Filtro</>}
+            {form === "filter" && (
+              <EmployeeFilter onFilter={(values) => console.log(values)} />
+            )}
           </SideContainer>
         )}
         <FlexibleContainer>

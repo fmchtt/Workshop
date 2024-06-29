@@ -20,7 +20,7 @@ export const ButtonStyle = styled.button<StyledButtonProps>`
   font-size: ${(props) => props.theme.font.sm};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.primary + "d1"};
+    background-color: ${(props) => props.theme.colors.primary + "e5"};
   }
 
   &:disabled {

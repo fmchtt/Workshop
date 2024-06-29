@@ -18,6 +18,8 @@ import {
 import FilledButton from "../../../components/filledbutton";
 import { FaX } from "react-icons/fa6";
 import { FaBuilding, FaFilter } from "react-icons/fa";
+import ClientFilter from "../../../components/filters/clientFilter";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -40,8 +42,15 @@ function CustomerHome() {
 
   return (
     <RouteContainer $column>
+      <Helmet>
+        <title>Clientes</title>
+      </Helmet>
       <ButtonWrapper>
-        <FilledButton $margin="0" onClick={() => setForm("filter")}>
+        <FilledButton
+          disabled={form === "filter"}
+          $margin="0"
+          onClick={() => setForm("filter")}
+        >
           <FaFilter />
           Filtros
         </FilledButton>
@@ -69,7 +78,9 @@ function CustomerHome() {
                 onClear={() => setClientEdit(undefined)}
               />
             )}
-            {form === "filter" && <>Filtro</>}
+            {form === "filter" && (
+              <ClientFilter onFilter={(values) => console.log(values)} />
+            )}
           </SideContainer>
         )}
         <FlexibleContainer>

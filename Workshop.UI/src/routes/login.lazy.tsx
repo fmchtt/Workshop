@@ -9,6 +9,7 @@ import {
 } from "../components/styles.global";
 import { LoginSideContainer } from "../components/pages/login.style";
 import WorkshopImage from "../assets/images/bicicle-workshop.png";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/login")({
   component: Login,
@@ -26,6 +27,9 @@ function Login() {
 
   return (
     <RouteContainer>
+      <Helmet>
+        <title>Entrar</title>
+      </Helmet>
       <SideContainer>
         <LoginForm />
         <Text $margin="8px">

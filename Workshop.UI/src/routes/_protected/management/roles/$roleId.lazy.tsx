@@ -18,6 +18,7 @@ import {
   useCreatePermissionMutation,
   useDeletePermissionMutation,
 } from "../../../../services/mutations/role.mutations";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute(
   "/_protected/management/roles/$roleId"
@@ -39,10 +40,13 @@ export function AddPermissions() {
   return (
     <RouteContainer>
       <FlexibleContainer $gap="20px">
+        <Helmet>
+          <title>Permissões - {data.name}</title>
+        </Helmet>
         <Text $size="md" $weight="semibold">
           Permissões do cargo{" "}
           <Detail $weight="bold" $size="md">
-            {data?.name}
+            {data.name}
           </Detail>
         </Text>
         {permissions.map((m, moduleIdx) => {
@@ -74,9 +78,6 @@ export function AddPermissions() {
                               type: m.type.name,
                               value: p.name,
                             })
-                      }
-                      disabled={
-                        createMutation.isPending || deleteMutation.isPending
                       }
                     />
                     <Text>{p.label}</Text>

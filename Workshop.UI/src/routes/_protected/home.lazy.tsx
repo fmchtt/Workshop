@@ -5,6 +5,7 @@ import Spinner from "../../components/spinner";
 import { useMe } from "../../services/queries/auth.queries";
 import { useCompanies } from "../../services/queries/company.queries";
 import { RouteContainer, SideContainer } from "../../components/styles.global";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/home")({
   component: Home,
@@ -20,6 +21,9 @@ export function Home() {
 
   return (
     <>
+      <Helmet>
+        <title>Dashboard</title>
+      </Helmet>
       {!data?.working && companiesQuery.data?.length == 0 ? (
         <RouteContainer>
           <SideContainer>

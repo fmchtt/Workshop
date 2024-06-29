@@ -19,6 +19,7 @@ import FilledButton from "../../../components/filledbutton";
 import { FaX } from "react-icons/fa6";
 import { FaFileContract, FaFilter } from "react-icons/fa";
 import OrderFilter from "../../../components/filters/orderFilter";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/order/")({
   component: OrderHome,
@@ -41,8 +42,15 @@ function OrderHome() {
 
   return (
     <RouteContainer $column>
+      <Helmet>
+        <title>Serviços</title>
+      </Helmet>
       <ButtonWrapper>
-        <FilledButton $margin="0" onClick={() => setForm("filter")}>
+        <FilledButton
+          disabled={form === "filter"}
+          $margin="0"
+          onClick={() => setForm("filter")}
+        >
           <FaFilter />
           Filtros
         </FilledButton>

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useAuth } from "../contexts/authContext";
 import { LoginSideContainer } from "../components/pages/login.style";
 import WorkshopImage from "../assets/images/bicicle-workshop.png";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/register")({
   component: Register,
@@ -26,6 +27,9 @@ function Register() {
 
   return (
     <RouteContainer>
+      <Helmet>
+        <title>Registrar</title>
+      </Helmet>
       <SideContainer>
         <RegisterForm />
         <Text $margin="8px">

@@ -22,6 +22,7 @@ import {
 import AddProductInOrderForm from "../../../components/forms/addProductInOrderForm";
 import PendingComponent from "../../../components/pendingComponent";
 import usePermissions from "../../../hooks/usePermissions";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/order/$orderId")({
   component: OrderView,
@@ -53,6 +54,9 @@ function OrderView() {
 
   return (
     <RouteContainer $column>
+      <Helmet>
+        <title>Serviços - {data?.client.name}</title>
+      </Helmet>
       <FlexibleContainer>
         <Text $weight="bold" $size="md">
           Dados da ordem de serviço:

@@ -42,10 +42,10 @@ export const ModuleButton = styled.a`
   font-size: ${(props) => props.theme.font.md};
 
   &.active {
-    background-color: #ffffff40;
+    background-color: ${(props) => props.theme.colors.thernary + "40"};
   }
 
   &:hover {
-    background-color: #ffffff21;
+    background-color: ${(props) => props.theme.colors.thernary + "20"};
   }
 `;

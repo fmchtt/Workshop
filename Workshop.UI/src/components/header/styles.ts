@@ -46,14 +46,16 @@ export const MenuItem = styled.a`
   text-decoration: none;
   color: ${(props) => props.theme.colors.primary};
 
-  background-color: #00000009;
+  background-color: ${(props) => props.theme.colors.primary + "10"};
   border-radius: ${(props) => props.theme.borderRadius};
 
   &.active {
-    background-color: #00000040;
+    background-color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.thernary};
   }
 
   &:hover {
-    background-color: #00000019;
+    background-color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.thernary};
   }
 `;

@@ -16,6 +16,7 @@ import { useRoles } from "../../../../services/queries/roles.queries";
 import { Role } from "../../../../types/entities/role";
 import { useDeleteRoleMutation } from "../../../../services/mutations/role.mutations";
 import RoleForm from "../../../../components/forms/roleForm";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/management/roles/")({
   component: RoleManagement,
@@ -34,6 +35,9 @@ function RoleManagement() {
 
   return (
     <RouteContainer $column>
+      <Helmet>
+        <title>Cargos</title>
+      </Helmet>
       <ButtonWrapper>
         <FilledButton
           disabled={form === "add"}

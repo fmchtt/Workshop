@@ -6,6 +6,7 @@ import {
 } from "../../../components/styles.global";
 import PendingComponent from "../../../components/pendingComponent";
 import usePermissions from "../../../hooks/usePermissions";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/management/company")({
   component: UpdateCompany,
@@ -20,6 +21,9 @@ function UpdateCompany() {
 
   return (
     <RouteContainer>
+      <Helmet>
+        <title>Empresa</title>
+      </Helmet>
       <SideContainer>
         <CompanyForm />
       </SideContainer>

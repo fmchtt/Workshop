@@ -18,6 +18,8 @@ import {
 import { FaX } from "react-icons/fa6";
 import FilledButton from "../../../components/filledbutton";
 import { FaBoxes, FaFilter } from "react-icons/fa";
+import ProductFilter from "../../../components/filters/productFilter";
+import { Helmet } from "react-helmet";
 
 export const Route = createLazyFileRoute("/_protected/stock/")({
   component: StockHome,
@@ -40,8 +42,15 @@ function StockHome() {
 
   return (
     <RouteContainer $column>
+      <Helmet>
+        <title>Estoque</title>
+      </Helmet>
       <ButtonWrapper>
-        <FilledButton $margin="0" onClick={() => setForm("filter")}>
+        <FilledButton
+          disabled={form === "filter"}
+          $margin="0"
+          onClick={() => setForm("filter")}
+        >
           <FaFilter />
           Filtros
         </FilledButton>
@@ -69,7 +78,9 @@ function StockHome() {
                 onClear={() => setProductEdit(undefined)}
               />
             )}
-            {form === "filter" && <>Filtro</>}
+            {form === "filter" && (
+              <ProductFilter onFilter={(values) => console.log(values)} />
+            )}
           </SideContainer>
         )}
         <FlexibleContainer>
