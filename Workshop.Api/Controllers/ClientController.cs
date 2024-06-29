@@ -9,6 +9,7 @@ using Workshop.Application.Management.Customer.GetById;
 using Workshop.Application.Management.Customer.Update;
 using Workshop.Application.Results;
 using Workshop.Application.Results.Management;
+using Workshop.Domain.ValueObjects.Management.Customer;
 
 namespace Workshop.Api.Controllers;
 
@@ -16,9 +17,9 @@ namespace Workshop.Api.Controllers;
 public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
     [HttpGet]
-    public async Task<ICollection<ClientResult>> List()
+    public async Task<ICollection<ClientResult>> List([FromQuery] FilterGetAllClients? filter)
     {
-        var query = new GetAllClientsQuery { Actor = await GetUser() };
+        var query = new GetAllClientsQuery { Actor = await GetUser(), Filter = filter };
         return _mapper.Map<ICollection<ClientResult>>(await _mediator.Send(query));
     }
 

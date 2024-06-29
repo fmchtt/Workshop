@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
+using Workshop.Domain.ValueObjects.Management.Customer;
 using Workshop.Infra.Contexts;
 using Workshop.Infra.Shared;
 
@@ -13,6 +14,18 @@ public class ClientRepository(WorkshopDBContext context) : BaseRepository<Client
     public async Task<ICollection<Client>> GetAll(Guid companyId)
     {
         return await _clients.Where(x => x.CompanyId == companyId).ToListAsync();
+    }
+
+    public async Task<ICollection<Client>> GetAll(Guid companyId, FilterGetAllClients filters)
+    {
+        var clients = _clients.Where(x => x.CompanyId == companyId);
+
+        if (filters.Name is not null)
+        {
+            clients = clients.Where(p => EF.Functions.Like(p.Name, $"%{filters.Name}%"));
+        }
+
+        return await clients.ToListAsync();
     }
 
     public async Task<Client?> GetById(Guid id, Guid companyId)

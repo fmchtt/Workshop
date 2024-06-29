@@ -10,6 +10,8 @@ public class GetAllOrdersHandler(IOrderRepository orderRepository) : IRequestHan
     {
         if (request.Actor.Employee == null) return [];
 
-        return await orderRepository.GetAll(request.Actor.Employee.CompanyId);
+        if(request.Filters is null) return await orderRepository.GetAll(request.Actor.Employee.CompanyId);
+
+        return await orderRepository.GetAll(request.Actor.Employee.CompanyId, request.Filters);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
+using Workshop.Domain.ValueObjects.Stock.Products;
 using Workshop.Infra.Contexts;
 using Workshop.Infra.Shared;
 
@@ -13,6 +14,18 @@ public class ProductRepository(WorkshopDBContext context) : BaseRepository<Produ
     public async Task<ICollection<Product>> GetAll(Guid companyId)
     {
         return await _products.Where(p => p.OwnerId == companyId && !p.Deleted).ToListAsync();
+    }
+
+    public async Task<ICollection<Product>> GetAll(Guid companyId, FilterGetAllProducts filters)
+    {
+        var products = _products.Where(p => p.OwnerId == companyId && !p.Deleted);
+
+        if(filters.Name is not null)
+        {
+            products = products.Where(p => EF.Functions.Like(p.Name, $"%{filters.Name}%"));
+        }
+
+        return await products.ToListAsync();
     }
 
     public async Task<Product?> GetById(Guid id, Guid companyId)
