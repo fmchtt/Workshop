@@ -8,6 +8,7 @@ import { useEmployees } from "../../services/queries/company.queries";
 import Form from "../form";
 import { FormikProps } from "formik";
 import { Order } from "../../types/entities/order";
+import { object, string } from "yup";
 
 type OrderFormProps = {
   orderEdit?: Order;
@@ -64,6 +65,10 @@ export default function OrderForm(props: OrderFormProps) {
         return createMutation.mutate(data);
       }}
       onReset={() => props.onClear()}
+      validationSchema={object({
+        clientId: string().required("O cliente é obrigatório").uuid(),
+        employeeId: string().required("O cliente é obrigatório").uuid(),
+      })}
     >
       <Form.Select
         label="Cliente"

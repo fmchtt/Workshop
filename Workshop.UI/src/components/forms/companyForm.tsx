@@ -1,3 +1,4 @@
+import { object, string } from "yup";
 import { useAuth } from "../../contexts/authContext";
 import {
   useCreateCompanyMutation,
@@ -28,6 +29,11 @@ export default function CompanyForm() {
         createMutation.mutate(values);
       }}
       title={`${data ? "Editar" : "Criar nova"} empresa`}
+      validationSchema={object({
+        name: string()
+          .required("O nome é obrigatório")
+          .min(4, "O nome deve ter no mínimo 4 letras"),
+      })}
     >
       <Form.Input label="Nome" name="name" />
       <Form.Submit label={data ? "Editar" : "Criar"} />

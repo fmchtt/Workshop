@@ -1,3 +1,4 @@
+import { number, object, string } from "yup";
 import { useAddProductOrderMutation } from "../../services/mutations/order.mutations";
 import { useProducts } from "../../services/queries/stock.queries";
 import Form from "../form";
@@ -24,6 +25,14 @@ export default function AddProductInOrderForm(
       onSubmit={(data) => {
         addProductMutation.mutate({ ...data, orderId: props.orderId });
       }}
+      validationSchema={object({
+        productId: string()
+          .required("Selecione um produto")
+          .uuid("Selecione um produto"),
+        quantity: number()
+          .required("A quantidade é obrigatória")
+          .min(0, "A quantidade tem que ser maior que 0"),
+      })}
     >
       <Form.Select
         label="Produto"

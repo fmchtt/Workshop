@@ -16,3 +16,10 @@ export const FooterContainer = styled.div<FooterContainerProps>`
   justify-content: ${(props) =>
     props.$justifyBetween ? "space-between" : "unset"};
 `;
+
+export const TableFooter = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 40px;
+`;

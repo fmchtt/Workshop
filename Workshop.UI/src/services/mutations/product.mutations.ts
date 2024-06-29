@@ -20,7 +20,7 @@ export function useCreateProductMutation(
     mutationFn: createProduct,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["products"],
+        ["products", {}],
         produce<Product[]>((draft) => {
           draft.push(data);
         })
@@ -40,7 +40,7 @@ export function useUpdateProductMutation(
     mutationFn: updateProduct,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["products"],
+        ["products", {}],
         produce<Product[]>((draft) => {
           const productIdx = draft.findIndex((x) => x.id === data.id);
           if (productIdx === -1) return;
@@ -62,7 +62,7 @@ export function useDeleteProductMutation(
     mutationFn: deleteProduct,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["products"],
+        ["products", {}],
         produce<Product[]>((draft) => {
           const productIdx = draft.findIndex((x) => x.id === variables);
           if (productIdx === -1) return;

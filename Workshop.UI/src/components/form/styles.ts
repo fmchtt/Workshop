@@ -47,7 +47,7 @@ export const Description = styled.span`
 `;
 
 export const ErrorMessage = styled.span`
-  color: #e65555;
+  color: ${(props) => props.theme.colors.danger};
   font-weight: 400;
   font-size: 15px;
 `;

@@ -3,6 +3,7 @@ import { useCreateEmployeeMutation } from "../../services/mutations/company.muta
 import { useRoles } from "../../services/queries/roles.queries";
 import Form from "../form";
 import { FormikProps } from "formik";
+import { object, string } from "yup";
 
 export default function EmployeeForm() {
   const formRef = useRef<FormikProps<{
@@ -25,6 +26,15 @@ export default function EmployeeForm() {
         createMutation.mutate(data);
       }}
       innerRef={(ref) => (formRef.current = ref)}
+      validationSchema={object({
+        name: string()
+          .required("O nome é obrigatório")
+          .min(4, "O nome deve ter no mínimo 4 letras"),
+        email: string()
+          .required("O email é obrigatório")
+          .email("Email inválido"),
+        roleId: string().required("O cargo é obrigatório").uuid(),
+      })}
     >
       <Form.Input label="Nome" name="name" />
       <Form.Input label="Email" name="email" type="email" />

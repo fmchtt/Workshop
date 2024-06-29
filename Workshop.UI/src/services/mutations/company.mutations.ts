@@ -98,7 +98,7 @@ export function useCreateEmployeeMutation(
     mutationFn: createEmployee,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["employees"],
+        ["employees", {}],
         produce<ResumedEmployee[]>((draft) => {
           draft.push(data);
         })
@@ -118,7 +118,7 @@ export function useDeleteEmployeeMutation(
     mutationFn: deleteEmployee,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["employees"],
+        ["employees", {}],
         produce<ResumedEmployee[]>((draft) => {
           const employeeIdx = draft.findIndex((x) => x.id === variables);
           if (employeeIdx === -1) return;

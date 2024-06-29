@@ -3,6 +3,7 @@ import { useOrder } from "../../../services/queries/order.queries";
 import {
   FooterContainer,
   InformationContainer,
+  TableFooter,
 } from "../../../components/pages/order.style";
 import { Table } from "../../../components/table";
 import {
@@ -55,7 +56,7 @@ function OrderView() {
   return (
     <RouteContainer $column>
       <Helmet>
-        <title>Serviços - {data?.client.name}</title>
+        <title>Serviços - {data?.client.name || ""}</title>
       </Helmet>
       <FlexibleContainer>
         <Text $weight="bold" $size="md">
@@ -64,19 +65,6 @@ function OrderView() {
         <InformationContainer>
           <Text $weight="semibold">
             Código: <Detail>{data?.orderNumber}</Detail>
-          </Text>
-          <Text $weight="semibold">
-            Total do serviço:{" "}
-            <Detail>
-              R${" "}
-              {data?.products
-                .reduce(
-                  (prev, actual) =>
-                    prev + actual.product.price * actual.quantity,
-                  0
-                )
-                .toFixed(2)}
-            </Detail>
           </Text>
           <Text $weight="semibold">
             Colaborador: <Detail>{data?.employee.user.name}</Detail>
@@ -116,6 +104,21 @@ function OrderView() {
             },
           ]}
         />
+        <TableFooter>
+          <Text $weight="semibold" $size="md">
+            Total:{" "}
+            <Detail $size="md">
+              R${" "}
+              {data?.products
+                .reduce(
+                  (prev, actual) =>
+                    prev + actual.product.price * actual.quantity,
+                  0
+                )
+                .toFixed(2)}
+            </Detail>
+          </Text>
+        </TableFooter>
       </FlexibleContainer>
       <FooterContainer $justifyBetween>
         {data?.complete ? (

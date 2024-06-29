@@ -44,8 +44,11 @@ export function useUpdateRoleMutation(
   return useMutation({
     mutationFn: updateRole,
     onSuccess: (data, variables) => {
-      client.setQueryData(
-        ["roles"],
+      client.setQueriesData(
+        {
+          queryKey: ["roles", {}],
+          exact: true,
+        },
         produce<Role[]>((draft) => {
           const roleIdx = draft.findIndex((r) => r.id === data.id);
           if (roleIdx === -1) return;
@@ -65,8 +68,11 @@ export function useDeleteRoleMutation(props?: MutationProps<Message, string>) {
   return useMutation({
     mutationFn: deleteRole,
     onSuccess: (data, variables) => {
-      client.setQueryData(
-        ["roles"],
+      client.setQueriesData(
+        {
+          queryKey: ["roles", {}],
+          exact: true,
+        },
         produce<Role[]>((draft) => {
           const roleIdx = draft.findIndex((r) => r.id === variables);
           if (roleIdx === -1) return;
@@ -89,7 +95,7 @@ export function useCreatePermissionMutation(
     mutationFn: createPermission,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["roles"],
+        ["roles", {}],
         produce<Role[]>((draft) => {
           const roleIdx = draft.findIndex((r) => r.id === variables.roleId);
           if (roleIdx === -1) return;
@@ -114,7 +120,7 @@ export function useDeletePermissionMutation(
     mutationFn: deletePermission,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["roles"],
+        ["roles", {}],
         produce<Role[]>((draft) => {
           const roleIdx = draft.findIndex((r) => r.id === variables.roleId);
           if (roleIdx === -1) return;

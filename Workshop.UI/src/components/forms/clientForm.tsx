@@ -6,6 +6,7 @@ import {
 import Form from "../form";
 import { FormikProps } from "formik";
 import { Client } from "../../types/entities/client";
+import { object, string } from "yup";
 
 export default function ClientForm(props: {
   clientEdit?: Client;
@@ -55,6 +56,11 @@ export default function ClientForm(props: {
       onReset={() => props.onClear()}
       innerRef={(ref) => (formRef.current = ref)}
       title={`${props.clientEdit ? "Editar" : "Criar novo"} cliente`}
+      validationSchema={object({
+        name: string()
+          .required("O nome é obrigatório")
+          .min(4, "O nome deve ter no mínimo 4 letras"),
+      })}
     >
       <Form.Input label="Nome" name="name" placeholder="Ex: Empresa 1" />
       <Form.Submit

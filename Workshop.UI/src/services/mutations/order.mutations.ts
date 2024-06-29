@@ -23,7 +23,7 @@ export function useCreateOrderMutation(
     mutationFn: createOrder,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["orders"],
+        ["orders", {}],
         produce<Order[]>((draft) => {
           draft.push(data);
         })
@@ -43,7 +43,7 @@ export function useUpdateOrderMutation(
     mutationFn: updateOrder,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["orders"],
+        ["orders", {}],
         produce<Order[]>((draft) => {
           const orderIdx = draft.findIndex((x) => x.id === data.id);
           if (orderIdx === -1) return;
@@ -63,7 +63,7 @@ export function useDeleteOrderMutation(props?: MutationProps<Message, string>) {
     mutationFn: deleteOrder,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["orders"],
+        ["orders", {}],
         produce<Order[]>((draft) => {
           const orderIdx = draft.findIndex((x) => x.id === variables);
           if (orderIdx === -1) return;
@@ -85,7 +85,7 @@ export function useAddProductOrderMutation(
     mutationFn: addProduct,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["orders"],
+        ["orders", {}],
         produce<Order[]>((draft) => {
           const orderIdx = draft.findIndex((x) => x.id === variables.orderId);
           if (orderIdx === -1) return;
@@ -120,7 +120,7 @@ export function useConcludeOrderMutation(props?: MutationProps<Order, string>) {
     mutationFn: concludeOrder,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["orders"],
+        ["orders", {}],
         produce<Order[]>((draft) => {
           const orderIdx = draft.findIndex((x) => x.id === variables);
           if (orderIdx === -1) return;

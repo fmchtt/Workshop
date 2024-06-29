@@ -6,6 +6,7 @@ import {
   useCreateProductMutation,
   useUpdateProductMutation,
 } from "../../services/mutations/product.mutations";
+import { number, object, string } from "yup";
 
 export default function ProductForm(props: {
   productEdit: Product | undefined;
@@ -64,6 +65,18 @@ export default function ProductForm(props: {
       onReset={() => props.onClear()}
       title={`${props.productEdit ? "Editar" : "Criar novo"} produto`}
       innerRef={(ref) => (formRef.current = ref)}
+      validationSchema={object({
+        name: string()
+          .required("O nome é obrigatório")
+          .min(4, "O nome deve ter no mínimo 4 letras"),
+        description: string(),
+        price: number()
+          .required("O preço é obrigatório")
+          .min(0, "O preço deve ser maior que 0"),
+        quantity: number()
+          .required("O preço é obrigatório")
+          .min(0, "A quantidade deve ser maior que 0"),
+      })}
     >
       <Form.Input label="Nome" name="name" placeholder="Ex: Lâmpada H4" />
       <Form.TextArea

@@ -6,6 +6,7 @@ import {
   useCreateRoleMutation,
   useUpdateRoleMutation,
 } from "../../services/mutations/role.mutations";
+import { object, string } from "yup";
 
 export default function RoleForm(props: {
   roleEdit?: Client;
@@ -55,6 +56,11 @@ export default function RoleForm(props: {
       onReset={() => props.onClear()}
       innerRef={(ref) => (formRef.current = ref)}
       title={`${props.roleEdit ? "Editar" : "Criar novo"} cargo`}
+      validationSchema={object({
+        name: string()
+          .required("O nome é obrigatório")
+          .min(4, "O nome deve ter no mínimo 4 letras"),
+      })}
     >
       <Form.Input label="Nome" name="name" placeholder="Ex: Cargo 1" />
       <Form.Submit

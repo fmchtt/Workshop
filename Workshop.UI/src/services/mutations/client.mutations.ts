@@ -20,7 +20,7 @@ export function useCreateClientMutation(
     mutationFn: createClient,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["clients"],
+        ["clients", {}],
         produce<Client[]>((draft) => {
           draft.push(data);
         })
@@ -40,7 +40,7 @@ export function useUpdateClientMutation(
     mutationFn: updateClient,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["clients"],
+        ["clients", {}],
         produce<Client[]>((draft) => {
           const clientIdx = draft.findIndex((x) => x.id === data.id);
           if (clientIdx === -1) return;
@@ -62,7 +62,7 @@ export function useDeleteClientMutation(
     mutationFn: deleteClient,
     onSuccess: (data, variables) => {
       client.setQueryData(
-        ["clients"],
+        ["clients", {}],
         produce<Client[]>((draft) => {
           const clientIdx = draft.findIndex((x) => x.id === variables);
           if (clientIdx === -1) return;
