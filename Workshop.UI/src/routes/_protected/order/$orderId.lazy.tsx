@@ -19,11 +19,13 @@ import ConfirmationModal from "../../../components/confirmationModal";
 import {
   useConcludeOrderMutation,
   useDeleteOrderMutation,
+  useDeleteProductOrderMutation,
 } from "../../../services/mutations/order.mutations";
 import AddProductInOrderForm from "../../../components/forms/addProductInOrderForm";
 import PendingComponent from "../../../components/pendingComponent";
 import usePermissions from "../../../hooks/usePermissions";
 import { Helmet } from "react-helmet";
+import { Product } from "../../../types/entities/product";
 
 export const Route = createLazyFileRoute("/_protected/order/$orderId")({
   component: OrderView,
@@ -37,6 +39,17 @@ function OrderView() {
   const [showConclusion, setShowConclusion] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const validatingPermission = usePermissions();
+
+  const [productDelete, setProductDelete] = useState<Product | undefined>();
+  const deleteProductMutation = useDeleteProductOrderMutation({
+    onSuccess: () => {
+      setProductDelete(undefined);
+    },
+  });
+
+  const [productEdit, setProductEdit] = useState<
+    { id: string; quantity: number } | undefined
+  >();
 
   const concludeMutation = useConcludeOrderMutation({
     onSuccess: () => setShowConclusion(false),
@@ -103,6 +116,10 @@ function OrderView() {
               parser: (data) => `R$ ${data.toFixed(2)}`,
             },
           ]}
+          showDelete={!data?.complete}
+          onDelete={(product) => setProductDelete(product)}
+          showEdit={!data?.complete}
+          onEdit={(product) => setProductEdit(product)}
         />
         <TableFooter>
           <Text $weight="semibold" $size="md">
@@ -161,10 +178,20 @@ function OrderView() {
           </>
         )}
       </FooterContainer>
-      <Modal show={showCreateForm} onClose={() => setShowCreateForm(false)}>
+      <Modal
+        show={showCreateForm || !!productEdit}
+        onClose={() => {
+          setShowCreateForm(false);
+          setProductEdit(undefined);
+        }}
+      >
         <AddProductInOrderForm
           orderId={params.orderId}
-          onSuccess={() => setShowCreateForm(false)}
+          onSuccess={() => {
+            setShowCreateForm(false);
+            setProductEdit(undefined);
+          }}
+          productEdit={productEdit}
         />
       </Modal>
       <ConfirmationModal
@@ -181,6 +208,21 @@ function OrderView() {
         onClose={() => setShowDelete(false)}
         show={showDelete}
         $loading={deleteMutation.isPending}
+      />
+      <ConfirmationModal
+        title="Deletar produto da ordem de serviço"
+        text={`Tem certeza que deseja apagar o produto ${productDelete?.name} da ordem de serviço ${data?.orderNumber} ?`}
+        onSuccess={() =>
+          data?.id &&
+          productDelete?.id &&
+          deleteProductMutation.mutate({
+            orderId: data.id,
+            productId: productDelete.id,
+          })
+        }
+        onClose={() => setProductDelete(undefined)}
+        show={!!productDelete}
+        $loading={deleteProductMutation.isPending}
       />
     </RouteContainer>
   );

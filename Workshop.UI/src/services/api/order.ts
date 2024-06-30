@@ -57,6 +57,37 @@ export async function addProduct({ orderId, ...props }: AddProductProps) {
   return data;
 }
 
+export type UpdateProductProps = {
+  orderId: string;
+  productId: string;
+  quantity: number;
+};
+export async function updateProduct({
+  orderId,
+  productId,
+  ...props
+}: UpdateProductProps) {
+  const { data } = await http.patch<ProductInOrder>(
+    `/orders/${orderId}/product/${productId}`,
+    props
+  );
+  return data;
+}
+
+export type DeleteProductProps = {
+  orderId: string;
+  productId: string;
+};
+export async function deleteProduct({
+  orderId,
+  productId,
+}: DeleteProductProps) {
+  const { data } = await http.delete<Message>(
+    `/orders/${orderId}/product/${productId}`
+  );
+  return data;
+}
+
 export async function concludeOrder(orderId: string) {
   const { data } = await http.post<Order>(`/orders/${orderId}/complete`);
   return data;

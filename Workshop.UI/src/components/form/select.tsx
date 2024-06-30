@@ -11,6 +11,7 @@ type Option = {
 
 type SelectProps = {
   options: Option[];
+  disabled?: boolean;
 };
 
 export default function FieldSelect({
@@ -19,6 +20,7 @@ export default function FieldSelect({
   name,
   options,
   isClearable,
+  disabled,
 }: FormInputProps & SelectProps) {
   return (
     <Field name={name}>
@@ -35,6 +37,7 @@ export default function FieldSelect({
             }
             onChange={(option) => form.setFieldValue(field.name, option?.value)}
             isClearable={isClearable}
+            isDisabled={disabled}
           />
           {description && <Description>{description}</Description>}
           {meta.touched && meta.error && (

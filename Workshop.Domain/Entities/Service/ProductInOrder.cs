@@ -18,7 +18,9 @@ public class ProductInOrder : Entity
     public ProductInOrder(Product product, Order order, int quantity)
     {
         ProductId = product.Id;
+        Product = product;
         OrderId = order.Id;
+        Order = order;
         Quantity = quantity;
     }
 }

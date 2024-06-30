@@ -12,6 +12,7 @@ using Workshop.Application.Service.Orders.DeleteProductInOrder;
 using Workshop.Application.Service.Orders.GetAll;
 using Workshop.Application.Service.Orders.GetById;
 using Workshop.Application.Service.Orders.Update;
+using Workshop.Application.Service.Orders.UpdateProductInOrder;
 using Workshop.Domain.ValueObjects.Service.Orders;
 
 namespace Workshop.Api.Controllers;
@@ -84,14 +85,27 @@ public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseC
         return _mapper.Map<ProductInOrderResult>(await _mediator.Send(command));
     }
 
-    [HttpDelete("{id}/product/{productId}/{quantity}")]
-    public async Task<MessageResult> RemoveProduct(
+    [HttpPatch("{id}/product/{productId}")]
+    public async Task<ProductInOrderResult> RemoveProduct(
         [FromRoute] Guid id,
         [FromRoute] Guid productId,
-        [FromRoute] int quantity
+        [FromBody] UpdateProductInOrderCommand command
     )
     {
-        var command = new DeleteProductInOrderCommand { Actor = await GetUser(), OrderId = id, ProductId = productId, Quantity = quantity };
+        command.Actor = await GetUser();
+        command.OrderId = id;
+        command.ProductId = productId;
+
+        return _mapper.Map<ProductInOrderResult>(await _mediator.Send(command));
+    }
+
+    [HttpDelete("{id}/product/{productId}")]
+    public async Task<MessageResult> RemoveProduct(
+        [FromRoute] Guid id,
+        [FromRoute] Guid productId
+    )
+    {
+        var command = new DeleteProductInOrderCommand { Actor = await GetUser(), OrderId = id, ProductId = productId };
         return new MessageResult(await _mediator.Send(command));
     }
 }

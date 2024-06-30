@@ -9,7 +9,6 @@ public class DeleteProductInOrderValidator : AbstractValidator<DeleteProductInOr
     {
         RuleFor(c => c.ProductId).NotEmpty();
         RuleFor(c => c.OrderId).NotEmpty();
-        RuleFor(c => c.Quantity).NotNull().GreaterThan(0);
         RuleFor(c => c.Actor).NotNull().NotEqual(User.Empty);
     }
 }

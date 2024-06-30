@@ -115,6 +115,8 @@ export const SideContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  overflow-y: auto;
 `;
 
 export type FlexibleContainerProps = {

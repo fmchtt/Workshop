@@ -6,8 +6,12 @@ import {
   createOrder,
   CreateOrderProps,
   deleteOrder,
+  deleteProduct,
+  DeleteProductProps,
   updateOrder,
   UpdateOrderProps,
+  updateProduct,
+  UpdateProductProps,
 } from "../api/order";
 import { MutationProps } from "../../types/utils/mutation";
 import { Order, ProductInOrder } from "../../types/entities/order";
@@ -105,6 +109,83 @@ export function useAddProductOrderMutation(
           }
 
           draft.products[productIdx] = data;
+        })
+      );
+      props?.onSuccess && props.onSuccess(data, variables);
+    },
+    onError: props?.onError && props.onError,
+  });
+}
+
+export function useUpdateProductOrderMutation(
+  props?: MutationProps<ProductInOrder, UpdateProductProps>
+) {
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateProduct,
+    onSuccess: (data, variables) => {
+      client.setQueryData(
+        ["orders", {}],
+        produce<Order[]>((draft) => {
+          const orderIdx = draft.findIndex((x) => x.id === variables.orderId);
+          if (orderIdx === -1) return;
+          const productIdx = draft[orderIdx].products.findIndex(
+            (p) => p.product.id === variables.productId
+          );
+          if (productIdx === -1) return;
+
+          draft[orderIdx].products[productIdx] = data;
+        })
+      );
+
+      client.setQueryData(
+        ["orders", variables.orderId],
+        produce<Order>((draft) => {
+          const productIdx = draft.products.findIndex(
+            (p) => p.product.id === variables.productId
+          );
+          if (productIdx === -1) return;
+
+          draft.products[productIdx] = data;
+        })
+      );
+      props?.onSuccess && props.onSuccess(data, variables);
+    },
+    onError: props?.onError && props.onError,
+  });
+}
+
+export function useDeleteProductOrderMutation(
+  props?: MutationProps<Message, DeleteProductProps>
+) {
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: (data, variables) => {
+      client.setQueryData(
+        ["orders", {}],
+        produce<Order[]>((draft) => {
+          const orderIdx = draft.findIndex((x) => x.id === variables.orderId);
+          if (orderIdx === -1) return;
+          const productIdx = draft[orderIdx].products.findIndex(
+            (p) => p.product.id === variables.productId
+          );
+          if (productIdx === -1) return;
+          draft[orderIdx].products.splice(productIdx, 1);
+        })
+      );
+
+      client.setQueryData(
+        ["orders", variables.orderId],
+        produce<Order>((draft) => {
+          const productIdx = draft.products.findIndex(
+            (p) => p.product.id === variables.productId
+          );
+          if (productIdx === -1) return;
+
+          draft.products.splice(productIdx, 1);
         })
       );
       props?.onSuccess && props.onSuccess(data, variables);

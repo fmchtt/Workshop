@@ -1,10 +1,14 @@
 import { number, object, string } from "yup";
-import { useAddProductOrderMutation } from "../../services/mutations/order.mutations";
+import {
+  useAddProductOrderMutation,
+  useUpdateProductOrderMutation,
+} from "../../services/mutations/order.mutations";
 import { useProducts } from "../../services/queries/stock.queries";
 import Form from "../form";
 
 type AddProductInOrderFormProps = {
   orderId: string;
+  productEdit?: { id: string; quantity: number };
   onSuccess: () => void;
 };
 export default function AddProductInOrderForm(
@@ -16,13 +20,26 @@ export default function AddProductInOrderForm(
     onSuccess: () => props.onSuccess(),
   });
 
+  const updateProductMutation = useUpdateProductOrderMutation({
+    onSuccess: () => props.onSuccess(),
+  });
+
   return (
     <Form
       initialValues={{
-        quantity: 0,
-        productId: "",
+        quantity: props.productEdit?.quantity || 0,
+        productId: props.productEdit?.id || "",
       }}
       onSubmit={(data) => {
+        if (props.productEdit) {
+          updateProductMutation.mutate({
+            orderId: props.orderId,
+            productId: props.productEdit.id,
+            quantity: data.quantity,
+          });
+          return;
+        }
+
         addProductMutation.mutate({ ...data, orderId: props.orderId });
       }}
       validationSchema={object({
@@ -47,9 +64,15 @@ export default function AddProductInOrderForm(
               };
             }) || []
         }
+        disabled={!!props.productEdit}
       />
       <Form.Input label="Quantidade" name="quantity" />
-      <Form.Submit label="Criar" $loading={addProductMutation.isPending} />
+      <Form.Submit
+        label={props.productEdit ? "Editar" : "Criar"}
+        $loading={
+          addProductMutation.isPending || updateProductMutation.isPending
+        }
+      />
     </Form>
   );
 }

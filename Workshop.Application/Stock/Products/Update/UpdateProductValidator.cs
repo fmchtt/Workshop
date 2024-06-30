@@ -9,7 +9,7 @@ public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
     {
         RuleFor(c => c.ProductId).NotEmpty();
         RuleFor(c => c.Actor).NotNull().NotEqual(User.Empty);
-        RuleFor(c => c.QuantityInStock).GreaterThanOrEqualTo(0);
+        RuleFor(c => c.Quantity).GreaterThanOrEqualTo(0);
         RuleFor(c => c.Price).GreaterThanOrEqualTo(0);
     }
 }

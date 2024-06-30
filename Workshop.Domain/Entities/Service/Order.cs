@@ -52,7 +52,29 @@ public class Order : Entity
         return Products[index];
     }
 
-    public void RemoveProduct(Product product, int quantity)
+    public ProductInOrder UpdateProduct(Product product, int quantity)
+    {
+        var index = Products.FindIndex(p => p.ProductId == product.Id);
+        if (Products[index].Quantity < quantity)
+        {
+            var quantityDelta = quantity - Products[index].Quantity;
+            if (product.QuantityInStock < quantityDelta)
+            {
+                throw new ValidationException("Produto sem quantidade suficiente!");
+            }
+            product.QuantityInStock -= quantityDelta;
+        } 
+        else
+        {
+            var quantityDelta = Products[index].Quantity - quantity;
+            product.QuantityInStock += quantityDelta;
+        }
+
+        Products[index].Quantity = quantity;
+        return Products[index];
+    }
+
+    public void RemoveProduct(Product product)
     {
         var index = Products.FindIndex(p => p.ProductId == product.Id);
         if (index == -1)
@@ -60,17 +82,7 @@ public class Order : Entity
             throw new ValidationException("Produto não está na ordem de serviço");
         }
 
-
-        if (Products[index].Quantity < quantity)
-        {
-            throw new ValidationException("Produto na ordem de serviço sem quantidade suficiente!");
-        }
-
-        product.QuantityInStock += quantity;
-        Products[index].Quantity -= quantity;
-        if (Products[index].Quantity <= 0)
-        {
-            Products.RemoveAt(index);
-        }
+        product.QuantityInStock += Products[index].Quantity;
+        Products.RemoveAt(index);
     }
 }

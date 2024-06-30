@@ -31,9 +31,9 @@ public class UpdateProductHandler(IProductRepository productRepository) : IReque
             product.Price = request.Price.Value;
         }
 
-        if (request.QuantityInStock.HasValue)
+        if (request.Quantity.HasValue)
         {
-            product.QuantityInStock = request.QuantityInStock.Value;
+            product.QuantityInStock = request.Quantity.Value;
         }
 
         await productRepository.Update(product);
