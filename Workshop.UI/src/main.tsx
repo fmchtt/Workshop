@@ -17,6 +17,8 @@ import {
   useAuth,
 } from "./contexts/authContext";
 import "rc-switch/assets/index.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const router = createRouter({
   routeTree,
@@ -60,6 +62,7 @@ if (!rootElement.innerHTML) {
         <ThemeProvider theme={defaultTheme}>
           <AuthContextProvider>
             <AuthedRouter />
+            <ToastContainer position="bottom-right" autoClose={2000} />
           </AuthContextProvider>
         </ThemeProvider>
         <ReactQueryDevtools />

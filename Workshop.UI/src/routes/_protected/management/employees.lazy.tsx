@@ -21,6 +21,7 @@ import { useAuth } from "../../../contexts/authContext";
 import EmployeeFilter from "../../../components/filters/employeeFilter";
 import { Helmet } from "react-helmet";
 import { EmployeeFilters } from "../../../services/api/company";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/_protected/management/employees")({
   component: EmployeeManagement,
@@ -33,6 +34,7 @@ function EmployeeManagement() {
   >();
   const deleteMutation = useDeleteEmployeeMutation({
     onSuccess: () => {
+      toast.success("Colaborador removido!");
       setEmployeeDelete(undefined);
     },
   });

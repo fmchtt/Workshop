@@ -9,6 +9,7 @@ import Form from "../form";
 import { FormikProps } from "formik";
 import { Order } from "../../types/entities/order";
 import { object, string } from "yup";
+import { toast } from "react-toastify";
 
 type OrderFormProps = {
   orderEdit?: Order;
@@ -26,12 +27,14 @@ export default function OrderForm(props: OrderFormProps) {
 
   const createMutation = useCreateOrderMutation({
     onSuccess: () => {
+      toast.success("Ordem de serviço criada!");
       formRef.current?.resetForm();
       props.onClear();
     },
   });
   const updateMutation = useUpdateOrderMutation({
     onSuccess: () => {
+      toast.success("Ordem de serviço atualizada!");
       formRef.current?.resetForm();
       props.onClear();
     },

@@ -7,6 +7,7 @@ import {
   useUpdateProductMutation,
 } from "../../services/mutations/product.mutations";
 import { number, object, string } from "yup";
+import { toast } from "react-toastify";
 
 export default function ProductForm(props: {
   productEdit: Product | undefined;
@@ -14,12 +15,14 @@ export default function ProductForm(props: {
 }) {
   const createMutation = useCreateProductMutation({
     onSuccess: () => {
+      toast.success("Produto criado!");
       formRef.current?.resetForm();
       props.onClear();
     },
   });
   const updateMuration = useUpdateProductMutation({
     onSuccess: () => {
+      toast.success("Produto atualizado!");
       formRef.current?.resetForm();
       props.onClear();
     },

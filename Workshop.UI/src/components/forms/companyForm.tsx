@@ -7,12 +7,21 @@ import {
 import { useCompany } from "../../services/queries/company.queries";
 import Form from "../form";
 import Spinner from "../spinner";
+import { toast } from "react-toastify";
 
 export default function CompanyForm() {
   const { user } = useAuth();
   const { data, isLoading } = useCompany({ enabled: !!user?.working });
-  const updateMutation = useUpdateCompanyMutation();
-  const createMutation = useCreateCompanyMutation();
+  const updateMutation = useUpdateCompanyMutation({
+    onSuccess: () => {
+      toast.success("Empresa atualizada!");
+    },
+  });
+  const createMutation = useCreateCompanyMutation({
+    onSuccess: () => {
+      toast.success("Empresa criada!");
+    },
+  });
 
   if (!!user?.working && isLoading) {
     return <Spinner />;

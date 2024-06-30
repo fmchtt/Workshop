@@ -19,6 +19,7 @@ import {
   useDeletePermissionMutation,
 } from "../../../../services/mutations/role.mutations";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute(
   "/_protected/management/roles/$roleId"
@@ -30,8 +31,16 @@ export function AddPermissions() {
   const params = Route.useParams();
   const { data, isLoading } = useRole(params.roleId);
 
-  const createMutation = useCreatePermissionMutation();
-  const deleteMutation = useDeletePermissionMutation();
+  const createMutation = useCreatePermissionMutation({
+    onSuccess: () => {
+      toast.success("Permissão adicionada!");
+    },
+  });
+  const deleteMutation = useDeletePermissionMutation({
+    onSuccess: () => {
+      toast.success("Permissão removida!");
+    },
+  });
 
   if (!data || isLoading) {
     return <PendingComponent />;

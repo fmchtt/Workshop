@@ -21,6 +21,7 @@ import { FaBoxes, FaFilter } from "react-icons/fa";
 import ProductFilter from "../../../components/filters/productFilter";
 import { Helmet } from "react-helmet";
 import { ProductFilters } from "../../../services/api/stock";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/_protected/stock/")({
   component: StockHome,
@@ -35,7 +36,10 @@ function StockHome() {
   const { data } = useProducts({ filters });
 
   const deleteMutation = useDeleteProductMutation({
-    onSuccess: () => setProductDelete(undefined),
+    onSuccess: () => {
+      setProductDelete(undefined);
+      toast.success("Produto removido!");
+    },
   });
 
   if (validatingPermission([{ type: "stock", value: "manageProduct" }])) {

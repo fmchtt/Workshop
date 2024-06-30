@@ -26,6 +26,7 @@ import PendingComponent from "../../../components/pendingComponent";
 import usePermissions from "../../../hooks/usePermissions";
 import { Helmet } from "react-helmet";
 import { Product } from "../../../types/entities/product";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/_protected/order/$orderId")({
   component: OrderView,
@@ -43,6 +44,7 @@ function OrderView() {
   const [productDelete, setProductDelete] = useState<Product | undefined>();
   const deleteProductMutation = useDeleteProductOrderMutation({
     onSuccess: () => {
+      toast.success("Produto removida da ordem de serviço!");
       setProductDelete(undefined);
     },
   });
@@ -52,10 +54,14 @@ function OrderView() {
   >();
 
   const concludeMutation = useConcludeOrderMutation({
-    onSuccess: () => setShowConclusion(false),
+    onSuccess: () => {
+      toast.success("Ordem de serviço concluída");
+      setShowConclusion(false);
+    },
   });
   const deleteMutation = useDeleteOrderMutation({
     onSuccess: () => {
+      toast.success("Ordem de serviço removida!");
       navigate({
         to: "/order",
       });

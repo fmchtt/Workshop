@@ -5,6 +5,7 @@ import {
 } from "../../services/mutations/order.mutations";
 import { useProducts } from "../../services/queries/stock.queries";
 import Form from "../form";
+import { toast } from "react-toastify";
 
 type AddProductInOrderFormProps = {
   orderId: string;
@@ -17,11 +18,17 @@ export default function AddProductInOrderForm(
   const productsQuery = useProducts();
 
   const addProductMutation = useAddProductOrderMutation({
-    onSuccess: () => props.onSuccess(),
+    onSuccess: () => {
+      toast.success("Produto adicionado!");
+      props.onSuccess();
+    },
   });
 
   const updateProductMutation = useUpdateProductOrderMutation({
-    onSuccess: () => props.onSuccess(),
+    onSuccess: () => {
+      toast.success("Produto atualizado!");
+      props.onSuccess();
+    },
   });
 
   return (

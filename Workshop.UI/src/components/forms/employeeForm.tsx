@@ -4,6 +4,7 @@ import { useRoles } from "../../services/queries/roles.queries";
 import Form from "../form";
 import { FormikProps } from "formik";
 import { object, string } from "yup";
+import { toast } from "react-toastify";
 
 export default function EmployeeForm() {
   const formRef = useRef<FormikProps<{
@@ -15,6 +16,7 @@ export default function EmployeeForm() {
 
   const createMutation = useCreateEmployeeMutation({
     onSuccess: () => {
+      toast.success("Colaborador adicionado!");
       formRef.current?.resetForm();
     },
   });

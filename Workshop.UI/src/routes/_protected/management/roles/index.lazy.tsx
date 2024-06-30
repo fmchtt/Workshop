@@ -17,6 +17,7 @@ import { Role } from "../../../../types/entities/role";
 import { useDeleteRoleMutation } from "../../../../services/mutations/role.mutations";
 import RoleForm from "../../../../components/forms/roleForm";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/_protected/management/roles/")({
   component: RoleManagement,
@@ -28,6 +29,7 @@ function RoleManagement() {
   const [roleDelete, setRoleDelete] = useState<Role | undefined>();
   const deleteMutation = useDeleteRoleMutation({
     onSuccess: () => {
+      toast.success("Cargo removido!");
       setRoleDelete(undefined);
     },
   });

@@ -7,6 +7,7 @@ import {
   useUpdateRoleMutation,
 } from "../../services/mutations/role.mutations";
 import { object, string } from "yup";
+import { toast } from "react-toastify";
 
 export default function RoleForm(props: {
   roleEdit?: Client;
@@ -14,12 +15,14 @@ export default function RoleForm(props: {
 }) {
   const createMutation = useCreateRoleMutation({
     onSuccess: () => {
+      toast.success("Cargo criado!");
       formRef.current?.resetForm();
       props.onClear();
     },
   });
   const updateMutation = useUpdateRoleMutation({
     onSuccess: () => {
+      toast.success("Cargo atualizado!");
       formRef.current?.resetForm();
       props.onClear();
     },

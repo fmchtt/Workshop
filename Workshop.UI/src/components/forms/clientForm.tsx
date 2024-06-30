@@ -7,6 +7,7 @@ import Form from "../form";
 import { FormikProps } from "formik";
 import { Client } from "../../types/entities/client";
 import { object, string } from "yup";
+import { toast } from "react-toastify";
 
 export default function ClientForm(props: {
   clientEdit?: Client;
@@ -14,12 +15,14 @@ export default function ClientForm(props: {
 }) {
   const createMutation = useCreateClientMutation({
     onSuccess: () => {
+      toast.success("Cliente adicionado!");
       formRef.current?.resetForm();
       props.onClear();
     },
   });
   const updateMutation = useUpdateClientMutation({
     onSuccess: () => {
+      toast.success("Cliente atualizado!");
       formRef.current?.resetForm();
       props.onClear();
     },

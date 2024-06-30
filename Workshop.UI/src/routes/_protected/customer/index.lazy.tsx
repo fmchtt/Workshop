@@ -21,6 +21,7 @@ import { FaBuilding, FaFilter } from "react-icons/fa";
 import ClientFilter from "../../../components/filters/clientFilter";
 import { Helmet } from "react-helmet";
 import { ClientFilters } from "../../../services/api/client";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/_protected/customer/")({
   component: CustomerHome,
@@ -35,7 +36,10 @@ function CustomerHome() {
   const { data } = useClients({ filters: filters });
 
   const deleteMutation = useDeleteClientMutation({
-    onSuccess: () => setClientDelete(undefined),
+    onSuccess: () => {
+      toast.success("Clinte removido!");
+      setClientDelete(undefined);
+    },
   });
 
   if (validatingPermission([{ type: "management", value: "manageClient" }])) {

@@ -21,6 +21,7 @@ import { FaFileContract, FaFilter } from "react-icons/fa";
 import OrderFilter from "../../../components/filters/orderFilter";
 import { Helmet } from "react-helmet";
 import { OrderFilters } from "../../../services/api/order";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/_protected/order/")({
   component: OrderHome,
@@ -35,7 +36,10 @@ function OrderHome() {
   const { data } = useOrders({ filters });
 
   const deleteMutation = useDeleteOrderMutation({
-    onSuccess: () => setOrderDelete(undefined),
+    onSuccess: () => {
+      toast.success("Ordem de serviço removida!");
+      setOrderDelete(undefined);
+    },
   });
 
   if (validatingPermission([{ type: "service", value: "manageOrder" }])) {
