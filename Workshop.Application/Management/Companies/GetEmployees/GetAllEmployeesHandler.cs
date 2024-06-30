@@ -9,6 +9,20 @@ public class GetAllEmployeesHandler : IRequestHandler<GetAllEmployeesQuery, ICol
     {
         if (request.Actor.Employee == null) return Task.FromResult<ICollection<Employee>>([]);
 
-        return Task.FromResult<ICollection<Employee>>(request.Actor.Employee.Company.Employees);
+        var employees = request.Actor.Employee.Company.Employees;
+
+        if (request.Filters is null) return Task.FromResult<ICollection<Employee>>(employees);
+
+        if(request.Filters.Name is not null)
+        {
+            employees = employees.Where(e => e.User.Name.Contains(request.Filters.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
+
+        if (request.Filters.Email is not null)
+        {
+            employees = employees.Where(e => e.User.Email.Contains(request.Filters.Email, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
+
+        return Task.FromResult<ICollection<Employee>>(employees);
     }
 }

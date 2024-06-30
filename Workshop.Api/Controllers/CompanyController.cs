@@ -13,6 +13,7 @@ using Workshop.Application.Management.Companies.RemoveEmployee;
 using Workshop.Application.Management.Companies.Update;
 using Workshop.Application.Results;
 using Workshop.Application.Results.Management;
+using Workshop.Domain.ValueObjects.Management.Companies;
 
 namespace Workshop.Api.Controllers;
 
@@ -64,9 +65,9 @@ public class CompanyController(IMediator mediator, IMapper mapper) : WorkshopBas
     }
 
     [HttpGet("employee")]
-    public async Task<ICollection<EmployeeResult>> GetEmployees()
+    public async Task<ICollection<EmployeeResult>> GetEmployees([FromQuery] GetAllEmployeesFilter? filters)
     {
-        var query = new GetAllEmployeesQuery { Actor = await GetUser() };
+        var query = new GetAllEmployeesQuery { Actor = await GetUser(), Filters = filters };
         return _mapper.Map<ICollection<EmployeeResult>>(await _mediator.Send(query));
     }
 

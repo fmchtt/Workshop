@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Workshop.Domain.Entities.Management;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.ValueObjects.Management.Customer;
@@ -22,7 +23,7 @@ public class ClientRepository(WorkshopDBContext context) : BaseRepository<Client
 
         if (filters.Name is not null)
         {
-            clients = clients.Where(p => EF.Functions.Like(p.Name, $"%{filters.Name}%"));
+            clients = clients.Where(e => e.Name.Contains(filters.Name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         return await clients.ToListAsync();

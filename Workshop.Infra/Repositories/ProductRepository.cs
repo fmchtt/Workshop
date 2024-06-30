@@ -22,7 +22,7 @@ public class ProductRepository(WorkshopDBContext context) : BaseRepository<Produ
 
         if(filters.Name is not null)
         {
-            products = products.Where(p => EF.Functions.Like(p.Name, $"%{filters.Name}%"));
+            products = products.Where(e => e.Name.Contains(filters.Name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         return await products.ToListAsync();
