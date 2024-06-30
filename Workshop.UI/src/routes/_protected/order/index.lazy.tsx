@@ -82,10 +82,17 @@ function OrderHome() {
               <OrderForm
                 orderEdit={orderEdit}
                 onClear={() => setOrderEdit(undefined)}
+                onSuccess={() => {
+                  setOrderEdit(undefined);
+                  setFilters({});
+                }}
               />
             )}
             {form === "filter" && (
-              <OrderFilter onFilter={(value) => setFilters(value)} />
+              <OrderFilter
+                onFilter={(value) => setFilters(value)}
+                onClear={() => setFilters({})}
+              />
             )}
           </SideContainer>
         )}
@@ -136,9 +143,10 @@ function OrderHome() {
           <ConfirmationModal
             title="Deletar ordem de serviço"
             text={`Tem certeza que deseja apagar a ordem de serviço ${orderDelete?.orderNumber} ?`}
-            onSuccess={() =>
-              orderDelete && deleteMutation.mutate(orderDelete.id)
-            }
+            onSuccess={() => {
+              orderDelete && deleteMutation.mutate(orderDelete.id);
+              setFilters({});
+            }}
             onClose={() => setOrderDelete(undefined)}
             show={!!orderDelete}
             $loading={deleteMutation.isPending}

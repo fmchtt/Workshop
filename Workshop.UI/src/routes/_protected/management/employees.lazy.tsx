@@ -71,9 +71,18 @@ function EmployeeManagement() {
             <IconButton $alignEnd>
               <FaX onClick={() => setForm(undefined)} />
             </IconButton>
-            {form === "add" && <EmployeeForm />}
+            {form === "add" && (
+              <EmployeeForm
+                onSuccess={() => {
+                  setFilters({});
+                }}
+              />
+            )}
             {form === "filter" && (
-              <EmployeeFilter onFilter={(values) => setFilters(values)} />
+              <EmployeeFilter
+                onFilter={(values) => setFilters(values)}
+                onClear={() => setFilters({})}
+              />
             )}
           </SideContainer>
         )}
@@ -98,7 +107,10 @@ function EmployeeManagement() {
         title="Apagar colaborador"
         show={!!employeeDelete}
         onClose={() => setEmployeeDelete(undefined)}
-        onSuccess={() => deleteMutation.mutate(employeeDelete?.id || "")}
+        onSuccess={() => {
+          deleteMutation.mutate(employeeDelete?.id || "");
+          setFilters({});
+        }}
       />
     </RouteContainer>
   );

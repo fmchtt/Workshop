@@ -12,19 +12,20 @@ import { toast } from "react-toastify";
 export default function ProductForm(props: {
   productEdit: Product | undefined;
   onClear: () => void;
+  onSuccess: () => void;
 }) {
   const createMutation = useCreateProductMutation({
     onSuccess: () => {
       toast.success("Produto criado!");
       formRef.current?.resetForm();
-      props.onClear();
+      props.onSuccess();
     },
   });
   const updateMuration = useUpdateProductMutation({
     onSuccess: () => {
       toast.success("Produto atualizado!");
       formRef.current?.resetForm();
-      props.onClear();
+      props.onSuccess();
     },
   });
 

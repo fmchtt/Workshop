@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 type OrderFormProps = {
   orderEdit?: Order;
   onClear: () => void;
+  onSuccess: () => void;
 };
 export default function OrderForm(props: OrderFormProps) {
   const employeeQuery = useEmployees();
@@ -29,14 +30,14 @@ export default function OrderForm(props: OrderFormProps) {
     onSuccess: () => {
       toast.success("Ordem de serviço criada!");
       formRef.current?.resetForm();
-      props.onClear();
+      props.onSuccess();
     },
   });
   const updateMutation = useUpdateOrderMutation({
     onSuccess: () => {
       toast.success("Ordem de serviço atualizada!");
       formRef.current?.resetForm();
-      props.onClear();
+      props.onSuccess();
     },
   });
 

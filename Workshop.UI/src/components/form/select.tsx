@@ -30,12 +30,10 @@ export default function FieldSelect({
           <Select
             {...field}
             options={options}
-            value={
-              field.value !== undefined
-                ? options.find((x) => x.value === field.value)
-                : undefined
+            value={options.find((x) => x.value === field.value) || null}
+            onChange={(option) =>
+              form.setFieldValue(field.name, option?.value || meta.initialValue)
             }
-            onChange={(option) => form.setFieldValue(field.name, option?.value)}
             isClearable={isClearable}
             isDisabled={disabled}
           />

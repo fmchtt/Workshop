@@ -1,12 +1,10 @@
 import { OrderFilters } from "../../services/api/order";
 import { useClients } from "../../services/queries/client.queries";
 import { useEmployees } from "../../services/queries/company.queries";
+import { FilterProps } from "../../types/utils/filter";
 import Form from "../form";
 
-type OrderFilterProps = {
-  onFilter: (values: OrderFilters) => void;
-};
-export default function OrderFilter(props: OrderFilterProps) {
+export default function OrderFilter(props: FilterProps<OrderFilters>) {
   const clientQuery = useClients();
   const employeeQuery = useEmployees();
 
@@ -14,6 +12,7 @@ export default function OrderFilter(props: OrderFilterProps) {
     <Form
       initialValues={{} as OrderFilters}
       onSubmit={(value) => props.onFilter(value)}
+      onReset={props.onClear}
     >
       <Form.Input label="Código" name="orderNumber" type="number" />
       <Form.Select
@@ -51,6 +50,7 @@ export default function OrderFilter(props: OrderFilterProps) {
         isClearable
       />
       <Form.Submit label="Filtrar" />
+      <Form.Clear label="Limpar" />
     </Form>
   );
 }

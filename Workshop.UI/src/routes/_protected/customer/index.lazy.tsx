@@ -82,10 +82,17 @@ function CustomerHome() {
               <ClientForm
                 clientEdit={clientEdit}
                 onClear={() => setClientEdit(undefined)}
+                onSuccess={() => {
+                  setClientEdit(undefined);
+                  setFilters({});
+                }}
               />
             )}
             {form === "filter" && (
-              <ClientFilter onFilter={(values) => setFilters(values)} />
+              <ClientFilter
+                onFilter={(values) => setFilters(values)}
+                onClear={() => setFilters({})}
+              />
             )}
           </SideContainer>
         )}
@@ -105,9 +112,10 @@ function CustomerHome() {
         <ConfirmationModal
           title="Deletar cliente"
           text={`Tem certeza que deseja apagar o cliente ${clientDelete?.name} ?`}
-          onSuccess={() =>
-            clientDelete && deleteMutation.mutate(clientDelete.id)
-          }
+          onSuccess={() => {
+            clientDelete && deleteMutation.mutate(clientDelete.id);
+            setFilters({});
+          }}
           onClose={() => setClientDelete(undefined)}
           show={!!clientDelete}
           $loading={deleteMutation.isPending}

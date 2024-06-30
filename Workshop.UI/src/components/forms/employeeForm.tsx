@@ -6,7 +6,7 @@ import { FormikProps } from "formik";
 import { object, string } from "yup";
 import { toast } from "react-toastify";
 
-export default function EmployeeForm() {
+export default function EmployeeForm(props: { onSuccess: () => void }) {
   const formRef = useRef<FormikProps<{
     name: string;
     email: string;
@@ -17,6 +17,7 @@ export default function EmployeeForm() {
   const createMutation = useCreateEmployeeMutation({
     onSuccess: () => {
       toast.success("Colaborador adicionado!");
+      props.onSuccess();
       formRef.current?.resetForm();
     },
   });

@@ -82,10 +82,17 @@ function StockHome() {
               <ProductForm
                 productEdit={productEdit}
                 onClear={() => setProductEdit(undefined)}
+                onSuccess={() => {
+                  setProductEdit(undefined);
+                  setFilters({});
+                }}
               />
             )}
             {form === "filter" && (
-              <ProductFilter onFilter={(values) => setFilters(values)} />
+              <ProductFilter
+                onFilter={(values) => setFilters(values)}
+                onClear={() => setFilters({})}
+              />
             )}
           </SideContainer>
         )}
@@ -115,6 +122,7 @@ function StockHome() {
           text={`Tem certeza que deseja apagar o produto ${productDelete?.name} ?`}
           onSuccess={() => {
             productDelete && deleteMutation.mutate(productDelete.id);
+            setFilters({});
           }}
           onClose={() => {
             setProductDelete(undefined);

@@ -12,19 +12,20 @@ import { toast } from "react-toastify";
 export default function ClientForm(props: {
   clientEdit?: Client;
   onClear: () => void;
+  onSuccess: () => void;
 }) {
   const createMutation = useCreateClientMutation({
     onSuccess: () => {
       toast.success("Cliente adicionado!");
       formRef.current?.resetForm();
-      props.onClear();
+      props.onSuccess();
     },
   });
   const updateMutation = useUpdateClientMutation({
     onSuccess: () => {
       toast.success("Cliente atualizado!");
       formRef.current?.resetForm();
-      props.onClear();
+      props.onSuccess();
     },
   });
 
