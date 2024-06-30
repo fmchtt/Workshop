@@ -12,6 +12,7 @@ using Workshop.Application.Service.Orders.DeleteProductInOrder;
 using Workshop.Application.Service.Orders.GetAll;
 using Workshop.Application.Service.Orders.GetById;
 using Workshop.Application.Service.Orders.Update;
+using Workshop.Domain.ValueObjects.Service.Orders;
 
 namespace Workshop.Api.Controllers;
 
@@ -28,9 +29,9 @@ public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseC
     }
 
     [HttpGet]
-    public async Task<ICollection<OrderResult>> GetProducts()
+    public async Task<ICollection<OrderResult>> GetOrders([FromQuery] FilterGetAllOrders? filters)
     {
-        var query = new GetAllOrdersQuery { Actor = await GetUser() };
+        var query = new GetAllOrdersQuery { Actor = await GetUser(), Filters = filters };
         return _mapper.Map<ICollection<OrderResult>>(await _mediator.Send(query));
     }
 

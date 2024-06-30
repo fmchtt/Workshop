@@ -10,6 +10,8 @@ public class GetAllClientsHandler(IClientRepository clientRepository) : IRequest
     {
         if (request.Actor.Employee == null) return [];
 
-        return await clientRepository.GetAll(request.Actor.Employee.CompanyId);
+        if(request.Filter is null) return await clientRepository.GetAll(request.Actor.Employee.CompanyId);
+
+        return await clientRepository.GetAll(request.Actor.Employee.CompanyId, request.Filter);
     }
 }

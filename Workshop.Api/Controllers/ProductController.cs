@@ -9,6 +9,7 @@ using Workshop.Application.Stock.Products.Delete;
 using Workshop.Application.Stock.Products.GetAll;
 using Workshop.Application.Stock.Products.GetById;
 using Workshop.Application.Stock.Products.Update;
+using Workshop.Domain.ValueObjects.Stock.Products;
 
 namespace Workshop.Api.Controllers;
 [ApiController, Route("products"), Authorize]
@@ -24,9 +25,9 @@ public class ProductController(IMediator mediator, IMapper mapper) : WorkshopBas
     }
 
     [HttpGet]
-    public async Task<ICollection<ProductResult>> GetProducts()
+    public async Task<ICollection<ProductResult>> GetProducts([FromQuery] FilterGetAllProducts? filter)
     {
-        var query = new GetAllProductsQuery { Actor = await GetUser() };
+        var query = new GetAllProductsQuery { Actor = await GetUser(), Filter = filter };
         return _mapper.Map<ICollection<ProductResult>>(await _mediator.Send(query));
     }
 

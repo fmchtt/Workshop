@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
+using Workshop.Domain.ValueObjects.Service.Orders;
 using Workshop.Infra.Contexts;
 using Workshop.Infra.Shared;
 
@@ -13,6 +14,36 @@ public class OrderRepository(WorkshopDBContext context) : BaseRepository<Order>(
     public async Task<ICollection<Order>> GetAll(Guid CompanyId)
     {
         return await _orders.Where(x => x.Employee.CompanyId == CompanyId).ToListAsync();
+    }
+    public async Task<ICollection<Order>> GetAll(Guid CompanyId, FilterGetAllOrders filters)
+    {
+        var order = _orders.Where(x => x.Employee.CompanyId == CompanyId);
+
+        if (filters.Complete is not null)
+        {
+            order = order.Where(x => x.Complete == filters.Complete);
+        }
+        if (filters.EmployeeId is not null)
+        {
+            order = order.Where(x => x.EmployeeId == filters.EmployeeId);
+        }
+        if (filters.OrderNumber is not null)
+        {
+            order = order.Where(x => x.OrderNumber == filters.OrderNumber);
+        }
+        if (filters.ClientId is not null)
+        {
+            var clientIds = filters.ClientId.Split(',');
+            if(clientIds.Length > 0)
+            {
+                foreach (var clientId in clientIds)
+                {
+                    order = order.Where(x => x.ClientId == Guid.Parse(clientId));
+                }
+            }
+        }
+
+        return await order.ToListAsync();
     }
 
     public async Task<Order?> GetById(Guid id, Guid CompanyId)
