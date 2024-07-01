@@ -22,6 +22,7 @@ export default function Input({
           <Label>{label}</Label>
           <StyledInput
             {...field}
+            value={field.value || ""}
             placeholder={placeholder}
             onChange={form.handleChange}
             type={type || "text"}
