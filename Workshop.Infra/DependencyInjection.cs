@@ -1,9 +1,11 @@
-﻿using FluentValidation;
+﻿using Castle.Core.Smtp;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Workshop.Application.Behavior;
+using Workshop.Domain.Contracts;
 using Workshop.Domain.Repositories;
 using Workshop.Domain.Utils;
 using Workshop.Infra.Behaviors;
@@ -41,6 +43,7 @@ public static class DependencyInjection
         services.AddTransient<IHasher, BCryptHasher>();
         services.AddTransient<ITokenService, TokenService>(x => new TokenService(configuration.GetValue<string>("SecretKey") ?? Guid.NewGuid().ToString()));
         services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IEmailService, EmailService>();
 
         // Repositories configuration
         services.AddTransient<IUserRepository, UserRepository>();
@@ -56,6 +59,10 @@ public static class DependencyInjection
         // Mappers configuration
         services.AddAutoMapper(AppDomain.CurrentDomain.Load("Workshop.Infra"));
 
+        //Fluent Email
+        services
+            .AddFluentEmail("fromemail@test.test")
+            .AddSmtpSender("localhost", 25);
 
         return services;
     }
