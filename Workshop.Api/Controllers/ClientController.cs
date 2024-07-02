@@ -53,11 +53,10 @@ public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBase
         return new MessageResult(await _mediator.Send(command));
     }
 
-    [HttpPost("representative/{id}")]
-    public async Task<ClientResult> AddRepresentative([FromRoute] Guid id, [FromBody] AddRepresentativeCommand command)
+    [HttpPost("representative")]
+    public async Task<MessageResult> AddRepresentative([FromBody] AddRepresentativeCommand command)
     {
         command.Actor = await GetUser();
-        command.ClientId = id;
-        return _mapper.Map<ClientResult>(await _mediator.Send(command));
+        return new MessageResult(await _mediator.Send(command));
     }
 }

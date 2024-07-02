@@ -15,6 +15,7 @@ public class WorkshopDBContext(DbContextOptions<WorkshopDBContext> options) : Db
     public DbSet<ProductInOrder> ProductInOrders { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Invitation> Invitations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

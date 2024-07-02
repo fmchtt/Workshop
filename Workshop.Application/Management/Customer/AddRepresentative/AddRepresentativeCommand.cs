@@ -9,7 +9,7 @@ using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Application.Management.Customer.AddRepresentative;
 
-public class AddRepresentativeCommand : ICommand<Client>
+public class AddRepresentativeCommand : ICommand<string>
 {
     public string Email { get; set; } = string.Empty;
     public Guid ClientId { get; set; }
