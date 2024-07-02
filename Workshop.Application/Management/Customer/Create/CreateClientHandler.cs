@@ -5,7 +5,7 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Management.Customer.Create;
 
-public class CreateInvitationHandler(IClientRepository clientRepository) : IRequestHandler<CreateClientCommand, Client>
+public class CreateClientHandler(IClientRepository clientRepository) : IRequestHandler<CreateClientCommand, Client>
 {
     public async Task<Client> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {

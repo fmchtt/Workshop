@@ -3,9 +3,9 @@ using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Application.Management.Customer.Create;
 
-public class CreateInvitationValidator : AbstractValidator<CreateClientCommand>
+public class CreateClientValidator : AbstractValidator<CreateClientCommand>
 {
-    public CreateInvitationValidator()
+    public CreateClientValidator()
     {
         RuleFor(c => c.Name).NotEmpty().MinimumLength(4);
         RuleFor(c => c.Actor).NotNull().NotEqual(User.Empty);
