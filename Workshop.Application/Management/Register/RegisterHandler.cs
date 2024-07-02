@@ -7,7 +7,9 @@ using Workshop.Domain.Utils;
 
 namespace Workshop.Application.Management.Register;
 
-public class RegisterHandler(IUserRepository repository, IHasher hasher, ITokenService tokenService) : IRequestHandler<RegisterCommand, TokenResult>
+public class RegisterHandler(IUserRepository repository, IHasher hasher, ITokenService tokenService, 
+    IInvitationRepository invitationRepository, IClientRepository clientRepository) 
+    : IRequestHandler<RegisterCommand, TokenResult>
 {
     public async Task<TokenResult> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
@@ -21,6 +23,37 @@ public class RegisterHandler(IUserRepository repository, IHasher hasher, ITokenS
         var user = new User(request.Name, request.Email, password);
         await repository.Create(user);
         var token = await tokenService.GenerateToken(user);
+
+        await VerifyExistingInvitesAndAdd(invitationRepository, clientRepository, request, user);
+
         return new TokenResult(token);
+    }
+
+    private static async Task VerifyExistingInvitesAndAdd(IInvitationRepository invitationRepository, IClientRepository clientRepository, RegisterCommand request, User user)
+    {
+        var invites = await invitationRepository.GetByEmail(request.Email);
+
+        if (invites is null || !invites.Any())
+        {
+            return;
+        }
+
+        foreach (var invite in invites)
+        {
+            if (invite.ClientId is null)
+                break;
+
+            if (invite.ExpirationDate < DateTime.Now)
+                break;
+
+            invite.InvalidateInvite();
+            var client = await clientRepository.GetById((Guid)invite.ClientId);
+            NotFoundException.ThrowIfNull(client, "Cliente não encontrado!");
+
+            client.AddRepresentative(user.Id);
+
+            await clientRepository.Update(client);
+            await invitationRepository.Update(invite);
+        }
     }
 }

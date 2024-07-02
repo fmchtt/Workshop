@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Workshop.Application.Management.Customer.AddRepresentative;
 using Workshop.Application.Management.Customer.Create;
 using Workshop.Application.Management.Customer.Delete;
 using Workshop.Application.Management.Customer.GetAll;
@@ -49,6 +50,13 @@ public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBase
     public async Task<MessageResult> Delete([FromRoute] Guid id)
     {
         var command = new DeleteClientCommand { Actor = await GetUser(), ClientId = id };
+        return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpPost("representative")]
+    public async Task<MessageResult> AddRepresentative([FromBody] AddRepresentativeCommand command)
+    {
+        command.Actor = await GetUser();
         return new MessageResult(await _mediator.Send(command));
     }
 }
