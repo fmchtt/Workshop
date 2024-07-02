@@ -23,8 +23,9 @@ public class Client : Entity
         Company = company;
     }
 
-    public void AddRepresentative(Guid representativeId)
+    public void AddRepresentative(User representative)
     {
-        RepresentativeId = representativeId;
+        RepresentativeId = representative.Id;
+        Representative = representative;
     }
 }

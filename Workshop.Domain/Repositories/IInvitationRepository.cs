@@ -5,5 +5,5 @@ namespace Workshop.Domain.Repositories;
 
 public interface IInvitationRepository : IRepository<Invitation>
 {
-    Task<IEnumerable<Invitation>?> GetByEmail(string email);
+    Task<ICollection<Invitation>> GetByEmail(string email);
 }

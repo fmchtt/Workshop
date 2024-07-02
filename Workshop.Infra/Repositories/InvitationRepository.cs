@@ -9,8 +9,8 @@ namespace Workshop.Infra.Repositories;
 public class InvitationRepository(WorkshopDBContext context) : BaseRepository<Invitation>(context), IInvitationRepository
 {
     private readonly DbSet<Invitation> _invitations = context.Set<Invitation>();
-    public async Task<IEnumerable<Invitation>?> GetByEmail(string email)
+    public async Task<ICollection<Invitation>?> GetByEmail(string email)
     {
-        return await _invitations.Where(i => i.Email == email).ToListAsync();
+        return await _invitations.Where(i => i.Email == email && i.ExpirationDate < DateTime.Now).ToListAsync();
     }
 }

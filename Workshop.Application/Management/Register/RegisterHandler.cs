@@ -38,19 +38,15 @@ public class RegisterHandler(IUserRepository repository, IHasher hasher, ITokenS
             return;
         }
 
+        invites = invites.Where(x => x.ClientId != null).ToList();
+
         foreach (var invite in invites)
         {
-            if (invite.ClientId is null)
-                break;
-
-            if (invite.ExpirationDate < DateTime.Now)
-                break;
-
             invite.InvalidateInvite();
             var client = await clientRepository.GetById((Guid)invite.ClientId);
             NotFoundException.ThrowIfNull(client, "Cliente não encontrado!");
 
-            client.AddRepresentative(user.Id);
+            client.AddRepresentative(user);
 
             await clientRepository.Update(client);
             await invitationRepository.Update(invite);

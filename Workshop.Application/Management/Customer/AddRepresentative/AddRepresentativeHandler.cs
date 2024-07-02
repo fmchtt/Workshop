@@ -35,7 +35,7 @@ public class AddRepresentativeHandler(IClientRepository clientRepository, IUserR
             return "Convite enviado com sucesso";
         }
 
-        client.AddRepresentative(user.Id);
+        client.AddRepresentative(user);
 
         await clientRepository.Update(client);
 
