@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Workshop.Domain.Entities.Shared;
+﻿using Workshop.Domain.Entities.Shared;
 
 namespace Workshop.Domain.Entities.Management;
 public class Invitation : Entity
 {
-    public Guid? ClientId { get; set; }
     public string Email { get; set; }
-    public Guid? CompanyId { get; set; }
     public DateTime ExpirationDate { get; set; }
+    public Guid? CompanyId { get; set; }
+    public virtual Company? Company { get; set; }
+    public Guid? ClientId { get; set; }
+    public virtual Client? Client { get; set; }
 
     public Invitation(string email, DateTime expirationDate)
     {
