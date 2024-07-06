@@ -10,6 +10,7 @@ using Workshop.Application.Management.Customer.GetById;
 using Workshop.Application.Management.Customer.Update;
 using Workshop.Application.Results;
 using Workshop.Application.Results.Management;
+using Workshop.Application.Results.Service;
 using Workshop.Domain.ValueObjects.Management.Customer;
 
 namespace Workshop.Api.Controllers;
@@ -27,7 +28,7 @@ public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBase
     [HttpGet("{id}")]
     public async Task<ClientResult> GetById([FromRoute] Guid id)
     {
-        var query = new GetClientByIdQuery { Actor = await GetUser(), ClientId = id };
+        var query = new GetOrdersQuery { Actor = await GetUser(), ClientId = id };
         return _mapper.Map<ClientResult>(await _mediator.Send(query));
     }
 
@@ -58,5 +59,12 @@ public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBase
     {
         command.Actor = await GetUser();
         return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpGet("orders/{clientId}")]
+    public async Task<ICollection<OrderResult>> GetOrders([FromRoute] Guid clientId, [FromQuery] FilterGetAllByClientId? filter)
+    {
+        var query = new GetOrdersQuery { Actor = await GetUser(), ClientId = clientId, Filter = filter };
+        return _mapper.Map<ICollection<OrderResult>>(await _mediator.Send(query));
     }
 }

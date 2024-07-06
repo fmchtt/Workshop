@@ -11,6 +11,6 @@ public class InvitationRepository(WorkshopDBContext context) : BaseRepository<In
     private readonly DbSet<Invitation> _invitations = context.Set<Invitation>();
     public async Task<ICollection<Invitation>?> GetByEmail(string email)
     {
-        return await _invitations.Where(i => i.Email == email && i.ExpirationDate < DateTime.Now).ToListAsync();
+        return await _invitations.Where(i => i.Email == email).ToListAsync();
     }
 }

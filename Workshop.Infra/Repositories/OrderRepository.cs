@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Workshop.Domain.Entities.Service;
 using Workshop.Domain.Repositories;
+using Workshop.Domain.ValueObjects.Management.Customer;
 using Workshop.Domain.ValueObjects.Service.Orders;
 using Workshop.Infra.Contexts;
 using Workshop.Infra.Shared;
@@ -55,5 +56,26 @@ public class OrderRepository(WorkshopDBContext context) : BaseRepository<Order>(
     {
         var newOrder = _orders.Add(order);
         return Task.FromResult(newOrder.Entity);
+    }
+
+    public async Task<ICollection<Order>> GetAllByClientId(Guid clientId, FilterGetAllByClientId filters)
+    {
+        var order = _orders.Where(x => x.ClientId == clientId);
+
+        if (filters.Complete is not null)
+        {
+            order = order.Where(x => x.Complete == filters.Complete);
+        }
+        if (filters.OrderNumber is not null)
+        {
+            order = order.Where(x => x.OrderNumber == filters.OrderNumber);
+        }
+
+        return await order.ToListAsync();
+    }
+
+    public async Task<ICollection<Order>> GetAllByClientId(Guid clientId)
+    {
+        return await _orders.Where(x => x.ClientId == clientId).ToListAsync();
     }
 }
