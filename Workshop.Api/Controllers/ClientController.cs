@@ -28,7 +28,7 @@ public class ClientController(IMediator mediator, IMapper mapper) : WorkshopBase
     [HttpGet("{id}")]
     public async Task<ClientResult> GetById([FromRoute] Guid id)
     {
-        var query = new GetOrdersQuery { Actor = await GetUser(), ClientId = id };
+        var query = new GetClientByIdQuery { Actor = await GetUser(), ClientId = id };
         return _mapper.Map<ClientResult>(await _mediator.Send(query));
     }
 
