@@ -11,6 +11,9 @@ public class Client : Entity
     public virtual User? Representative { get; set; }
     public Guid CompanyId { get; set; }
     public virtual Company Company { get; set; } = null!;
+    public Guid? AddressId { get; set; }
+    public virtual Address? Address { get; set; }
+    public string? Cnpj { get; set; }
 
     public Client()
     {

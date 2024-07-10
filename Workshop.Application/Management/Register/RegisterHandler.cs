@@ -38,7 +38,7 @@ public class RegisterHandler(IUserRepository repository, IHasher hasher, ITokenS
             return;
         }
 
-        invites = invites.Where(x => x.ClientId != null).ToList();
+        invites = invites.Where(x => x.ClientId is not null && x.ExpirationDate > DateTime.Now).ToList();
 
         foreach (var invite in invites)
         {

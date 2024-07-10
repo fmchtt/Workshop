@@ -10,6 +10,10 @@ public class Company : Entity
     public virtual List<Employee> Employees { get; set; } = [];
     public virtual List<Role> Roles { get; set; } = [];
     public virtual List<Client> Clients { get; set; } = [];
+    public Guid? AddressId { get; set; }
+    public virtual Address? Address { get; set; }
+    public string? Cnpj { get; set; }
+    public string? Logo { get; set; }
 
     public Company()
     {
