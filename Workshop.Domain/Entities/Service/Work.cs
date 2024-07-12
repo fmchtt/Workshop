@@ -20,12 +20,12 @@ public class Work : Entity
     {
     }
 
-    public Work(string? description, Guid ownerId, Company owner)
+    public Work(string? description, Company owner)
     {
         CreatedDate = DateTime.Now;
         ModifiedDate = DateTime.Now;
         Description = description;
-        OwnerId = ownerId;
+        OwnerId = owner.Id;
         Owner = owner;
     }
 }

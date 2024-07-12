@@ -10,9 +10,10 @@ internal class WorkConfiguration : IEntityTypeConfiguration<Work>
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Price).IsRequired();
         builder.Property(x => x.Description).IsRequired();
+        builder.Property(x => x.CreatedDate).ValueGeneratedOnAdd();
+        builder.Property(x => x.ModifiedDate);
 
-        builder.HasOne(x => x.Order).WithMany(x => x.Works).HasForeignKey(x => x.OrderId).IsRequired();
+        builder.HasOne(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId).IsRequired();
     }
 }

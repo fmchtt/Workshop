@@ -11,6 +11,11 @@ public class WorkInOrderRepository(WorkshopDBContext context) : BaseRepository<W
 {
     private readonly DbSet<WorkInOrder> _worksInOrder = context.Set<WorkInOrder>();
 
+    public async Task<WorkInOrder?> GetWorkByIdAndOrderId(Guid workId, Guid orderId)
+    {
+        return await _worksInOrder.FirstOrDefaultAsync(w => w.WorkId == workId && w.OrderId == orderId);
+    }
+
     public async Task<WorkInOrder?> GetWorkByOrderAndDescription(Guid orderId, string description)
     {
         return await _worksInOrder.FirstOrDefaultAsync(w => w.OrderId == orderId && w.Work.Description!.Equals(description, StringComparison.CurrentCultureIgnoreCase));
