@@ -5,9 +5,10 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Service.Orders.CreateWork;
 
-public class CreateWorkHandler(IOrderRepository orderRepository, IWorkRepository workRepository) : IRequestHandler<CreateWorkCommand, Work>
+public class CreateWorkInOrderHandler(IOrderRepository orderRepository, IWorkInOrderRepository workInOrderRepository, IWorkRepository workRepository) 
+    : IRequestHandler<CreateWorkInOrderCommand, WorkInOrder>
 {
-    public async Task<Work> Handle(CreateWorkCommand request, CancellationToken cancellationToken)
+    public async Task<WorkInOrder> Handle(CreateWorkInOrderCommand request, CancellationToken cancellationToken)
     {
         if (request.Actor.Employee?.HasPermission("service", "manageOrder") != true)
         {
@@ -22,19 +23,22 @@ public class CreateWorkHandler(IOrderRepository orderRepository, IWorkRepository
             throw new AuthorizationException("Ordem de serviço concluída não pode ser editada!");
         }
 
-        var work = await workRepository.GetWorkByOrderAndDescription(order.Id, request.Description!);
+        var workInOrder = await workInOrderRepository.GetWorkByIdAndOrderId(request.WorkId, order.Id);
         
-        if(work is not null)
+        if(workInOrder is not null)
         {
             throw new ValidationException("Já existe uma mão de obra com esse nome nessa Ordem de serviço");
         }
 
-        work = new Work(request.Price, request.TimeToFinish, request.Description, order);
+        var work = await workRepository.GetById(request.WorkId);
+        NotFoundException.ThrowIfNull(work, "Mão de obra não encontrada!");
 
-        order.Works.Add(work);
+        workInOrder = new WorkInOrder(request.Price, request.DateInit, request.DateFinish, work, order);
+
+        order.Works.Add(workInOrder);
         await workRepository.Create(work);
         await orderRepository.Update(order);
 
-        return work;
+        return workInOrder;
     }
 }

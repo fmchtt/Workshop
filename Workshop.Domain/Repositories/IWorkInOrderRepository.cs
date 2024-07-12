@@ -4,6 +4,7 @@ using Workshop.Domain.Entities.Service;
 
 namespace Workshop.Domain.Repositories;
 
-public interface IWorkRepository : IRepository<Work>
+public interface IWorkInOrderRepository : IRepository<WorkInOrder>
 {
+    Task<WorkInOrder?> GetWorkByIdAndOrderId(Guid workId, Guid orderId);
 }

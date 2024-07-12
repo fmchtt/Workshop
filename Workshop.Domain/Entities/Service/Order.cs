@@ -15,7 +15,7 @@ public class Order : Entity
     public virtual Company Company { get; set; } = null!;
     public Guid ClientId { get; set; }
     public virtual Client Client { get; set; } = null!;
-    public virtual List<Work> Works { get; set; } = [];
+    public virtual List<WorkInOrder> Works { get; set; } = [];
 
     public decimal Total { get { return SumOrderTotal(); } }
 

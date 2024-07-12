@@ -5,13 +5,14 @@ using Workshop.Domain.Entities.Service;
 
 namespace Workshop.Application.Service.Orders.CreateWork;
 
-public class CreateWorkCommand : ICommand<Work>
+public class CreateWorkInOrderCommand : ICommand<WorkInOrder>
 {
     [JsonIgnore]
     public Guid OrderId { get; set; }
+    public Guid WorkId { get; set; }
     public decimal Price { get; set; }
-    public TimeOnly TimeToFinish { get; set; }
-    public string? Description { get; set; }
+    public DateTime DateInit { get; set; }
+    public DateTime DateFinish { get; set; }
     [JsonIgnore]
     public User Actor { get; set; } = User.Empty;
 }

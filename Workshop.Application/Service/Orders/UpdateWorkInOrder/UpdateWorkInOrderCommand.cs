@@ -10,15 +10,15 @@ using Workshop.Domain.Entities.Service;
 
 namespace Workshop.Application.Service.Orders.UpdateWork;
 
-public class UpdateWorkCommand : ICommand<Work>
+public class UpdateWorkInOrderCommand : ICommand<WorkInOrder>
 {
     [JsonIgnore]
     public Guid WorkId { get; set; }
     [JsonIgnore]
     public Guid OrderId { get; set; }
     public decimal Price { get; set; }
-    public string? Description { get; set; }
-    public TimeOnly TimeToFinish { get; set; }
+    public DateTime DateInit { get; set; }
+    public DateTime DateFinish { get; set; }
     [JsonIgnore]
     public User Actor { get; set; } = User.Empty;
 }

@@ -5,9 +5,9 @@ using Workshop.Domain.Repositories;
 
 namespace Workshop.Application.Service.Orders.DeleteWork;
 
-public class DeleteWorkHandler(IOrderRepository orderRepository, IWorkRepository workRepository) : IRequestHandler<DeleteWorkCommand, string>
+public class DeleteWorkInOrderHandler(IOrderRepository orderRepository, IWorkInOrderRepository workInOrderRepository) : IRequestHandler<DeleteWorkInOrderCommand, string>
 {
-    public async Task<string> Handle(DeleteWorkCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(DeleteWorkInOrderCommand request, CancellationToken cancellationToken)
     {
         if (request.Actor.Employee?.HasPermission("service", "manageOrder") != true)
         {
@@ -22,11 +22,11 @@ public class DeleteWorkHandler(IOrderRepository orderRepository, IWorkRepository
             throw new AuthorizationException("Ordem de serviço concluída não pode ser editada!");
         }
 
-        var work = order.Works.Find(x => x.Id == request.WorkId);
+        var work = order.Works.Find(x => x.WorkId == request.WorkId);
         NotFoundException.ThrowIfNull(work, "Mão de obra não encontrado na ordem de serviço!");
 
         order.Works.Remove(work);
-        await workRepository.Delete(work);
+        await workInOrderRepository.Delete(work);
 
         return "Mão de obra removido da ordem de serviço com sucesso!";
     }

@@ -3,9 +3,9 @@ using Workshop.Domain.Entities.Management;
 
 namespace Workshop.Application.Service.Orders.DeleteWork;
 
-public class DeleteWorkValidator : AbstractValidator<DeleteWorkCommand>
+public class DeleteWorkInOrderValidator : AbstractValidator<DeleteWorkInOrderCommand>
 {
-    public DeleteWorkValidator()
+    public DeleteWorkInOrderValidator()
     {
         RuleFor(c => c.WorkId).NotEmpty();
         RuleFor(c => c.OrderId).NotEmpty();
