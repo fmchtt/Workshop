@@ -7,12 +7,15 @@ using Workshop.Application.Results.Service;
 using Workshop.Application.Service.Orders.CompleteOrder;
 using Workshop.Application.Service.Orders.Create;
 using Workshop.Application.Service.Orders.CreateProductInOrder;
+using Workshop.Application.Service.Orders.CreateWork;
 using Workshop.Application.Service.Orders.Delete;
 using Workshop.Application.Service.Orders.DeleteProductInOrder;
+using Workshop.Application.Service.Orders.DeleteWork;
 using Workshop.Application.Service.Orders.GetAll;
 using Workshop.Application.Service.Orders.GetById;
 using Workshop.Application.Service.Orders.Update;
 using Workshop.Application.Service.Orders.UpdateProductInOrder;
+using Workshop.Application.Service.Orders.UpdateWork;
 using Workshop.Domain.ValueObjects.Service.Orders;
 
 namespace Workshop.Api.Controllers;
@@ -106,6 +109,41 @@ public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseC
     )
     {
         var command = new DeleteProductInOrderCommand { Actor = await GetUser(), OrderId = id, ProductId = productId };
+        return new MessageResult(await _mediator.Send(command));
+    }
+
+    [HttpPost("{id}/work")]
+    public async Task<WorkResult> AddWork(
+        [FromRoute] Guid id,
+        [FromBody] CreateWorkCommand command
+    )
+    {
+        command.Actor = await GetUser();
+        command.OrderId = id;
+        return _mapper.Map<WorkResult>(await _mediator.Send(command));
+    }
+
+    [HttpPatch("{id}/work/{productId}")]
+    public async Task<WorkResult> UpdateWork(
+        [FromRoute] Guid id,
+        [FromRoute] Guid workId,
+        [FromBody] UpdateWorkCommand command
+    )
+    {
+        command.Actor = await GetUser();
+        command.OrderId = id;
+        command.WorkId = workId;
+
+        return _mapper.Map<WorkResult>(await _mediator.Send(command));
+    }
+
+    [HttpDelete("{id}/work/{workId}")]
+    public async Task<MessageResult> RemoveWork(
+        [FromRoute] Guid id,
+        [FromRoute] Guid workId
+    )
+    {
+        var command = new DeleteWorkCommand { Actor = await GetUser(), OrderId = id, WorkId = workId };
         return new MessageResult(await _mediator.Send(command));
     }
 }
