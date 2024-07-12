@@ -57,6 +57,7 @@ public static class DependencyInjection
         services.AddTransient<IProductInOrderRepository, ProductInOrderRepository>();
         services.AddTransient<IInvitationRepository, InvitationRepository>();
         services.AddTransient<IAddressRepository, AddressRepository>();
+        services.AddTransient<IWorkRepository, WorkRepository>();
 
         // Mappers configuration
         services.AddAutoMapper(AppDomain.CurrentDomain.Load("Workshop.Infra"));

@@ -15,11 +15,20 @@ public class Order : Entity
     public virtual Company Company { get; set; } = null!;
     public Guid ClientId { get; set; }
     public virtual Client Client { get; set; } = null!;
+    public virtual List<Work> Works { get; set; } = [];
 
-    public decimal Total { get { return Products.Sum(p => p.Product.Price * p.Quantity); } }
+    public decimal Total { get { return SumOrderTotal(); } }
 
     public Order()
     {
+    }
+
+    public decimal SumOrderTotal()
+    {
+        var productsTotal = Products.Sum(p => p.Product.Price * p.Quantity);
+        var workTotal = Works.Sum(w => w.Price);
+
+        return productsTotal + workTotal;
     }
 
     public Order(Company company, Employee employee, Client client)
