@@ -10,4 +10,5 @@ public class OrderResult
     public EmployeeResult Employee { get; set; } = null!;
     public ClientResult Client { get; set; } = null!;
     public bool Complete { get; set; }
+    public ICollection<WorkInOrderResult> Works { get; set; } = [];
 }

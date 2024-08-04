@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Workshop.Infra.Contexts;
@@ -11,9 +12,11 @@ using Workshop.Infra.Contexts;
 namespace Workshop.Infra.Migrations
 {
     [DbContext(typeof(WorkshopDBContext))]
-    partial class WorkshopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240712025955_Work")]
+    partial class Work
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -372,38 +375,9 @@ namespace Workshop.Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Work");
-                });
-
-            modelBuilder.Entity("Workshop.Domain.Entities.Service.WorkInOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("DateFinish")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("DateInit")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
@@ -411,16 +385,14 @@ namespace Workshop.Infra.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("WorkId")
-                        .HasColumnType("uuid");
+                    b.Property<TimeOnly>("TimeToFinish")
+                        .HasColumnType("time without time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("WorkId");
-
-                    b.ToTable("WorkInOrder");
+                    b.ToTable("Work");
                 });
 
             modelBuilder.Entity("Workshop.Domain.Entities.Management.Client", b =>
@@ -596,32 +568,13 @@ namespace Workshop.Infra.Migrations
 
             modelBuilder.Entity("Workshop.Domain.Entities.Service.Work", b =>
                 {
-                    b.HasOne("Workshop.Domain.Entities.Management.Company", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Workshop.Domain.Entities.Service.WorkInOrder", b =>
-                {
                     b.HasOne("Workshop.Domain.Entities.Service.Order", "Order")
                         .WithMany("Works")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Workshop.Domain.Entities.Service.Work", "Work")
-                        .WithMany()
-                        .HasForeignKey("WorkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Order");
-
-                    b.Navigation("Work");
                 });
 
             modelBuilder.Entity("Workshop.Domain.Entities.Management.Client", b =>

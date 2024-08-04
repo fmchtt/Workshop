@@ -17,5 +17,6 @@ internal class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).IsRequired();
         builder.HasOne(x => x.Client).WithMany(x => x.Orders).HasForeignKey(x => x.ClientId).IsRequired();
         builder.HasMany(x => x.Products).WithOne(x => x.Order).HasForeignKey(x => x.OrderId).IsRequired();
+        builder.HasMany(x => x.Works).WithOne(x => x.Order).HasForeignKey(x => x.OrderId);
     }
 }

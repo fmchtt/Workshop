@@ -20,8 +20,8 @@ using Workshop.Domain.ValueObjects.Service.Orders;
 
 namespace Workshop.Api.Controllers;
 
-[ApiController, Route("orders"), Authorize]
-public class OrderController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
+[ApiController, Route("works"), Authorize]
+public class WorksController(IMediator mediator, IMapper mapper) : WorkshopBaseController(mediator, mapper)
 {
     [HttpGet("{id}")]
     public async Task<OrderResult> GetOrder(
